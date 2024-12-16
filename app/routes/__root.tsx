@@ -1,13 +1,13 @@
 import type { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import {
-  createRootRouteWithContext,
   Outlet,
   ScriptOnce,
   ScrollRestoration,
+  createRootRouteWithContext,
 } from "@tanstack/react-router";
-import { createServerFn, Meta, Scripts } from "@tanstack/start";
-import { lazy, Suspense } from "react";
+import { Meta, Scripts, createServerFn } from "@tanstack/start";
+import { Suspense, lazy } from "react";
 
 import { getAuthSession } from "~/server/auth";
 import appCss from "~/styles/app.css?url";
@@ -60,7 +60,7 @@ function RootComponent() {
 
 function RootDocument({ children }: { readonly children: React.ReactNode }) {
   return (
-    <html>
+    <html lang="en">
       <head>
         <Meta />
       </head>
@@ -72,12 +72,12 @@ function RootDocument({ children }: { readonly children: React.ReactNode }) {
           <TanStackRouterDevtools position="bottom-right" />
         </Suspense>
 
-        <ScriptOnce>
+        {/* <ScriptOnce>
           {`document.documentElement.classList.toggle(
             'dark',
             localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
             )`}
-        </ScriptOnce>
+        </ScriptOnce> */}
 
         <Scripts />
       </body>

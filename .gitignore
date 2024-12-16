@@ -16,3 +16,4 @@ dist
 /api/
 /server/build
 /public/build
+db

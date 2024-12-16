@@ -66,26 +66,25 @@ export const APIRoute = createAPIFileRoute("/api/auth/callback/google")({
             Location: "/",
           },
         });
-      } else {
-        const existingUserEmail = await db.query.user.findFirst({
-          where: eq(user.email, providerUser.email),
+      }
+      const existingUserEmail = await db.query.user.findFirst({
+        where: eq(user.email, providerUser.email),
+      });
+      if (existingUserEmail) {
+        await db.insert(oauthAccount).values({
+          provider_id: PROVIDER_ID,
+          provider_user_id: providerUser.sub,
+          user_id: existingUserEmail.id,
         });
-        if (existingUserEmail) {
-          await db.insert(oauthAccount).values({
-            provider_id: PROVIDER_ID,
-            provider_user_id: providerUser.sub,
-            user_id: existingUserEmail.id,
-          });
-          const token = generateSessionToken();
-          const session = await createSession(token, existingUserEmail.id);
-          setSessionTokenCookie(token, session.expires_at);
-          return new Response(null, {
-            status: 302,
-            headers: {
-              Location: "/",
-            },
-          });
-        }
+        const token = generateSessionToken();
+        const session = await createSession(token, existingUserEmail.id);
+        setSessionTokenCookie(token, session.expires_at);
+        return new Response(null, {
+          status: 302,
+          headers: {
+            Location: "/",
+          },
+        });
       }
 
       const userId = await db.transaction(async (tx) => {

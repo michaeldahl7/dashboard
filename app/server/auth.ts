@@ -6,9 +6,9 @@ import { deleteCookie, getCookie, setCookie } from "vinxi/http";
 
 import { db } from "~/server/db";
 import {
+  type Session,
   session as sessionTable,
   user as userTable,
-  type Session,
 } from "~/server/db/schema";
 
 export const SESSION_COOKIE_NAME = "session";
