@@ -1,15 +1,20 @@
-import { Link, Outlet, createFileRoute, redirect } from "@tanstack/react-router";
+import {
+  Link,
+  Outlet,
+  createFileRoute,
+  redirect,
+} from "@tanstack/react-router";
 
 import { History, Home, ListPlus, ShoppingCart } from "lucide-react";
 import { Button } from "~/components/ui/button";
 
 export const Route = createFileRoute("/dashboard")({
   component: DashboardLayout,
-  beforeLoad: async ({ context }) => {
-    if (!context.user) {
-      throw redirect({ to: "/signin" });
-    }
-  },
+  // beforeLoad: async ({ context }) => {
+  //   if (!context.user) {
+  //     throw redirect({ to: "/signin" });
+  //   }
+  // },
 });
 
 function DashboardLayout() {
@@ -25,7 +30,10 @@ function DashboardLayout() {
             </div>
 
             <div className="flex gap-6">
-              <Link to="/" className="flex items-center gap-2 hover:text-primary">
+              <Link
+                to="/"
+                className="flex items-center gap-2 hover:text-primary"
+              >
                 <Home size={20} />
                 <span>Inventory</span>
               </Link>

@@ -1,7 +1,6 @@
 import {
   boolean,
   integer,
-  json,
   pgTable,
   primaryKey,
   real,
@@ -32,7 +31,9 @@ export const oauthAccount = pgTable(
       .notNull()
       .references(() => user.id),
   },
-  (table) => [primaryKey({ columns: [table.provider_id, table.provider_user_id] })],
+  (table) => [
+    primaryKey({ columns: [table.provider_id, table.provider_user_id] }),
+  ],
 );
 
 export const session = pgTable("session", {
@@ -47,7 +48,12 @@ export const session = pgTable("session", {
 });
 
 // ============= Location Tables =============
-export const locationTypes = ["fridge", "freezer", "pantry", "counter"] as const;
+export const locationTypes = [
+  "fridge",
+  "freezer",
+  "pantry",
+  "counter",
+] as const;
 export type LocationType = (typeof locationTypes)[number];
 
 export const location = pgTable("location", {
@@ -181,6 +187,7 @@ export const usageHistory = pgTable("usage_history", {
 
 // ============= Types =============
 export type User = typeof user.$inferSelect;
+export type Session = typeof session.$inferSelect;
 export type Product = typeof product.$inferSelect;
 export type Location = typeof location.$inferSelect;
 export type LocationZone = typeof locationZone.$inferSelect;

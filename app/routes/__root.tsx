@@ -27,28 +27,30 @@ const getUser = createServerFn({ method: "GET" }).handler(async () => {
   return user;
 });
 
-export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-  beforeLoad: async () => {
-    const user = await getUser();
-    return { user };
+export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
+  {
+    beforeLoad: async () => {
+      const user = await getUser();
+      return { user };
+    },
+    head: () => ({
+      meta: [
+        {
+          charSet: "utf-8",
+        },
+        {
+          name: "viewport",
+          content: "width=device-width, initial-scale=1",
+        },
+        {
+          title: "TanStarter",
+        },
+      ],
+      links: [{ rel: "stylesheet", href: appCss }],
+    }),
+    component: RootComponent,
   },
-  head: () => ({
-    meta: [
-      {
-        charSet: "utf-8",
-      },
-      {
-        name: "viewport",
-        content: "width=device-width, initial-scale=1",
-      },
-      {
-        title: "TanStarter",
-      },
-    ],
-    links: [{ rel: "stylesheet", href: appCss }],
-  }),
-  component: RootComponent,
-});
+);
 
 function RootComponent() {
   return (
@@ -71,13 +73,6 @@ function RootDocument({ children }: { readonly children: React.ReactNode }) {
         <Suspense>
           <TanStackRouterDevtools position="bottom-right" />
         </Suspense>
-
-        {/* <ScriptOnce>
-          {`document.documentElement.classList.toggle(
-            'dark',
-            localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
-            )`}
-        </ScriptOnce> */}
 
         <Scripts />
       </body>
