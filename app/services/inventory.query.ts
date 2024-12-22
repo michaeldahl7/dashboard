@@ -5,25 +5,29 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import {
-  getInventoryItems,
+  //   getInventoryItems,
   addInventoryItem,
-  updateInventoryItem,
-  deleteInventoryItem,
+  //   updateInventoryItem,
+  //   deleteInventoryItem,
 } from "./inventory.api";
-import type {
-  InsertInventoryInput,
-  UpdateInventoryInput,
-} from "./inventory.schema";
+import type { InsertInventoryInput, UpdateInventoryInput } from "./inventory.schema";
 
-export const inventoryQueryOptions = () =>
-  queryOptions({
-    queryKey: ["inventory"],
-    queryFn: () => getInventoryItems(),
-  });
+import {
+  itemInsertSchema,
+  type InventoryItem,
+  type InsertInventoryItem,
+  type ValidatedInsertFoodItem,
+} from "~/server/db/schema";
 
-export const useInventoryQuery = () => {
-  return useSuspenseQuery(inventoryQueryOptions());
-};
+// export const inventoryQueryOptions = () =>
+//   queryOptions({
+//     queryKey: ["inventory"],
+//     queryFn: () => getInventoryItems(),
+//   });
+
+// export const useInventoryQuery = () => {
+//   return useSuspenseQuery(inventoryQueryOptions());
+// };
 
 export const useInventoryMutations = () => {
   const queryClient = useQueryClient();
@@ -32,20 +36,20 @@ export const useInventoryMutations = () => {
   };
 
   const addItem = useMutation({
-    mutationFn: (data: InsertInventoryInput) => addInventoryItem({ data }),
+    mutationFn: (data: ValidatedInsertFoodItem) => addInventoryItem({ data }),
     onSuccess: invalidateInventory,
   });
 
-  const updateItem = useMutation({
-    mutationFn: ({ id, data }: UpdateInventoryInput) =>
-      updateInventoryItem({ data: { id, data } }),
-    onSuccess: invalidateInventory,
-  });
+  //   const updateItem = useMutation({
+  //     mutationFn: ({ id, data }: UpdateInventoryInput) =>
+  //       updateInventoryItem({ data: { id, data } }),
+  //     onSuccess: invalidateInventory,
+  //   });
 
-  const deleteItem = useMutation({
-    mutationFn: (id: number) => deleteInventoryItem({ data: id }),
-    onSuccess: invalidateInventory,
-  });
+  //   const deleteItem = useMutation({
+  //     mutationFn: (id: number) => deleteInventoryItem({ data: id }),
+  //     onSuccess: invalidateInventory,
+  //   });
 
-  return { addItem, updateItem, deleteItem };
+  return { addItem }; // updateItem, deleteItem
 };

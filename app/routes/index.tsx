@@ -1,7 +1,16 @@
+// app/routes/index.tsx
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
+import { Textarea } from "~/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "~/components/ui/select";
 import {
   Card,
   CardHeader,
@@ -11,35 +20,17 @@ import {
   CardFooter,
 } from "~/components/ui/card";
 
-import { z } from "zod";
-import { type FieldApi, useForm } from "@tanstack/react-form";
-import { createServerValidate, ServerValidateError } from "@tanstack/react-form/start";
-import { createServerFn } from "@tanstack/start";
-import { authMiddleware } from "~/middleware/auth-guard";
-
-function FieldInfo({ field }: { field: FieldApi<any, any, any, any> }) {
-  return (
-    <>
-      {field.state.meta.isTouched && field.state.meta.errors.length ? (
-        <em>{field.state.meta.errors.join(",")}</em>
-      ) : null}
-      {field.state.meta.isValidating ? "Validating..." : null}
-    </>
-  );
-}
-
-const formSchema = z.object({
-  firstName: z
-    .string()
-    .min(1, "A first name is required")
-    .min(3, "First name must be at least 3 characters")
-    .refine((value) => !value.includes("error"), 'No "error" allowed in first name'),
-  lastName: z.string().min(1, "Last name is required"),
-});
-
-const userSchema = z.object({
-  age: z.number().gte(13, "You must be 13 to make an account"),
-});
+import { useForm } from "@tanstack/react-form";
+import { useInventoryMutations } from "~/services/inventory.query";
+import {
+  locationTypes,
+  categoryTypes,
+  unitTypes,
+  type ValidatedInsertFoodItem,
+  type LocationType,
+  type CategoryType,
+  type UnitType,
+} from "~/server/db/schema";
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -47,132 +38,271 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const { user } = Route.useRouteContext();
+  const { addItem } = useInventoryMutations();
 
-  const form = useForm({
+  const form = useForm<ValidatedInsertFoodItem>({
     defaultValues: {
-      firstName: "",
-      lastName: "",
+      name: "",
+      quantity: 1,
+      location: "pantry",
+      category: undefined,
+      unit: undefined,
+      notes: "",
+      expiry_date: undefined,
     },
     onSubmit: async ({ value }) => {
-      // Do something with form data
-      console.log(value);
+      await addItem.mutateAsync(value);
+      form.reset();
     },
   });
 
   return (
     <div className="flex flex-col gap-4 p-6">
-      <h1 className="text-4xl font-bold">TanStarter</h1>
-      <div className="flex items-center gap-2">
-        This is an unprotected page:
-        <pre className="rounded-md border bg-card p-1 text-card-foreground">
-          routes/index.tsx
-        </pre>
-      </div>
+      <h1 className="text-4xl font-bold">Kitchen Tracker</h1>
 
       {user ? (
         <div className="flex flex-col gap-2">
           <p>Welcome back, {user.name}!</p>
-          <Button type="button" asChild className="w-fit" size="lg">
+          <Button asChild className="w-fit" size="lg">
             <Link to="/dashboard">Go to Dashboard</Link>
           </Button>
-          <div>
-            More data:
-            <pre>{JSON.stringify(user, null, 2)}</pre>
-          </div>
-
-          <form method="POST" action="/api/auth/logout">
-            <Button type="submit" className="w-fit" variant="destructive" size="lg">
-              Sign out
-            </Button>
-          </form>
         </div>
       ) : (
-        <Card className="max-w-md">
-          <CardHeader>
-            <CardTitle>User Information</CardTitle>
-            <CardDescription>Enter your personal details below.</CardDescription>
-          </CardHeader>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              form.handleSubmit();
-            }}
-          >
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <form.Field
-                  name="firstName"
-                  validators={{
-                    onChange: formSchema.shape.firstName,
-                    onChangeAsyncDebounceMs: 500,
-                    onChangeAsync: z.string().refine(
-                      async (value) => {
-                        await new Promise((resolve) => setTimeout(resolve, 500));
-                        return !value.includes("error");
-                      },
-                      {
-                        message: 'No "error" allowed in first name',
-                      },
-                    ),
-                  }}
-                >
-                  {(field) => (
-                    <div className="space-y-1">
-                      <Label htmlFor={field.name}>First Name</Label>
-                      <Input
-                        id={field.name}
-                        name={field.name}
-                        value={field.state.value}
-                        onBlur={field.handleBlur}
-                        onChange={(e) => field.handleChange(e.target.value)}
-                      />
-                      <FieldInfo field={field} />
-                    </div>
-                  )}
-                </form.Field>
-              </div>
+        <div>
+          <div className="flex flex-col gap-2">
+            <p>You are not signed in.</p>
+            <Button type="button" asChild className="w-fit" size="lg">
+              <Link to="/signin">Sign in</Link>
+            </Button>
+          </div>
+          <Card className="max-w-2xl">
+            <CardHeader>
+              <CardTitle>Add Food Item</CardTitle>
+              <CardDescription>Add a new item to your kitchen</CardDescription>
+            </CardHeader>
 
-              <div className="space-y-2">
-                <form.Field
-                  name="lastName"
-                  validators={{
-                    onChange: formSchema.shape.lastName,
-                  }}
-                >
-                  {(field) => (
-                    <div className="space-y-1">
-                      <Label htmlFor={field.name}>Last Name</Label>
-                      <Input
-                        id={field.name}
-                        name={field.name}
-                        value={field.state.value}
-                        onBlur={field.handleBlur}
-                        onChange={(e) => field.handleChange(e.target.value)}
-                      />
-                      <FieldInfo field={field} />
-                    </div>
-                  )}
-                </form.Field>
-              </div>
-            </CardContent>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                void form.handleSubmit();
+              }}
+            >
+              <CardContent className="space-y-4">
+                {/* Name */}
+                <div>
+                  <form.Field name="name">
+                    {(field) => (
+                      <div className="space-y-2">
+                        <Label>Name</Label>
+                        <Input
+                          placeholder="Enter food item name"
+                          value={field.state.value}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                        />
+                        {field.state.meta.errors && (
+                          <p className="text-sm text-destructive">
+                            {field.state.meta.errors.join(", ")}
+                          </p>
+                        )}
+                      </div>
+                    )}
+                  </form.Field>
+                </div>
 
-            <CardFooter className="flex gap-2">
-              <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting]}>
-                {([canSubmit, isSubmitting]) => (
-                  <>
-                    <Button type="submit" disabled={!canSubmit}>
-                      {isSubmitting ? "Submitting..." : "Submit"}
-                    </Button>
-                    <Button type="button" variant="outline" onClick={() => form.reset()}>
-                      Reset
-                    </Button>
-                  </>
-                )}
-              </form.Subscribe>
-            </CardFooter>
-          </form>
-        </Card>
+                <div className="grid grid-cols-2 gap-4">
+                  {/* Quantity */}
+                  <div>
+                    <form.Field name="quantity">
+                      {(field) => (
+                        <div className="space-y-2">
+                          <Label>Quantity</Label>
+                          <Input
+                            type="number"
+                            min="0"
+                            step="0.1"
+                            value={field.state.value}
+                            onChange={(e) =>
+                              field.handleChange(Number.parseFloat(e.target.value))
+                            }
+                          />
+                          {field.state.meta.errors && (
+                            <p className="text-sm text-destructive">
+                              {field.state.meta.errors.join(", ")}
+                            </p>
+                          )}
+                        </div>
+                      )}
+                    </form.Field>
+                  </div>
+
+                  {/* Unit */}
+                  <div>
+                    <form.Field name="unit">
+                      {(field) => (
+                        <div className="space-y-2">
+                          <Label>Unit</Label>
+                          <Select
+                            value={field.state.value || ""}
+                            onValueChange={(value: UnitType) => field.handleChange(value)}
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select unit" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {unitTypes.map((unit) => (
+                                <SelectItem key={unit} value={unit}>
+                                  {unit}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          {field.state.meta.errors && (
+                            <p className="text-sm text-destructive">
+                              {field.state.meta.errors.join(", ")}
+                            </p>
+                          )}
+                        </div>
+                      )}
+                    </form.Field>
+                  </div>
+
+                  {/* Location */}
+                  <div>
+                    <form.Field name="location">
+                      {(field) => (
+                        <div className="space-y-2">
+                          <Label>Location</Label>
+                          <Select
+                            value={field.state.value || ""}
+                            onValueChange={(value: LocationType) =>
+                              field.handleChange(value)
+                            }
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select location" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {locationTypes.map((location) => (
+                                <SelectItem key={location} value={location}>
+                                  {location}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          {field.state.meta.errors && (
+                            <p className="text-sm text-destructive">
+                              {field.state.meta.errors.join(", ")}
+                            </p>
+                          )}
+                        </div>
+                      )}
+                    </form.Field>
+                  </div>
+
+                  {/* Category */}
+                  <div>
+                    <form.Field name="category">
+                      {(field) => (
+                        <div className="space-y-2">
+                          <Label>Category</Label>
+                          <Select
+                            value={field.state.value || ""}
+                            onValueChange={(value: CategoryType) =>
+                              field.handleChange(value)
+                            }
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select category" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {categoryTypes.map((category) => (
+                                <SelectItem key={category} value={category}>
+                                  {category}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          {field.state.meta.errors && (
+                            <p className="text-sm text-destructive">
+                              {field.state.meta.errors.join(", ")}
+                            </p>
+                          )}
+                        </div>
+                      )}
+                    </form.Field>
+                  </div>
+                </div>
+
+                {/* Expiry Date */}
+                <div>
+                  <form.Field name="expiry_date">
+                    {(field) => (
+                      <div className="space-y-2">
+                        <Label>Expiry Date</Label>
+                        <Input
+                          type="date"
+                          value={field.state.value || ""}
+                          onChange={(e) => {
+                            const value = e.target.value || undefined;
+                            field.handleChange(value);
+                          }}
+                        />
+                        {field.state.meta.errors && (
+                          <p className="text-sm text-destructive">
+                            {field.state.meta.errors.join(", ")}
+                          </p>
+                        )}
+                      </div>
+                    )}
+                  </form.Field>
+                </div>
+
+                {/* Notes */}
+                <div>
+                  <form.Field name="notes">
+                    {(field) => (
+                      <div className="space-y-2">
+                        <Label>Notes</Label>
+                        <Textarea
+                          placeholder="Add any notes about the item"
+                          value={field.state.value || ""}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                        />
+                        {field.state.meta.errors && (
+                          <p className="text-sm text-destructive">
+                            {field.state.meta.errors.join(", ")}
+                          </p>
+                        )}
+                      </div>
+                    )}
+                  </form.Field>
+                </div>
+              </CardContent>
+
+              <CardFooter className="flex gap-2">
+                <form.Subscribe
+                  selector={(state) => [state.canSubmit, state.isSubmitting]}
+                >
+                  {([canSubmit, isSubmitting]) => (
+                    <>
+                      <Button type="submit" disabled={!canSubmit}>
+                        {isSubmitting ? "Adding..." : "Add Item"}
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => form.reset()}
+                      >
+                        Reset
+                      </Button>
+                    </>
+                  )}
+                </form.Subscribe>
+              </CardFooter>
+            </form>
+          </Card>
+        </div>
       )}
     </div>
   );
