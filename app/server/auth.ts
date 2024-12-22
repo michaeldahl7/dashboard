@@ -3,7 +3,7 @@ import { encodeBase32LowerCaseNoPadding, encodeHexLowerCase } from "@oslojs/enco
 import { Discord, GitHub, Google } from "arctic";
 import { eq } from "drizzle-orm";
 import { deleteCookie, getCookie, setCookie } from "vinxi/http";
-
+import { env } from "~/env/server";
 import { db } from "~/server/db";
 import {
   type Session,
@@ -90,20 +90,20 @@ export function setSessionTokenCookie(token: string, expiresAt: Date) {
 
 // OAuth2 Providers
 export const discord = new Discord(
-  process.env.DISCORD_CLIENT_ID as string,
-  process.env.DISCORD_CLIENT_SECRET as string,
-  process.env.DISCORD_REDIRECT_URI as string,
+  env.DISCORD_CLIENT_ID,
+  env.DISCORD_CLIENT_SECRET,
+  env.DISCORD_REDIRECT_URI,
 );
-export const github = new GitHub(
-  process.env.GITHUB_CLIENT_ID as string,
-  process.env.GITHUB_CLIENT_SECRET as string,
-  process.env.GITHUB_REDIRECT_URI || null,
-);
-export const google = new Google(
-  process.env.GOOGLE_CLIENT_ID as string,
-  process.env.GOOGLE_CLIENT_SECRET as string,
-  process.env.GOOGLE_REDIRECT_URI as string,
-);
+// export const github = new GitHub(
+//   env.GITHUB_CLIENT_ID,
+//   env.GITHUB_CLIENT_SECRET,
+//   env.GITHUB_REDIRECT_URI || null,
+// );
+// export const google = new Google(
+//   env.GOOGLE_CLIENT_ID,
+//   env.GOOGLE_CLIENT_SECRET,
+//   env.GOOGLE_REDIRECT_URI,
+// );
 
 /**
  * Retrieves the session and user data if valid.

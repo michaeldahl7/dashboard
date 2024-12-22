@@ -2,7 +2,6 @@ import type { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import {
   Outlet,
-  ScriptOnce,
   ScrollRestoration,
   createRootRouteWithContext,
 } from "@tanstack/react-router";
@@ -27,30 +26,28 @@ const getUser = createServerFn({ method: "GET" }).handler(async () => {
   return user;
 });
 
-export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
-  {
-    beforeLoad: async () => {
-      const user = await getUser();
-      return { user };
-    },
-    head: () => ({
-      meta: [
-        {
-          charSet: "utf-8",
-        },
-        {
-          name: "viewport",
-          content: "width=device-width, initial-scale=1",
-        },
-        {
-          title: "TanStarter",
-        },
-      ],
-      links: [{ rel: "stylesheet", href: appCss }],
-    }),
-    component: RootComponent,
+export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+  beforeLoad: async () => {
+    const user = await getUser();
+    return { user };
   },
-);
+  head: () => ({
+    meta: [
+      {
+        charSet: "utf-8",
+      },
+      {
+        name: "viewport",
+        content: "width=device-width, initial-scale=1",
+      },
+      {
+        title: "TanStarter",
+      },
+    ],
+    links: [{ rel: "stylesheet", href: appCss }],
+  }),
+  component: RootComponent,
+});
 
 function RootComponent() {
   return (

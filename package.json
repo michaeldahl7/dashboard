@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vinxi dev",
+    "dev": "vinxi dev --host",
     "build": "vinxi build",
     "start": "vinxi start",
     "format-and-lint": "biome check .",
@@ -11,9 +11,8 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
-    "db:seed": "pnpm dlx tsx --env-file=.env app/db/seed.ts ",
     "db:studio": "drizzle-kit studio",
-    "ui": "bunx shadcn@latest"
+    "ui": "bunx --bun shadcn@latest"
   },
   "dependencies": {
     "@oslojs/crypto": "^1.0.1",
@@ -21,6 +20,7 @@
     "@radix-ui/react-label": "^2.1.1",
     "@radix-ui/react-select": "^2.1.4",
     "@radix-ui/react-slot": "^1.1.1",
+    "@t3-oss/env-core": "^0.11.1",
     "@tanstack/react-form": "^0.40.4",
     "@tanstack/react-query": "^5.62.8",
     "@tanstack/react-query-devtools": "^5.62.8",
@@ -56,9 +56,5 @@
     "tailwindcss": "^3.4.17",
     "typescript": "^5.7.2",
     "vite-tsconfig-paths": "^5.1.4"
-  },
-  "trustedDependencies": [
-    "@biomejs/biome",
-    "@parcel/watcher"
-  ]
+  }
 }
