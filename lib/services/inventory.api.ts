@@ -1,10 +1,10 @@
 // app/services/inventory.api.ts
 import { createServerFn } from "@tanstack/start";
 import { zodValidator } from "@tanstack/zod-adapter";
-import { db } from "~/server/db";
-import { inventoryItem, foodItems } from "~/server/db/schema";
+import { db } from "~/lib/server/db";
+import { inventoryItem, foodItems } from "~/lib/server/db/schema";
 import { eq, and } from "drizzle-orm";
-import { authMiddleware } from "~/middleware/auth-guard";
+import { authMiddleware } from "~/lib/middleware/auth-guard";
 import {
   insertInventorySchema,
   updateInventorySchema,
@@ -15,7 +15,7 @@ import {
   itemInsertSchema,
   type InventoryItem,
   insertFoodItemSchema,
-} from "~/server/db/schema";
+} from "~/lib/server/db/schema";
 
 // export const getInventoryItems = createServerFn({ method: "GET" })
 //   .middleware([authMiddleware])

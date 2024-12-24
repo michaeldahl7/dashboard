@@ -1,5 +1,5 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import { Button } from "~/components/ui/button";
+import { Button } from "~/lib/components/ui/button";
 
 export const Route = createFileRoute("/signin")({
   component: AuthPage,
@@ -26,10 +26,20 @@ function AuthPage() {
           >
             Sign in with Discord
           </Button>
-          <Button formAction="/api/auth/github" type="submit" variant="outline" size="lg">
+          <Button
+            formAction="/api/auth/github"
+            type="submit"
+            variant="outline"
+            size="lg"
+          >
             Sign in with GitHub
           </Button>
-          <Button formAction="/api/auth/google" type="submit" variant="outline" size="lg">
+          <Button
+            formAction="/api/auth/google"
+            type="submit"
+            variant="outline"
+            size="lg"
+          >
             Sign in with Google
           </Button>
         </form>

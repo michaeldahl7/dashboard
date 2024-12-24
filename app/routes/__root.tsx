@@ -8,8 +8,8 @@ import {
 import { Meta, Scripts, createServerFn } from "@tanstack/start";
 import { Suspense, lazy } from "react";
 
-import { getAuthSession } from "~/server/auth";
-import appCss from "~/styles/app.css?url";
+import { getAuthSession } from "~/lib/server/auth";
+import appCss from "~/lib/styles/app.css?url";
 
 const TanStackRouterDevtools =
   process.env.NODE_ENV === "production"
@@ -26,28 +26,30 @@ const getUser = createServerFn({ method: "GET" }).handler(async () => {
   return user;
 });
 
-export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-  beforeLoad: async () => {
-    const user = await getUser();
-    return { user };
+export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
+  {
+    beforeLoad: async () => {
+      const user = await getUser();
+      return { user };
+    },
+    head: () => ({
+      meta: [
+        {
+          charSet: "utf-8",
+        },
+        {
+          name: "viewport",
+          content: "width=device-width, initial-scale=1",
+        },
+        {
+          title: "TanStarter",
+        },
+      ],
+      links: [{ rel: "stylesheet", href: appCss }],
+    }),
+    component: RootComponent,
   },
-  head: () => ({
-    meta: [
-      {
-        charSet: "utf-8",
-      },
-      {
-        name: "viewport",
-        content: "width=device-width, initial-scale=1",
-      },
-      {
-        title: "TanStarter",
-      },
-    ],
-    links: [{ rel: "stylesheet", href: appCss }],
-  }),
-  component: RootComponent,
-});
+);
 
 function RootComponent() {
   return (

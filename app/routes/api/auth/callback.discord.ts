@@ -7,9 +7,9 @@ import {
   discord,
   generateSessionToken,
   setSessionTokenCookie,
-} from "~/server/auth";
-import { db } from "~/server/db";
-import { oauthAccount, user } from "~/server/db/schema";
+} from "~/lib/server/auth";
+import { db } from "~/lib/server/db";
+import { oauthAccount, user } from "~/lib/server/db/schema";
 
 interface DiscordUser {
   id: string;
@@ -39,11 +39,14 @@ export const APIRoute = createAPIFileRoute("/api/auth/callback/discord")({
 
     try {
       const tokens = await discord.validateAuthorizationCode(code);
-      const discordUserResponse = await fetch("https://discord.com/api/v10/users/@me", {
-        headers: {
-          Authorization: `Bearer ${tokens.accessToken()}`,
+      const discordUserResponse = await fetch(
+        "https://discord.com/api/v10/users/@me",
+        {
+          headers: {
+            Authorization: `Bearer ${tokens.accessToken()}`,
+          },
         },
-      });
+      );
       const providerUser: DiscordUser = await discordUserResponse.json();
 
       const existingUser = await db.query.oauthAccount.findFirst({

@@ -1,16 +1,16 @@
 // app/routes/index.tsx
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { Button } from "~/components/ui/button";
-import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
-import { Textarea } from "~/components/ui/textarea";
+import { Button } from "~/lib/components/ui/button";
+import { Input } from "~/lib/components/ui/input";
+import { Label } from "~/lib/components/ui/label";
+import { Textarea } from "~/lib/components/ui/textarea";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "~/components/ui/select";
+} from "~/lib/components/ui/select";
 import {
   Card,
   CardHeader,
@@ -18,10 +18,10 @@ import {
   CardDescription,
   CardContent,
   CardFooter,
-} from "~/components/ui/card";
+} from "~/lib/components/ui/card";
 
 import { useForm } from "@tanstack/react-form";
-import { useInventoryMutations } from "~/services/inventory.query";
+import { useInventoryMutations } from "~/lib/services/inventory.query";
 import {
   locationTypes,
   categoryTypes,
@@ -30,7 +30,7 @@ import {
   type LocationType,
   type CategoryType,
   type UnitType,
-} from "~/server/db/schema";
+} from "~/lib/server/db/schema";
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -123,7 +123,9 @@ function Home() {
                             step="0.1"
                             value={field.state.value}
                             onChange={(e) =>
-                              field.handleChange(Number.parseFloat(e.target.value))
+                              field.handleChange(
+                                Number.parseFloat(e.target.value),
+                              )
                             }
                           />
                           {field.state.meta.errors && (
@@ -144,7 +146,9 @@ function Home() {
                           <Label>Unit</Label>
                           <Select
                             value={field.state.value || ""}
-                            onValueChange={(value: UnitType) => field.handleChange(value)}
+                            onValueChange={(value: UnitType) =>
+                              field.handleChange(value)
+                            }
                           >
                             <SelectTrigger>
                               <SelectValue placeholder="Select unit" />

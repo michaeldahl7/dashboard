@@ -1,15 +1,18 @@
 import { sha256 } from "@oslojs/crypto/sha2";
-import { encodeBase32LowerCaseNoPadding, encodeHexLowerCase } from "@oslojs/encoding";
+import {
+  encodeBase32LowerCaseNoPadding,
+  encodeHexLowerCase,
+} from "@oslojs/encoding";
 import { Discord, GitHub, Google } from "arctic";
 import { eq } from "drizzle-orm";
 import { deleteCookie, getCookie, setCookie } from "vinxi/http";
-import { env } from "~/env/server";
-import { db } from "~/server/db";
+import { env } from "~/lib/env/server";
+import { db } from "~/lib/server/db";
 import {
   type Session,
   session as sessionTable,
   user as userTable,
-} from "~/server/db/schema";
+} from "~/lib/server/db/schema";
 
 export const SESSION_COOKIE_NAME = "session";
 
@@ -19,7 +22,10 @@ export function generateSessionToken(): string {
   return encodeBase32LowerCaseNoPadding(bytes);
 }
 
-export async function createSession(token: string, userId: number): Promise<Session> {
+export async function createSession(
+  token: string,
+  userId: number,
+): Promise<Session> {
   const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
   const session: Session = {
     id: sessionId,
@@ -109,7 +115,9 @@ export const discord = new Discord(
  * Retrieves the session and user data if valid.
  * Can be used in API routes and server functions.
  */
-export async function getAuthSession({ refreshCookie } = { refreshCookie: true }) {
+export async function getAuthSession(
+  { refreshCookie } = { refreshCookie: true },
+) {
   const token = getCookie(SESSION_COOKIE_NAME);
   if (!token) {
     return { session: null, user: null };
