@@ -66,7 +66,7 @@ export const session = pgTable("session", {
    }).notNull(),
 });
 
-// ============= Inventory Tables =============
+
 export const inventory = pgTable("inventory", {
    id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
    name: text("name").notNull(),
@@ -77,6 +77,24 @@ export const inventory = pgTable("inventory", {
    created_at: timestamp("created_at").defaultNow().notNull(),
    updated_at: timestamp("updated_at").defaultNow(),
 });
+
+// 2. Generate base Drizzle types
+export type SelectInventory = typeof inventory.$inferSelect;
+export type InsertInventory = typeof inventory.$inferInsert;
+
+// 3. Create Zod schemas with refinements
+// Schema for database operations (includes all fields)
+export const InventorySchema = createSelectSchema(inventory);
+
+// Schema for form input (excludes system-managed fields)
+export const InventoryFormSchema = z.object({
+   name: z.string().min(1),
+   type: z.enum(inventoryTypes), 
+});
+
+// 4. Generate types from Zod schemas
+export type InventoryForm = z.infer<typeof InventoryFormSchema>;
+
 
 export const item = pgTable("item", {
    id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
@@ -90,18 +108,29 @@ export const item = pgTable("item", {
    updated_at: timestamp("updated_at").defaultNow(),
 });
 
+// With other type definitions
+export type SelectItem = typeof item.$inferSelect;
+export type InsertItem = typeof item.$inferInsert;
 
-// ============= Types =============
+// Database schema (full record validation)
+export const ItemSchema = createSelectSchema(item);
+
+// Form schema (user input validation)
+export const ItemFormSchema = z.object({
+  name: z.string().min(1),
+  inventory_id: z.number(),
+  quantity: z.number().positive().default(1),
+  unit: z.enum(quantityUnits).optional(),
+});
+
+export type ItemForm = z.infer<typeof ItemFormSchema>;
+
+
 // Auth Types
 export type SelectUser = typeof user.$inferSelect;
 export type InsertUser = typeof user.$inferInsert;
 export type Session = typeof session.$inferSelect;
 
-// Inventory Types
-export type SelectInventory = typeof inventory.$inferSelect;
-export type InsertInventory = typeof inventory.$inferInsert;
-export type SelectItem = typeof item.$inferSelect;
-export type InsertItem = typeof item.$inferInsert;
 
 export const InsertItemSchema = createInsertSchema(item, {
    unit: (schema) => schema.pipe(z.enum(quantityUnits)).nullable().optional(),
@@ -109,18 +138,3 @@ export const InsertItemSchema = createInsertSchema(item, {
 
 export const InsertInventorySchema = createInsertSchema(inventory);
 
-// Add form validation schema
-export const ItemFormSchema = z.object({
-   name: z.string().min(1),
-   inventory_id: z.number(),
-   quantity: z.number().optional(),
-   unit: z.enum(quantityUnits).optional(),
-});
-
-// Define form schemas separately from DB schemas
-export const InventoryFormSchema = z.object({
-   name: z.string().min(1),
-   type: z.enum(inventoryTypes),
-});
-
-export type InventoryForm = z.infer<typeof InventoryFormSchema>;

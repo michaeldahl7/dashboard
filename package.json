@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vinxi dev --host",
+    "dev": "vinxi dev",
     "build": "vinxi build",
     "start": "vinxi start",
     "format-and-lint": "biome check .",
