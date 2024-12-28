@@ -11,8 +11,8 @@ import { createSelectSchema, createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
 // ============= Enums & Types =============
-export const locationTypes = ["fridge", "freezer", "pantry", "counter"] as const;
-export type LocationType = (typeof locationTypes)[number];
+export const inventoryTypes = ["fridge", "freezer", "pantry", "counter"] as const;
+export type InventoryType = (typeof inventoryTypes)[number];
 
 export const quantityUnits = [
    "pieces",
@@ -67,49 +67,29 @@ export const session = pgTable("session", {
 });
 
 // ============= Inventory Tables =============
-export const location = pgTable("location", {
+export const inventory = pgTable("inventory", {
    id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
    name: text("name").notNull(),
-   type: text("type").notNull().$type<LocationType>(),
-   created_at: timestamp("created_at").defaultNow().notNull(),
-   updated_at: timestamp("updated_at").defaultNow(),
-});
-
-export const inventoryItem = pgTable("inventory_item", {
-   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
-   name: text("name").notNull(),
-   location_id: integer("location_id")
+   type: text("type").notNull().$type<InventoryType>(),
+   user_id: integer("user_id")
       .notNull()
-      .references(() => location.id),
-   quantity: real("quantity").notNull().default(1),
-   unit: text("unit").$type<QuantityUnit>(),
-   expiry_date: timestamp("expiry_date"),
-   notes: text("notes"),
+      .references(() => user.id),
    created_at: timestamp("created_at").defaultNow().notNull(),
    updated_at: timestamp("updated_at").defaultNow(),
 });
 
-// ============= Zod Schemas =============
-export const insertLocationSchema = createInsertSchema(location, {
-   type: z.enum(locationTypes, {
-      errorMap: () => ({ message: "Invalid location type" }),
-   }),
+export const item = pgTable("item", {
+   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+   name: text("name").notNull(),
+   inventory_id: integer("inventory_id")
+      .notNull()
+      .references(() => inventory.id),
+   quantity: real("quantity").default(1).notNull(),
+   unit: text("unit").$type<QuantityUnit>(),
+   created_at: timestamp("created_at").defaultNow().notNull(),
+   updated_at: timestamp("updated_at").defaultNow(),
 });
 
-export const insertInventorySchema = createInsertSchema(inventoryItem, {
-   unit: z
-      .enum(quantityUnits, {
-         errorMap: () => ({ message: "Invalid unit type" }),
-      })
-      .optional(),
-   quantity: z.number().positive("Quantity must be positive"),
-   name: z.string().min(1, "Name is required"),
-   expiry_date: z.date().optional().nullable(),
-   notes: z.string().max(500, "Notes cannot exceed 500 characters").optional().nullable(),
-   location_id: z.number({
-      required_error: "Location is required",
-   })
-});
 
 // ============= Types =============
 // Auth Types
@@ -118,19 +98,29 @@ export type InsertUser = typeof user.$inferInsert;
 export type Session = typeof session.$inferSelect;
 
 // Inventory Types
-export type Location = typeof location.$inferSelect;
-export type InsertLocation = typeof location.$inferInsert;
-export type InventoryItem = typeof inventoryItem.$inferSelect;
-export type InsertInventoryItem = z.infer<typeof insertInventorySchema>;
+export type SelectInventory = typeof inventory.$inferSelect;
+export type InsertInventory = typeof inventory.$inferInsert;
+export type SelectItem = typeof item.$inferSelect;
+export type InsertItem = typeof item.$inferInsert;
 
-// Response Types
-export type GetInventoryItemsResponse = {
-   id: number;
-   name: string;
-   location: { id: number; name: string; type: LocationType };
-   quantity: number;
-   unit: QuantityUnit | null;
-   expiry_date: Date | null;
-   notes: string | null;
-   created_at: Date;
-}[];
+export const InsertItemSchema = createInsertSchema(item, {
+   unit: (schema) => schema.pipe(z.enum(quantityUnits)).nullable().optional(),
+});
+
+export const InsertInventorySchema = createInsertSchema(inventory);
+
+// Add form validation schema
+export const ItemFormSchema = z.object({
+   name: z.string().min(1),
+   inventory_id: z.number(),
+   quantity: z.number().optional(),
+   unit: z.enum(quantityUnits).optional(),
+});
+
+// Define form schemas separately from DB schemas
+export const InventoryFormSchema = z.object({
+   name: z.string().min(1),
+   type: z.enum(inventoryTypes),
+});
+
+export type InventoryForm = z.infer<typeof InventoryFormSchema>;

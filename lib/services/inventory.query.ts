@@ -1,58 +1,40 @@
 // app/services/inventory.query.ts
-import {
-   queryOptions,
-   useMutation,
-   useQueryClient,
-   useSuspenseQuery,
-   type QueryKey,
-} from "@tanstack/react-query";
-import {
-   getInventoryItems,
-   getInventoryItem,
-   addInventoryItem,
-   updateInventoryItem,
-   deleteInventoryItem,
-} from "./inventory.api";
-import type { InsertInventoryItem, InventoryItem } from "~/lib/server/db/schema";
+import { queryOptions, useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import { getInventories, getItems, addInventory, addItem } from "./inventory.api";
+import type { InsertInventory, InsertItem, SelectItem, InventoryForm } from "~/lib/server/db/schema";
+import type { inventory } from "~/lib/server/db/schema";
 
-// Query Keys
+type Inventory = typeof inventory.$inferSelect;
+
 export const inventoryKeys = {
    all: ["inventory"] as const,
    lists: () => [...inventoryKeys.all, "list"] as const,
-   list: (filters: string) => [...inventoryKeys.lists(), { filters }] as const,
-   details: () => [...inventoryKeys.all, "detail"] as const,
-   detail: (id: number) => [...inventoryKeys.details(), id] as const,
+   items: (inventoryId: number) => [...inventoryKeys.all, "items", inventoryId] as const,
 };
 
-// Query Options
 export const inventoryQueryOptions = () => {
-   return queryOptions<InventoryItem[]>({
+   return queryOptions<Inventory[]>({
       queryKey: inventoryKeys.lists(),
-      queryFn: async () => {
-         const items = await getInventoryItems();
-         // Extract just the inventory_item from the response
-         return items.map(item => item.inventory_item);
-      },
+      queryFn: () => getInventories(),
    });
 };
 
-export const inventoryItemQueryOptions = (id: number) => {
-   return queryOptions<InventoryItem>({
-      queryKey: inventoryKeys.detail(id),
-      queryFn: () => getInventoryItem({ data: id }),
+export const itemsQueryOptions = (inventoryId: number) => {
+   return queryOptions<SelectItem[]>({
+      queryKey: inventoryKeys.items(inventoryId),
+      queryFn: () => getItems({ data: inventoryId }),
    });
 };
 
-// Queries
 export const useInventoryQuery = () => {
    return useSuspenseQuery(inventoryQueryOptions());
 };
 
-export const useInventoryItemQuery = (id: number) => {
-   return useSuspenseQuery(inventoryItemQueryOptions(id));
+export const useItemsQuery = (inventoryId: number) => {
+   return useSuspenseQuery(itemsQueryOptions(inventoryId));
 };
 
-// Mutations
+
 export const useInventoryMutations = () => {
    const queryClient = useQueryClient();
 
@@ -60,25 +42,15 @@ export const useInventoryMutations = () => {
       queryClient.invalidateQueries({ queryKey: inventoryKeys.all });
    };
 
-   const addItem = useMutation({
-      mutationFn: (data: InsertInventoryItem) => addInventoryItem({ data }),
+   const addInventoryMutation = useMutation({
+      mutationFn: (data: InventoryForm) => addInventory({ data }),
       onSuccess: invalidateInventory,
    });
 
-   const updateItem = useMutation({
-      mutationFn: (data: Partial<InsertInventoryItem> & { id: number }) =>
-         updateInventoryItem({ data }),
+   const addItemMutation = useMutation({
+      mutationFn: (data: InsertItem) => addItem({ data }),
       onSuccess: invalidateInventory,
    });
 
-   const deleteItem = useMutation({
-      mutationFn: (id: number) => deleteInventoryItem({ data: id }),
-      onSuccess: invalidateInventory,
-   });
-
-   return {
-      addItem,
-      updateItem,
-      deleteItem,
-   };
+   return { addInventory: addInventoryMutation, addItem: addItemMutation };
 };

@@ -5,64 +5,42 @@ import { db } from "~/lib/server/db";
 import { eq } from "drizzle-orm";
 import { authMiddleware } from "~/lib/middleware/auth-guard";
 import {
-   inventoryItem,
-   location,
-   insertInventorySchema,
-   type InsertInventoryItem,
+   inventory,
+   item,
+   InsertInventorySchema,
+   InsertItemSchema,
+   type InsertInventory,
+   type InsertItem,
 } from "~/lib/server/db/schema";
 
-export const getInventoryItems = createServerFn()
+export const getInventories = createServerFn()
    .middleware([authMiddleware])
    .handler(async () => {
-      return db.select().from(inventoryItem).leftJoin(location, eq(inventoryItem.location_id, location.id));
+      return db.select().from(inventory);
    });
 
-export const getInventoryItem = createServerFn()
+export const getItems = createServerFn()
    .middleware([authMiddleware])
    .validator(z.number())
-   .handler(async ({ data: id }) => {
+   .handler(async ({ data: inventoryId }) => {
       return db
          .select()
-         .from(inventoryItem)
-         .where(eq(inventoryItem.id, id))
-         .then((rows) => rows[0]);
+         .from(item)
+         .where(eq(item.inventory_id, inventoryId));
    });
 
-export const addInventoryItem = createServerFn()
+const inventoryTypeEnum = z.enum(["fridge", "freezer", "pantry", "counter"]);
+
+export const addInventory = createServerFn()
    .middleware([authMiddleware])
-   .validator((data: unknown) => insertInventorySchema.parse(data))
+   .validator((data: unknown) => InsertInventorySchema.parse(data))
    .handler(async ({ data }) => {
-      return db
-         .insert(inventoryItem)
-         .values(data)
-         .returning()
-         .then((rows) => rows[0]);
+      return db.insert(inventory).values(data as InsertInventory).returning();
    });
 
-export const updateInventoryItem = createServerFn()
+export const addItem = createServerFn()
    .middleware([authMiddleware])
-   .validator(
-      insertInventorySchema.partial().extend({
-         id: z.number(),
-      }),
-   )
+   .validator((data: unknown) => InsertItemSchema.parse(data))
    .handler(async ({ data }) => {
-      const { id, ...updates } = data;
-      return db
-         .update(inventoryItem)
-         .set(updates)
-         .where(eq(inventoryItem.id, id))
-         .returning()
-         .then((rows) => rows[0]);
-   });
-
-export const deleteInventoryItem = createServerFn()
-   .middleware([authMiddleware])
-   .validator(z.number())
-   .handler(async ({ data: id }) => {
-      return db
-         .delete(inventoryItem)
-         .where(eq(inventoryItem.id, id))
-         .returning()
-         .then((rows) => rows[0]);
+      return db.insert(item).values(data as InsertItem).returning();
    });
