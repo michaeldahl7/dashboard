@@ -28,7 +28,11 @@ export const inventoryKeys = {
 export const inventoryQueryOptions = () => {
    return queryOptions<InventoryItem[]>({
       queryKey: inventoryKeys.lists(),
-      queryFn: () => getInventoryItems(),
+      queryFn: async () => {
+         const items = await getInventoryItems();
+         // Extract just the inventory_item from the response
+         return items.map(item => item.inventory_item);
+      },
    });
 };
 

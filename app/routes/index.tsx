@@ -2,13 +2,7 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { Button } from "~/lib/components/ui/button";
 import InventoryForm from "~/lib/components/inventory-form";
-import {
-   Card,
-   CardHeader,
-   CardTitle,
-   CardDescription,
-   CardContent,
-} from "~/lib/components/ui/card";
+
 
 export const Route = createFileRoute("/")({
    component: Home,

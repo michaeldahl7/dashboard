@@ -6,6 +6,7 @@ import { eq } from "drizzle-orm";
 import { authMiddleware } from "~/lib/middleware/auth-guard";
 import {
    inventoryItem,
+   location,
    insertInventorySchema,
    type InsertInventoryItem,
 } from "~/lib/server/db/schema";
@@ -13,7 +14,7 @@ import {
 export const getInventoryItems = createServerFn()
    .middleware([authMiddleware])
    .handler(async () => {
-      return db.select().from(inventoryItem);
+      return db.select().from(inventoryItem).leftJoin(location, eq(inventoryItem.location_id, location.id));
    });
 
 export const getInventoryItem = createServerFn()

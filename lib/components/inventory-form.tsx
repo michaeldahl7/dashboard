@@ -26,14 +26,16 @@ import {
    insertInventorySchema,
    type QuantityUnit,
 } from "~/lib/server/db/schema";
+import { useLocationsQuery } from "~/lib/services/location.query";
 
 export default function InventoryForm() {
    const { addItem } = useInventoryMutations();
+   const { data: locations } = useLocationsQuery();
 
    const form = useForm<InsertInventoryItem>({
       defaultValues: {
          name: "",
-         location_id: 1,
+         location_id: locations?.[0]?.id,
          quantity: 1,
          unit: "pieces" as QuantityUnit,
          expiry_date: null,
@@ -135,6 +137,34 @@ export default function InventoryForm() {
                      )}
                   </form.Field>
                </div>
+
+               <form.Field name="location_id">
+                  {(field) => (
+                     <div className="space-y-2">
+                        <Label>Location</Label>
+                        <Select
+                           value={field.state.value?.toString() ?? ""}
+                           onValueChange={(value) => field.handleChange(Number(value))}
+                        >
+                           <SelectTrigger>
+                              <SelectValue placeholder="Select location" />
+                           </SelectTrigger>
+                           <SelectContent>
+                              {locations?.map((location) => (
+                                 <SelectItem key={location.id} value={location.id.toString()}>
+                                    {location.name}
+                                 </SelectItem>
+                              ))}
+                           </SelectContent>
+                        </Select>
+                        {field.state.meta.errors ? (
+                           <p className="text-sm text-destructive">
+                              {field.state.meta.errors}
+                           </p>
+                        ) : null}
+                     </div>
+                  )}
+               </form.Field>
 
                <form.Field name="expiry_date">
                   {(field) => {
