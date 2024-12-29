@@ -1,17 +1,17 @@
-import { createMiddleware } from "@tanstack/start";
-import { setResponseStatus } from "vinxi/http";
-import { getAuthSession } from "~/lib/server/auth";
+// // import { createMiddleware } from "@tanstack/start";
+// // import { setResponseStatus } from "vinxi/http";
+// // import { getAuthSession } from "~/lib/server/auth";
 
-/**
- * Middleware to force authentication on a server function, and add the user to the context.
- */
-export const authMiddleware = createMiddleware().server(async ({ next }) => {
-  const { user } = await getAuthSession();
+// // /**
+// //  * Middleware to force authentication on a server function, and add the user to the context.
+// //  */
+// export const authMiddleware = createMiddleware().server(async ({ next }) => {
+//    const { user } = await getAuthSession();
 
-  if (!user) {
-    setResponseStatus(401);
-    throw new Error("Unauthorized");
-  }
+//    if (!user) {
+//       setResponseStatus(401);
+//       throw new Error("Unauthorized");
+//    }
 
-  return next({ context: { user } });
-});
+//    return next({ context: { user } });
+// });
