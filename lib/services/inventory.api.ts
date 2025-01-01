@@ -1,5 +1,6 @@
 // app/services/inventory.api.ts
 import { createServerFn } from "@tanstack/start";
+import { ulid } from "ulid";
 import { z } from "zod";
 import { db } from "~/lib/server/db";
 import { eq } from "drizzle-orm";
@@ -33,6 +34,7 @@ export const addInventory = createServerFn()
    .validator((data: InventoryForm) => InventoryFormSchema.parse(data))
    .handler(async ({ data, context }) => {
       const inventoryData: InsertInventory = {
+         id: ulid(),
          ...data,
          user_id: context.user.id,
       };
@@ -45,6 +47,7 @@ export const addItem = createServerFn()
    .validator((data: ItemForm) => ItemFormSchema.parse(data))
    .handler(async ({ data }) => {
       const itemData: InsertItem = {
+         id: ulid(),
          ...data,
       };
 

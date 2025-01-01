@@ -4,7 +4,7 @@ import { Button } from "~/lib/components/ui/button";
 export const Route = createFileRoute("/dashboard")({
    component: DashboardLayout,
    beforeLoad: async ({ context }) => {
-      if (!context.isAuthenticated) {
+      if (!context.user) {
          throw redirect({ to: "/signin" });
       }
    },

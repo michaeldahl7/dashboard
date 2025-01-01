@@ -5,8 +5,7 @@ import { authClient } from "~/lib/utils/authClient";
 export const Route = createFileRoute("/signin")({
    component: AuthPage,
    beforeLoad: async ({ context }) => {
-      console.log(context);
-      if (context.isAuthenticated) {
+      if (context.user) {
          throw redirect({
             to: "/dashboard",
          });

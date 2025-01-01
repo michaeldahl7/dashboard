@@ -1,4 +1,12 @@
-import { boolean, pgTable, real, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import {
+   serial,
+   boolean,
+   pgTable,
+   real,
+   text,
+   timestamp,
+   integer,
+} from "drizzle-orm/pg-core";
 import { createSelectSchema, createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -22,7 +30,7 @@ export const quantityUnits = [
 export type QuantityUnit = (typeof quantityUnits)[number];
 
 export const user = pgTable("user", {
-   id: uuid("id").primaryKey().defaultRandom(),
+   id: text().primaryKey(),
    name: text("name").notNull(),
    email: text("email").notNull().unique(),
    emailVerified: boolean("email_verified").notNull(),
@@ -32,23 +40,23 @@ export const user = pgTable("user", {
 });
 
 export const session = pgTable("session", {
-   id: uuid("id").primaryKey().defaultRandom(),
+   id: text().primaryKey(),
    expiresAt: timestamp("expires_at").notNull(),
    token: text("token").notNull().unique(),
    createdAt: timestamp("created_at").notNull(),
    updatedAt: timestamp("updated_at").notNull(),
    ipAddress: text("ip_address"),
    userAgent: text("user_agent"),
-   userId: uuid("user_id")
+   userId: text("user_id")
       .notNull()
       .references(() => user.id),
 });
 
 export const account = pgTable("account", {
-   id: uuid("id").primaryKey().defaultRandom(),
+   id: text().primaryKey(),
    accountId: text("account_id").notNull(),
    providerId: text("provider_id").notNull(),
-   userId: uuid("user_id")
+   userId: text("user_id")
       .notNull()
       .references(() => user.id),
    accessToken: text("access_token"),
@@ -63,7 +71,7 @@ export const account = pgTable("account", {
 });
 
 export const verification = pgTable("verification", {
-   id: uuid("id").primaryKey().defaultRandom(),
+   id: text().primaryKey(),
    identifier: text("identifier").notNull(),
    value: text("value").notNull(),
    expiresAt: timestamp("expires_at").notNull(),
@@ -72,10 +80,10 @@ export const verification = pgTable("verification", {
 });
 
 export const inventory = pgTable("inventory", {
-   id: uuid("id").primaryKey().defaultRandom(),
+   id: text().primaryKey(),
    name: text("name").notNull(),
    type: text("type").notNull().$type<InventoryType>(),
-   user_id: uuid("user_id")
+   user_id: text("user_id")
       .notNull()
       .references(() => user.id),
    created_at: timestamp("created_at").defaultNow().notNull(),
@@ -100,9 +108,9 @@ export const InventoryFormSchema = z.object({
 export type InventoryForm = z.infer<typeof InventoryFormSchema>;
 
 export const item = pgTable("item", {
-   id: uuid("id").primaryKey().defaultRandom(),
+   id: text().primaryKey(),
    name: text("name").notNull(),
-   inventory_id: uuid("inventory_id")
+   inventory_id: text("inventory_id")
       .notNull()
       .references(() => inventory.id),
    quantity: real("quantity").default(1).notNull(),
