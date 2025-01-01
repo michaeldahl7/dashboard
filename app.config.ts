@@ -1,9 +1,7 @@
 import { defineConfig } from "@tanstack/start/config";
-import type { App } from "vinxi";
 import tsConfigPaths from "vite-tsconfig-paths";
-import { join } from "node:path";
 
-const tanstackApp = defineConfig({
+export default defineConfig({
    vite: {
       plugins: [
          tsConfigPaths({
@@ -11,21 +9,9 @@ const tanstackApp = defineConfig({
          }),
       ],
    },
-});
 
-const routers = tanstackApp.config.routers.map((r) => {
-   return {
-      ...r,
-      middleware: r.target === "server" ? "./app/middleware.ts" : undefined,
-   };
-});
-
-const app: App = {
-   ...tanstackApp,
-   config: {
-      ...tanstackApp.config,
-      routers: routers,
+   server: {
+      // https://tanstack.com/router/latest/docs/framework/react/start/hosting#deployment
+      // preset: "vercel",
    },
-};
-
-export default app;
+});

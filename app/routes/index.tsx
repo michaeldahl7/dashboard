@@ -52,23 +52,6 @@ function Home() {
                </Button>
             </div>
          )}
-
-         <a
-            className="text-muted-foreground underline hover:text-foreground"
-            href="https://github.com/alexgaudon/tanstarter-better-auth"
-            target="_blank"
-            rel="noreferrer noopener"
-         >
-            alexgaudon/tanstarter-better-auth
-         </a>
-         <a
-            className="text-muted-foreground underline hover:text-foreground"
-            href="https://github.com/dotnize/tanstarter"
-            target="_blank"
-            rel="noreferrer noopener"
-         >
-            based on dotnize/tanstarter
-         </a>
       </div>
    );
 }

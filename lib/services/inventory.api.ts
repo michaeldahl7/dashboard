@@ -16,20 +16,20 @@ import {
 } from "~/lib/server/db/schema";
 
 export const getInventories = createServerFn()
-   // .middleware([authMiddleware])
+   .middleware([authMiddleware])
    .handler(async ({ context }) => {
       return db.select().from(inventory).where(eq(inventory.user_id, context.user.id));
    });
 
 export const getItems = createServerFn()
-   // .middleware([authMiddleware])
+   .middleware([authMiddleware])
    .validator(z.string())
    .handler(async ({ data: inventoryId, context }) => {
       return db.select().from(item).where(eq(item.inventory_id, inventoryId));
    });
 
 export const addInventory = createServerFn()
-   // .middleware([authMiddleware])
+   .middleware([authMiddleware])
    .validator((data: InventoryForm) => InventoryFormSchema.parse(data))
    .handler(async ({ data, context }) => {
       const inventoryData: InsertInventory = {

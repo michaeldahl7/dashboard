@@ -13,7 +13,9 @@ import fontsourceInter from "@fontsource-variable/inter?url";
 import fontsourceJetBrainsMono from "@fontsource-variable/jetbrains-mono?url";
 
 import appCss from "~/lib/styles/app.css?url";
-import { authQueryOptions } from "~/lib/services/auth.query";
+// import { authQueryOptions } from "~/lib/services/auth.query";
+import { getWebRequest } from "vinxi/http";
+import { auth } from "~/lib/server/auth";
 
 const TanStackRouterDevtools =
    process.env.NODE_ENV === "production"
@@ -35,10 +37,17 @@ const TanStackQueryDevtools =
            })),
         );
 
+const getUser = createServerFn({ method: "GET" }).handler(async () => {
+   const { headers } = getWebRequest();
+   const session = await auth.api.getSession({ headers });
+
+   return session?.user || null;
+});
+
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-   beforeLoad: async ({ context }) => {
-      const auth = context.queryClient.ensureQueryData(authQueryOptions());
-      return auth;
+   beforeLoad: async () => {
+      const user = await getUser();
+      return { user };
    },
    head: () => ({
       meta: [
