@@ -12,9 +12,16 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as SigninImport } from './routes/signin'
-import { Route as DashboardImport } from './routes/dashboard'
+import { Route as UserIdImport } from './routes/$userId'
 import { Route as IndexImport } from './routes/index'
-import { Route as DashboardIndexImport } from './routes/dashboard/index'
+import { Route as UserIdIndexImport } from './routes/$userId/index'
+import { Route as UserIdSettingsImport } from './routes/$userId/settings'
+import { Route as UserIdHouseIdImport } from './routes/$userId/$houseId'
+import { Route as UserIdHouseIdIndexImport } from './routes/$userId/$houseId/index'
+import { Route as UserIdHouseIdSetupImport } from './routes/$userId/$houseId/setup'
+import { Route as UserIdHouseIdSettingsImport } from './routes/$userId/$houseId/settings'
+import { Route as UserIdHouseIdMembersImport } from './routes/$userId/$houseId/members'
+import { Route as UserIdHouseIdInventoryImport } from './routes/$userId/$houseId/inventory'
 
 // Create/Update Routes
 
@@ -24,9 +31,9 @@ const SigninRoute = SigninImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const DashboardRoute = DashboardImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
+const UserIdRoute = UserIdImport.update({
+  id: '/$userId',
+  path: '/$userId',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -36,10 +43,52 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const DashboardIndexRoute = DashboardIndexImport.update({
+const UserIdIndexRoute = UserIdIndexImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => DashboardRoute,
+  getParentRoute: () => UserIdRoute,
+} as any)
+
+const UserIdSettingsRoute = UserIdSettingsImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => UserIdRoute,
+} as any)
+
+const UserIdHouseIdRoute = UserIdHouseIdImport.update({
+  id: '/$houseId',
+  path: '/$houseId',
+  getParentRoute: () => UserIdRoute,
+} as any)
+
+const UserIdHouseIdIndexRoute = UserIdHouseIdIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => UserIdHouseIdRoute,
+} as any)
+
+const UserIdHouseIdSetupRoute = UserIdHouseIdSetupImport.update({
+  id: '/setup',
+  path: '/setup',
+  getParentRoute: () => UserIdHouseIdRoute,
+} as any)
+
+const UserIdHouseIdSettingsRoute = UserIdHouseIdSettingsImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => UserIdHouseIdRoute,
+} as any)
+
+const UserIdHouseIdMembersRoute = UserIdHouseIdMembersImport.update({
+  id: '/members',
+  path: '/members',
+  getParentRoute: () => UserIdHouseIdRoute,
+} as any)
+
+const UserIdHouseIdInventoryRoute = UserIdHouseIdInventoryImport.update({
+  id: '/inventory',
+  path: '/inventory',
+  getParentRoute: () => UserIdHouseIdRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -53,11 +102,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardImport
+    '/$userId': {
+      id: '/$userId'
+      path: '/$userId'
+      fullPath: '/$userId'
+      preLoaderRoute: typeof UserIdImport
       parentRoute: typeof rootRoute
     }
     '/signin': {
@@ -67,69 +116,193 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SigninImport
       parentRoute: typeof rootRoute
     }
-    '/dashboard/': {
-      id: '/dashboard/'
+    '/$userId/$houseId': {
+      id: '/$userId/$houseId'
+      path: '/$houseId'
+      fullPath: '/$userId/$houseId'
+      preLoaderRoute: typeof UserIdHouseIdImport
+      parentRoute: typeof UserIdImport
+    }
+    '/$userId/settings': {
+      id: '/$userId/settings'
+      path: '/settings'
+      fullPath: '/$userId/settings'
+      preLoaderRoute: typeof UserIdSettingsImport
+      parentRoute: typeof UserIdImport
+    }
+    '/$userId/': {
+      id: '/$userId/'
       path: '/'
-      fullPath: '/dashboard/'
-      preLoaderRoute: typeof DashboardIndexImport
-      parentRoute: typeof DashboardImport
+      fullPath: '/$userId/'
+      preLoaderRoute: typeof UserIdIndexImport
+      parentRoute: typeof UserIdImport
+    }
+    '/$userId/$houseId/inventory': {
+      id: '/$userId/$houseId/inventory'
+      path: '/inventory'
+      fullPath: '/$userId/$houseId/inventory'
+      preLoaderRoute: typeof UserIdHouseIdInventoryImport
+      parentRoute: typeof UserIdHouseIdImport
+    }
+    '/$userId/$houseId/members': {
+      id: '/$userId/$houseId/members'
+      path: '/members'
+      fullPath: '/$userId/$houseId/members'
+      preLoaderRoute: typeof UserIdHouseIdMembersImport
+      parentRoute: typeof UserIdHouseIdImport
+    }
+    '/$userId/$houseId/settings': {
+      id: '/$userId/$houseId/settings'
+      path: '/settings'
+      fullPath: '/$userId/$houseId/settings'
+      preLoaderRoute: typeof UserIdHouseIdSettingsImport
+      parentRoute: typeof UserIdHouseIdImport
+    }
+    '/$userId/$houseId/setup': {
+      id: '/$userId/$houseId/setup'
+      path: '/setup'
+      fullPath: '/$userId/$houseId/setup'
+      preLoaderRoute: typeof UserIdHouseIdSetupImport
+      parentRoute: typeof UserIdHouseIdImport
+    }
+    '/$userId/$houseId/': {
+      id: '/$userId/$houseId/'
+      path: '/'
+      fullPath: '/$userId/$houseId/'
+      preLoaderRoute: typeof UserIdHouseIdIndexImport
+      parentRoute: typeof UserIdHouseIdImport
     }
   }
 }
 
 // Create and export the route tree
 
-interface DashboardRouteChildren {
-  DashboardIndexRoute: typeof DashboardIndexRoute
+interface UserIdHouseIdRouteChildren {
+  UserIdHouseIdInventoryRoute: typeof UserIdHouseIdInventoryRoute
+  UserIdHouseIdMembersRoute: typeof UserIdHouseIdMembersRoute
+  UserIdHouseIdSettingsRoute: typeof UserIdHouseIdSettingsRoute
+  UserIdHouseIdSetupRoute: typeof UserIdHouseIdSetupRoute
+  UserIdHouseIdIndexRoute: typeof UserIdHouseIdIndexRoute
 }
 
-const DashboardRouteChildren: DashboardRouteChildren = {
-  DashboardIndexRoute: DashboardIndexRoute,
+const UserIdHouseIdRouteChildren: UserIdHouseIdRouteChildren = {
+  UserIdHouseIdInventoryRoute: UserIdHouseIdInventoryRoute,
+  UserIdHouseIdMembersRoute: UserIdHouseIdMembersRoute,
+  UserIdHouseIdSettingsRoute: UserIdHouseIdSettingsRoute,
+  UserIdHouseIdSetupRoute: UserIdHouseIdSetupRoute,
+  UserIdHouseIdIndexRoute: UserIdHouseIdIndexRoute,
 }
 
-const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
-  DashboardRouteChildren,
+const UserIdHouseIdRouteWithChildren = UserIdHouseIdRoute._addFileChildren(
+  UserIdHouseIdRouteChildren,
 )
+
+interface UserIdRouteChildren {
+  UserIdHouseIdRoute: typeof UserIdHouseIdRouteWithChildren
+  UserIdSettingsRoute: typeof UserIdSettingsRoute
+  UserIdIndexRoute: typeof UserIdIndexRoute
+}
+
+const UserIdRouteChildren: UserIdRouteChildren = {
+  UserIdHouseIdRoute: UserIdHouseIdRouteWithChildren,
+  UserIdSettingsRoute: UserIdSettingsRoute,
+  UserIdIndexRoute: UserIdIndexRoute,
+}
+
+const UserIdRouteWithChildren =
+  UserIdRoute._addFileChildren(UserIdRouteChildren)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRouteWithChildren
+  '/$userId': typeof UserIdRouteWithChildren
   '/signin': typeof SigninRoute
-  '/dashboard/': typeof DashboardIndexRoute
+  '/$userId/$houseId': typeof UserIdHouseIdRouteWithChildren
+  '/$userId/settings': typeof UserIdSettingsRoute
+  '/$userId/': typeof UserIdIndexRoute
+  '/$userId/$houseId/inventory': typeof UserIdHouseIdInventoryRoute
+  '/$userId/$houseId/members': typeof UserIdHouseIdMembersRoute
+  '/$userId/$houseId/settings': typeof UserIdHouseIdSettingsRoute
+  '/$userId/$houseId/setup': typeof UserIdHouseIdSetupRoute
+  '/$userId/$houseId/': typeof UserIdHouseIdIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/signin': typeof SigninRoute
-  '/dashboard': typeof DashboardIndexRoute
+  '/$userId/settings': typeof UserIdSettingsRoute
+  '/$userId': typeof UserIdIndexRoute
+  '/$userId/$houseId/inventory': typeof UserIdHouseIdInventoryRoute
+  '/$userId/$houseId/members': typeof UserIdHouseIdMembersRoute
+  '/$userId/$houseId/settings': typeof UserIdHouseIdSettingsRoute
+  '/$userId/$houseId/setup': typeof UserIdHouseIdSetupRoute
+  '/$userId/$houseId': typeof UserIdHouseIdIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRouteWithChildren
+  '/$userId': typeof UserIdRouteWithChildren
   '/signin': typeof SigninRoute
-  '/dashboard/': typeof DashboardIndexRoute
+  '/$userId/$houseId': typeof UserIdHouseIdRouteWithChildren
+  '/$userId/settings': typeof UserIdSettingsRoute
+  '/$userId/': typeof UserIdIndexRoute
+  '/$userId/$houseId/inventory': typeof UserIdHouseIdInventoryRoute
+  '/$userId/$houseId/members': typeof UserIdHouseIdMembersRoute
+  '/$userId/$houseId/settings': typeof UserIdHouseIdSettingsRoute
+  '/$userId/$houseId/setup': typeof UserIdHouseIdSetupRoute
+  '/$userId/$houseId/': typeof UserIdHouseIdIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard' | '/signin' | '/dashboard/'
+  fullPaths:
+    | '/'
+    | '/$userId'
+    | '/signin'
+    | '/$userId/$houseId'
+    | '/$userId/settings'
+    | '/$userId/'
+    | '/$userId/$houseId/inventory'
+    | '/$userId/$houseId/members'
+    | '/$userId/$houseId/settings'
+    | '/$userId/$houseId/setup'
+    | '/$userId/$houseId/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/signin' | '/dashboard'
-  id: '__root__' | '/' | '/dashboard' | '/signin' | '/dashboard/'
+  to:
+    | '/'
+    | '/signin'
+    | '/$userId/settings'
+    | '/$userId'
+    | '/$userId/$houseId/inventory'
+    | '/$userId/$houseId/members'
+    | '/$userId/$houseId/settings'
+    | '/$userId/$houseId/setup'
+    | '/$userId/$houseId'
+  id:
+    | '__root__'
+    | '/'
+    | '/$userId'
+    | '/signin'
+    | '/$userId/$houseId'
+    | '/$userId/settings'
+    | '/$userId/'
+    | '/$userId/$houseId/inventory'
+    | '/$userId/$houseId/members'
+    | '/$userId/$houseId/settings'
+    | '/$userId/$houseId/setup'
+    | '/$userId/$houseId/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  DashboardRoute: typeof DashboardRouteWithChildren
+  UserIdRoute: typeof UserIdRouteWithChildren
   SigninRoute: typeof SigninRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  DashboardRoute: DashboardRouteWithChildren,
+  UserIdRoute: UserIdRouteWithChildren,
   SigninRoute: SigninRoute,
 }
 
@@ -144,25 +317,62 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/dashboard",
+        "/$userId",
         "/signin"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/dashboard": {
-      "filePath": "dashboard.tsx",
+    "/$userId": {
+      "filePath": "$userId.tsx",
       "children": [
-        "/dashboard/"
+        "/$userId/$houseId",
+        "/$userId/settings",
+        "/$userId/"
       ]
     },
     "/signin": {
       "filePath": "signin.tsx"
     },
-    "/dashboard/": {
-      "filePath": "dashboard/index.tsx",
-      "parent": "/dashboard"
+    "/$userId/$houseId": {
+      "filePath": "$userId/$houseId.tsx",
+      "parent": "/$userId",
+      "children": [
+        "/$userId/$houseId/inventory",
+        "/$userId/$houseId/members",
+        "/$userId/$houseId/settings",
+        "/$userId/$houseId/setup",
+        "/$userId/$houseId/"
+      ]
+    },
+    "/$userId/settings": {
+      "filePath": "$userId/settings.tsx",
+      "parent": "/$userId"
+    },
+    "/$userId/": {
+      "filePath": "$userId/index.tsx",
+      "parent": "/$userId"
+    },
+    "/$userId/$houseId/inventory": {
+      "filePath": "$userId/$houseId/inventory.tsx",
+      "parent": "/$userId/$houseId"
+    },
+    "/$userId/$houseId/members": {
+      "filePath": "$userId/$houseId/members.tsx",
+      "parent": "/$userId/$houseId"
+    },
+    "/$userId/$houseId/settings": {
+      "filePath": "$userId/$houseId/settings.tsx",
+      "parent": "/$userId/$houseId"
+    },
+    "/$userId/$houseId/setup": {
+      "filePath": "$userId/$houseId/setup.tsx",
+      "parent": "/$userId/$houseId"
+    },
+    "/$userId/$houseId/": {
+      "filePath": "$userId/$houseId/index.tsx",
+      "parent": "/$userId/$houseId"
     }
   }
 }

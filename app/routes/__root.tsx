@@ -1,3 +1,4 @@
+import type { User } from '~/lib/types/user'
 import type { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import {
@@ -15,7 +16,7 @@ import fontsourceJetBrainsMono from "@fontsource-variable/jetbrains-mono?url";
 import appCss from "~/lib/styles/app.css?url";
 // import { authQueryOptions } from "~/lib/services/auth.query";
 import { getWebRequest } from "vinxi/http";
-import { auth } from "~/lib/server/auth";
+import { type Auth, auth } from "~/lib/server/auth";
 
 const TanStackRouterDevtools =
    process.env.NODE_ENV === "production"
@@ -37,17 +38,32 @@ const TanStackQueryDevtools =
            })),
         );
 
+
+        
 const getUser = createServerFn({ method: "GET" }).handler(async () => {
    const { headers } = getWebRequest();
    const session = await auth.api.getSession({ headers });
 
-   return session?.user || null;
+   const authResult: Auth = !session
+   ? { isAuthenticated: false, user: null, session: null }
+   : {
+       isAuthenticated: true,
+       user: session.user,
+       session: session.session,
+     };
+
+
+   return authResult;
 });
 
-export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+interface RouterContext {
+   queryClient: QueryClient
+}
+
+export const Route = createRootRouteWithContext<RouterContext>()({
    beforeLoad: async () => {
-      const user = await getUser();
-      return { user };
+      const auth = await getUser();
+      return { auth };
    },
    head: () => ({
       meta: [

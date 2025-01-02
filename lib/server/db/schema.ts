@@ -79,13 +79,36 @@ export const verification = pgTable("verification", {
    updatedAt: timestamp("updated_at"),
 });
 
+export const house = pgTable("house", {
+   id: text().primaryKey(),
+   name: text("name").notNull(),
+   owner_id: text("owner_id")
+      .notNull()
+      .references(() => user.id),
+   created_at: timestamp("created_at").defaultNow().notNull(),
+   updated_at: timestamp("updated_at").defaultNow(),
+});
+
+export const houseMember = pgTable("house_member", {
+   id: text().primaryKey(),
+   house_id: text("house_id")
+      .notNull()
+      .references(() => house.id),
+   user_id: text("user_id")
+      .notNull()
+      .references(() => user.id),
+   role: text("role").$type<"admin" | "member">().default("member"),
+   created_at: timestamp("created_at").defaultNow().notNull(),
+   updated_at: timestamp("updated_at").defaultNow(),
+});
+
 export const inventory = pgTable("inventory", {
    id: text().primaryKey(),
    name: text("name").notNull(),
    type: text("type").notNull().$type<InventoryType>(),
-   user_id: text("user_id")
+   house_id: text("house_id")
       .notNull()
-      .references(() => user.id),
+      .references(() => house.id),
    created_at: timestamp("created_at").defaultNow().notNull(),
    updated_at: timestamp("updated_at").defaultNow(),
 });
@@ -146,3 +169,16 @@ export const InsertItemSchema = createInsertSchema(item, {
 });
 
 export const InsertInventorySchema = createInsertSchema(inventory);
+
+export const HouseSchema = createSelectSchema(house);
+export const HouseMemberSchema = createSelectSchema(houseMember);
+
+export const HouseFormSchema = z.object({
+   name: z.string().min(1),
+});
+
+export type SelectHouse = typeof house.$inferSelect;
+export type InsertHouse = typeof house.$inferInsert;
+export type SelectHouseMember = typeof houseMember.$inferSelect;
+export type InsertHouseMember = typeof houseMember.$inferInsert;
+export type HouseForm = z.infer<typeof HouseFormSchema>;

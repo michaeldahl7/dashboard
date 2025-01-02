@@ -1,38 +1,26 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
-import { Button } from "~/lib/components/ui/button";
-import { authClient } from "~/lib/utils/authClient";
+import { createFileRoute } from '@tanstack/react-router'
+import { Button } from '~/lib/components/ui/button'
+// import { Discord } from 'lucide-react'
 
-export const Route = createFileRoute("/signin")({
-   component: AuthPage,
-   beforeLoad: async ({ context }) => {
-      if (context.user) {
-         throw redirect({
-            to: "/dashboard",
-         });
-      }
-   },
-});
+export const Route = createFileRoute('/signin')({
+  component: SignIn,
+})
 
-function AuthPage() {
-   return (
-      <div className="flex min-h-screen items-center justify-center">
-         <div className="flex flex-col items-center gap-8 rounded-xl border bg-card p-10">
-            Logo here
-            <form method="GET" className="flex flex-col gap-2">
-               <Button
-                  variant="outline"
-                  type="button"
-                  onClick={async () => {
-                     await authClient.signIn.social({
-                        provider: "discord",
-                        callbackURL: "/", //redirect to dashboard after sign in
-                     });
-                  }}
-               >
-                  Sign in with Discord
-               </Button>
-            </form>
-         </div>
-      </div>
-   );
+function SignIn() {
+  return (
+    <div className="flex flex-col items-center gap-6">
+      <h1 className="text-2xl font-bold">Welcome to KITCHN</h1>
+      <Button
+        size="lg"
+        className="flex items-center gap-2"
+        onClick={() => {
+          // Redirect to Discord OAuth
+          window.location.href = '/api/auth/discord'
+        }}
+      >
+        {/* <Discord className="h-5 w-5" /> */}
+        Sign in with Discord
+      </Button>
+    </div>
+  )
 }
