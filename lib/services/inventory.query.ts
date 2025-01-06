@@ -11,7 +11,7 @@ import type {
    SelectItem,
    InventoryForm,
    ItemForm,
-} from "~/lib/server/db/schema";
+} from "~/lib/server/schema/inventory.schema";
 
 // Query keys for cache management
 export const inventoryKeys = {
@@ -21,10 +21,10 @@ export const inventoryKeys = {
 };
 
 // Query options
-export const inventoryQueryOptions = () => {
+export const inventoryQueryOptions = (houseId: string) => {
    return queryOptions<SelectInventory[]>({
       queryKey: inventoryKeys.lists(),
-      queryFn: () => getInventories(),
+      queryFn: () => getInventories({ data: houseId }),
    });
 };
 
@@ -36,8 +36,8 @@ export const itemsQueryOptions = (inventoryId: string) => {
 };
 
 // Hooks
-export const useInventoryQuery = () => {
-   return useSuspenseQuery(inventoryQueryOptions());
+export const useInventoryQuery = (houseId: string) => {
+   return useSuspenseQuery(inventoryQueryOptions(houseId));
 };
 
 export const useItemsQuery = (inventoryId: string) => {

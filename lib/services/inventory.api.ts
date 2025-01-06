@@ -14,12 +14,15 @@ import {
    type InsertItem,
    type InventoryForm,
    type ItemForm,
-} from "~/lib/server/db/schema";
+} from "~/lib/server/schema/inventory.schema";
 
 export const getInventories = createServerFn()
    .middleware([authMiddleware])
-   .handler(async ({ context }) => {
-      return db.select().from(inventory).where(eq(inventory.user_id, context.user.id));
+   .validator(z.string())
+   .handler(async ({ data: houseId }) => {
+      return db.select()
+         .from(inventory)
+         .where(eq(inventory.house_id, houseId));
    });
 
 export const getItems = createServerFn()
@@ -32,13 +35,13 @@ export const getItems = createServerFn()
 export const addInventory = createServerFn()
    .middleware([authMiddleware])
    .validator((data: InventoryForm) => InventoryFormSchema.parse(data))
-   .handler(async ({ data, context }) => {
+   .handler(async ({ data }) => {
       const inventoryData: InsertInventory = {
          id: ulid(),
-         ...data,
-         user_id: context.user.id,
+         name: data.name,
+         type: data.type,
+         house_id: data.houseId,
       };
-
       return db.insert(inventory).values(inventoryData).returning();
    });
 
@@ -48,7 +51,10 @@ export const addItem = createServerFn()
    .handler(async ({ data }) => {
       const itemData: InsertItem = {
          id: ulid(),
-         ...data,
+         name: data.name,
+         inventory_id: data.inventoryId,
+         quantity: data.quantity,
+         unit: data.unit,
       };
 
       return db.insert(item).values(itemData).returning();

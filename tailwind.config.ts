@@ -1,9 +1,14 @@
 import type { Config } from "tailwindcss";
 import tailwindcssAnimate from "tailwindcss-animate";
+import defaultTheme from 'tailwindcss/defaultTheme'
+import typography from '@tailwindcss/typography'
 
 export default {
   darkMode: ["class"],
-  content: ["./lib/**/*.tsx"],
+  content: [
+    "./lib/**/*.tsx",
+    "./app/**/*.tsx",
+  ],
   theme: {
   	extend: {
   		borderRadius: {
@@ -60,9 +65,7 @@ export default {
   				accent: 'hsl(var(--sidebar-accent))',
   				'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
   				border: 'hsl(var(--sidebar-border))',
-  				ring: 'hsl(var(--sidebar-ring))',
-  				'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
-  				'accent-foreground': 'hsl(var(--sidebar-accent-foreground))'
+  				ring: 'hsl(var(--sidebar-ring))'
   			}
   		},
   		keyframes: {
@@ -86,8 +89,18 @@ export default {
   		animation: {
   			'accordion-down': 'accordion-down 0.2s ease-out',
   			'accordion-up': 'accordion-up 0.2s ease-out'
+  		},
+  		fontFamily: {
+  			sans: [
+  				'Inter Variable',
+                    ...defaultTheme.fontFamily.sans
+                ],
+  			mono: [
+  				'JetBrains Mono Variable',
+                    ...defaultTheme.fontFamily.mono
+                ]
   		}
   	}
   },
-  plugins: [tailwindcssAnimate],
+  plugins: [typography, tailwindcssAnimate],
 } satisfies Config;

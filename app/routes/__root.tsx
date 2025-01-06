@@ -1,4 +1,3 @@
-import type { User } from '~/lib/types/user'
 import type { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import {
@@ -8,15 +7,14 @@ import {
 } from "@tanstack/react-router";
 import { Meta, Scripts, createServerFn } from "@tanstack/start";
 import { Suspense, lazy } from "react";
-// import type { RouterContext } from "~/app/router";
 
 import fontsourceInter from "@fontsource-variable/inter?url";
 import fontsourceJetBrainsMono from "@fontsource-variable/jetbrains-mono?url";
 
 import appCss from "~/lib/styles/app.css?url";
-// import { authQueryOptions } from "~/lib/services/auth.query";
 import { getWebRequest } from "vinxi/http";
 import { type Auth, auth } from "~/lib/server/auth";
+import { ThemeProvider } from "~/lib/components/theme-provider";
 
 const TanStackRouterDevtools =
    process.env.NODE_ENV === "production"
@@ -38,31 +36,28 @@ const TanStackQueryDevtools =
            })),
         );
 
-
-        
-const getUser = createServerFn({ method: "GET" }).handler(async () => {
+const getAuth = createServerFn({ method: "GET" }).handler(async () => {
    const { headers } = getWebRequest();
    const session = await auth.api.getSession({ headers });
 
    const authResult: Auth = !session
-   ? { isAuthenticated: false, user: null, session: null }
-   : {
-       isAuthenticated: true,
-       user: session.user,
-       session: session.session,
-     };
-
+      ? { isAuthenticated: false, user: null, session: null }
+      : {
+           isAuthenticated: true,
+           user: session.user,
+           session: session.session,
+        };
 
    return authResult;
 });
 
 interface RouterContext {
-   queryClient: QueryClient
+   queryClient: QueryClient;
 }
 
 export const Route = createRootRouteWithContext<RouterContext>()({
    beforeLoad: async () => {
-      const auth = await getUser();
+      const auth = await getAuth();
       return { auth };
    },
    head: () => ({
@@ -79,6 +74,10 @@ export const Route = createRootRouteWithContext<RouterContext>()({
          },
       ],
       links: [
+         {
+            rel: 'icon',
+            href: '/favicon.ico',
+          },
          { rel: "stylesheet", href: appCss },
          {
             rel: "stylesheet",
@@ -91,6 +90,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
       ],
    }),
    component: RootComponent,
+
 });
 
 function RootComponent() {
@@ -103,13 +103,25 @@ function RootComponent() {
 
 function RootDocument({ children }: { readonly children: React.ReactNode }) {
    return (
-      <html lang="en">
+      <html lang="en" suppressHydrationWarning>
          <head>
             <Meta />
          </head>
          <body>
+         <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
             {children}
+            </ThemeProvider>
             <ScrollRestoration />
+            <ReactQueryDevtools buttonPosition="bottom-left" />
+        <Suspense>
+          <TanStackRouterDevtools position="bottom-right" />
+        </Suspense>
+
             <Scripts />
          </body>
       </html>

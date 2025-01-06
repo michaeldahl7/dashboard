@@ -23,7 +23,7 @@ import {
   inventoryTypes,
   type InventoryType,
   type InventoryForm as InventoryFormType,
-} from "~/lib/server/db/schema";
+} from "~/lib/server/schema/inventory.schema";
 
 export function AddInventoryForm() {
   const { addInventory } = useInventoryMutations();
@@ -32,6 +32,7 @@ export function AddInventoryForm() {
     defaultValues: {
       name: "",
       type: "fridge" as InventoryType,
+      houseId: "",
     },
     onSubmit: async ({ value }) => {
       try {

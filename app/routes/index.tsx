@@ -1,57 +1,94 @@
-import { Link, createFileRoute } from "@tanstack/react-router";
-import { Button } from "~/lib/components/ui/button";
-import { authClient } from "~/lib/utils/authClient";
+import { createFileRoute, redirect } from "@tanstack/react-router";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/lib/components/ui/card";
+import { UsernameForm } from "~/lib/components/onboarding/username-form";
+import { updateOnboardingStep } from "~/lib/services/user.api";
+import type { OnboardingStep } from "~/lib/server/schema/types";
+import { HouseForm } from "~/lib/components/onboarding/house-form";
+import { InventoryForm } from "~/lib/components/onboarding/inventory-form";
 
-export const Route = createFileRoute("/")({
-  component: Home,
+const ONBOARDING_PATHS: Record<OnboardingStep, string> = {
+  username: '/',
+  house: '/onboarding/house',
+  inventory: '/onboarding/inventory',
+  completed: '/dashboard'
+} as const;
+
+export const Route = createFileRoute('/')({
+  component: IndexRoute,
+  beforeLoad: ({ context }) => {
+    const { user } = context.auth;
+    if (!user) throw redirect({ to: '/signup' });
+    
+    // Redirect if not on username step
+    if (user.onboardingStep !== "username") {
+      const nextPath = ONBOARDING_PATHS[user.onboardingStep as OnboardingStep];
+      throw redirect({ to: nextPath });
+    }
+
+    return { user };
+  },
 });
 
-function Home() {
-  const { auth } = Route.useRouteContext();
+function IndexRoute() {
+  const { user } = Route.useRouteContext();
+
+  const onStepComplete = async (nextStep: OnboardingStep) => {
+    await updateOnboardingStep({
+      data: {
+        userId: user.id,
+        step: nextStep
+      }
+    });
+  };
+
+  const renderStep = () => {
+    switch (user.onboardingStep) {
+      case "username":
+        return {
+          title: "Welcome!",
+          description: "Let's get started by choosing your username",
+          form: <UsernameForm 
+            userId={user.id} 
+            onSuccess={() => onStepComplete("house")} 
+          />
+        };
+      case "house":
+        return {
+          title: "Set Up Your Kitchen",
+          description: "Create your first house to get started",
+          form: <HouseForm 
+            userId={user.id} 
+            onSuccess={() => onStepComplete("inventory")} 
+          />
+        };
+      case "inventory":
+        return {
+          title: "Set Up Your Inventory",
+          description: "Add your storage locations",
+          form: <InventoryForm 
+            userId={user.id}
+            houseId={user.currentHouseId!}
+            onSuccess={() => onStepComplete("completed")} 
+          />
+        };
+      default:
+        throw redirect({ to: '/dashboard' });
+    }
+  };
+
+  const { title, description, form } = renderStep();
 
   return (
-    <div className="flex flex-col gap-4 p-6">
-      <h1 className="text-4xl font-bold">TanStarter</h1>
-      <div className="flex items-center gap-2">
-        This is an unprotected page:
-        <pre className="rounded-md border bg-card p-1 text-card-foreground">
-          routes/index.tsx
-        </pre>
-      </div>
-
-      {auth.isAuthenticated ? (
-        <div className="flex flex-col gap-2">
-          <p>Welcome back, {auth.user?.name}!</p>
-          <Button type="button" asChild className="w-fit" size="lg">
-            {/* <Link to="/dashboard">Go to Dashboard</Link> */}
-          </Button>
-          <div>
-            More data:
-            <pre>{JSON.stringify(auth, null, 2)}</pre>
-          </div>
-
-          <Button
-            onClick={() => {
-              authClient.signOut().then(() => {
-                window.location.reload();
-                window.location.href = "/";
-              });
-            }}
-            className="w-fit"
-            variant="destructive"
-            size="lg"
-          >
-            Sign out
-          </Button>
-        </div>
-      ) : (
-        <div className="flex flex-col gap-2">
-          <p>You are not signed in.</p>
-          <Button type="button" asChild className="w-fit" size="lg">
-            <Link to="/signin">Sign in</Link>
-          </Button>
-        </div>
-      )}
+    <div className="min-h-screen flex items-center justify-center">
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle>{title}</CardTitle>
+          <CardDescription>{description}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          {form}
+        </CardContent>
+      </Card>
     </div>
   );
 }
