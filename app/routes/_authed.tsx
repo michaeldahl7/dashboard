@@ -19,7 +19,7 @@ function AuthedLayout() {
 
   return (
     <>
-      <LoadingBar />
+      {/* <LoadingBar /> */}
       <SidebarProvider>
         <AppSidebar username={user.username!} />
         <main className="min-h-screen flex flex-col bg-background">

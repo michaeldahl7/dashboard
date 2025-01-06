@@ -23,7 +23,7 @@ export default function Signup() {
                         callbackURL: "/"
                      })}
                   >
-                     <Mail className="mr-2 h-4 w-4" />
+                     
                      Continue with Google
                   </Button>
                   

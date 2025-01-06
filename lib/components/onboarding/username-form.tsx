@@ -2,9 +2,18 @@ import { useForm } from '@tanstack/react-form'
 import { Button } from '~/lib/components/ui/button'
 import { Input } from '~/lib/components/ui/input'
 import { Label } from '~/lib/components/ui/label'
-import { useUpdateOnboardingStatus } from '~/lib/services/user.query'
-import { useUpdateOnboardingStep } from '~/lib/services/user.query'
-// import { navigate } from '~/lib/services/navigation.api'
+import { checkUsername } from '~/lib/services/user.api'
+import { useUpdateOnboardingStatus, useUpdateOnboardingStep } from '~/lib/services/user.query'
+import { useNavigate } from '@tanstack/react-router'
+import { z } from 'zod'
+
+// Define the validation schema
+const UsernameFormSchema = z.object({
+  username: z
+    .string()
+    .min(3, 'Username must be at least 3 characters')
+    .regex(/^[a-z0-9-]+$/, 'Username can only contain lowercase letters, numbers, and dashes')
+})
 
 interface UsernameFormProps {
   userId: string;
@@ -14,25 +23,34 @@ interface UsernameFormProps {
 export function UsernameForm({ userId, onSuccess }: UsernameFormProps) {
   const updateOnboardingStatus = useUpdateOnboardingStatus()
   const updateOnboardingStep = useUpdateOnboardingStep()
+  const navigate = useNavigate()
 
   const form = useForm({
     defaultValues: {
       username: '',
     },
     onSubmit: async ({ value }) => {
-      await updateOnboardingStatus({ 
+      // Check if the username already exists
+      const { exists } = await checkUsername({ data: { username: value.username } })
+      if (exists) {
+        alert('This username is already taken')
+        return
+      }
+
+      // Update onboarding status and step
+      await updateOnboardingStatus.mutateAsync({
         data: {
           userId,
           updates: { username: value.username }
         }
-      });
-      await updateOnboardingStep({
+      })
+      await updateOnboardingStep.mutateAsync({
         data: {
           userId,
           step: "house"
         }
-      });
-      navigate({ to: '/onboarding/house', replace: true });
+      })
+      navigate({ to: '/onboarding/house', replace: true })
     }
   })
 
@@ -47,15 +65,11 @@ export function UsernameForm({ userId, onSuccess }: UsernameFormProps) {
       <form.Field
         name="username"
         validators={{
-          onBlur: ({ value }) => {
-            if (!value) return 'Username is required'
-            if (value.length < 3) return 'Username must be at least 3 characters'
-            if (!/^[a-z0-9-]+$/.test(value)) {
-              return 'Username can only contain lowercase letters, numbers, and dashes'
-            }
-          },
           onBlurAsync: async ({ value }) => {
-            if (!value) return
+            if (!value) return 'Username is required'
+              await UsernameFormSchema.parseAsync({ username: value })
+          },
+          onChangeAsync: async ({ value }) => {
             const { exists } = await checkUsername({ data: { username: value } })
             return exists ? 'This username is already taken' : undefined
           }
