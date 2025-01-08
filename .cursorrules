@@ -1,1 +1,122 @@
-config.rules
+# Kitchen Tracker
+
+Every time you choose to apply a rule(s), explicitly state the rule(s) in the output. You can abbreviate the rule description to a single word or phrase.
+
+## Project Context
+[Brief description ]
+- [more description]
+- [more description]
+- [more description]
+
+## Code Style and Structure
+- Write concise, technical TypeScript code with accurate examples
+- Use functional and declarative programming patterns; avoid classes
+- Prefer iteration and modularization over code duplication
+- Use descriptive variable names with auxiliary verbs (e.g., isLoading, hasError)
+- Structure repository files as follows:
+```
+app/                      # Tanstack Router/Start directory
+├── routes/             # Route directory, filebased routing
+    ├── _authed/        # Authenticated routes
+    ├── api/            # Tanstack start API routes directory
+    └── lib/            # Shared libraries
+├── routes/
+lib/                      # Shared libraries
+├── components/         # Shared React components
+├── enc/                # Custom React hooks
+├── hooks/              # Custom React hooks
+├── middleware/         # Tanstack Start middleware
+├── server/             # Server and Database directory
+├── services/           # Tanstack Start serverfn's and Tanstack Query
+├── styles/             # Global styling
+├── utils/              # Helper functions
+
+## Tech Stack
+- React
+- TypeScript
+- Tailwind CSS
+- Shadcn UI
+- Postgres
+- DrizzleORM
+- Bun
+- Tanstack Router
+- Tanstack Query
+- Tanstack Start
+- Tanstack Form
+- Biome
+- Zod
+- Vite
+
+## Naming Conventions
+- Use lowercase with dashes for directories (e.g., components/form-wizard)
+- Favor named exports for components and utilities
+- Use lowercase with dashes for component files (e.g., username-form.tsx), but have the component function be Pascal case (e.g., export function UsernameForm)
+- Use camelCase for utility files (e.g., formValidator.ts)
+
+## TypeScript Usage
+- Use TypeScript for all code; prefer interfaces over types
+- Avoid enums; use const objects with 'as const' assertion
+- Use functional components with TypeScript interfaces
+- Use absolute imports for all files ~/...
+- Avoid try/catch blocks unless there's good reason to translate or handle error in that abstraction
+- Use explicit return types for all functions
+
+## State Management
+- Prioritize using Tanstack Router and Tanstack Query for state management, then only if necessary use Context for global state
+
+## Syntax and Formatting
+- Use "function" keyword for pure functions
+- Avoid unnecessary curly braces in conditionals
+- Use declarative JSX
+
+## UI and Styling
+- Use Shadcn UI and Radix for components
+- use `bunx --bun shadcn@latest add <component-name>` to add new shadcn components
+- Implement Tailwind CSS for styling
+- Consider extension-specific constraints (popup dimensions, permissions)
+- When adding new shadcn component, document the installation command
+
+## Error Handling
+- Implement proper error boundaries
+- Log errors appropriately for debugging
+- Provide user-friendly error messages
+- Handle network failures gracefully
+
+## Testing
+- Write unit tests for utilities and components
+- Implement E2E tests for critical flows
+- Test memory usage and performance
+
+## Security
+- Sanitize user inputs via tanstack form and zod validator
+- Handle sensitive data properly
+
+## Git Usage
+Commit Message Prefixes:
+- "fix:" for bug fixes
+- "feat:" for new features
+- "perf:" for performance improvements
+- "docs:" for documentation changes
+- "style:" for formatting changes
+- "refactor:" for code refactoring
+- "test:" for adding missing tests
+- "chore:" for maintenance tasks
+
+Rules:
+- Use lowercase for commit messages
+- Keep the summary line concise
+- Include description for non-obvious changes
+- Reference issue numbers when applicable
+
+## Documentation
+- Maintain clear README with setup instructions
+- Document API interactions and data flows
+- Don't include comments unless it's for complex logic
+- Document permission requirements
+
+## Development Workflow
+- Use proper version control
+- Implement proper code review process
+- Test in multiple environments
+- Follow semantic versioning for releases
+- Maintain changelog

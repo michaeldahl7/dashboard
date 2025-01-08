@@ -1,5 +1,5 @@
 {
-   "name": "KITCN",
+   "name": "kitchn",
    "private": true,
    "type": "module",
    "scripts": {
@@ -8,16 +8,17 @@
       "start": "vinxi start",
       "format-and-lint": "biome check .",
       "format-and-lint:fix": "biome check . --write",
-      "db:generate": "drizzle-kit generate",
-      "db:migrate": "drizzle-kit migrate",
-      "db:push": "drizzle-kit push",
+      "db:generate": "drizzle-kit generate --config=drizzle-dev.config.ts",
+      "db:migrate": "drizzle-kit migrate --config=drizzle-dev.config.ts",
+      "db:push": "drizzle-kit push --config=drizzle-dev.config.ts",
       "db:seed": "bun run lib/server/db/seed.ts",
-      "db:studio": "drizzle-kit studio",
+      "db:studio": "drizzle-kit studio --config=drizzle-dev.config.ts",
       "ui": "bunx --bun shadcn@latest",
       "auth": "bunx --bun @better-auth/cli@latest",
       "auth:generate": "bunx @better-auth/cli@latest generate --y --output ./lib/server/schema/auth.schema.ts && bunx biome format --write ./lib/server/schema/auth.schema.ts"
    },
    "dependencies": {
+      "@electric-sql/pglite": "^0.2.15",
       "@fontsource-variable/inter": "^5.1.1",
       "@fontsource-variable/jetbrains-mono": "^5.1.2",
       "@radix-ui/react-dialog": "^1.1.4",
@@ -57,7 +58,7 @@
    },
    "devDependencies": {
       "@biomejs/biome": "1.9.4",
-      "@tailwindcss/typography": "^0.5.15",
+      "@tailwindcss/typography": "^0.5.16",
       "@types/react": "^19.0.3",
       "@types/react-dom": "^19.0.2",
       "autoprefixer": "^10.4.20",
