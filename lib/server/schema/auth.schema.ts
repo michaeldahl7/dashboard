@@ -1,5 +1,4 @@
 import { pgTable, text, integer, timestamp, boolean } from "drizzle-orm/pg-core";
-import type { OnboardingStep } from "./types";
 
 export const user = pgTable("user", {
    id: text("id").primaryKey(),
@@ -9,9 +8,9 @@ export const user = pgTable("user", {
    image: text("image"),
    createdAt: timestamp("created_at").notNull(),
    updatedAt: timestamp("updated_at").notNull(),
-   username: text("username").unique(),
+   username: text("username"),
    currentHouseId: text("current_house_id"),
-   onboardingStep: text("onboarding_step").$type<OnboardingStep>().default("username"),
+   onboardingStep: text("onboarding_step").notNull(),
 });
 
 export const session = pgTable("session", {

@@ -1,9 +1,13 @@
 import { createServerFn } from "@tanstack/start";
 import { db } from "~/lib/server/db";
+import type { InsertUser } from "~/lib/server/db";
 import { user as userTable } from "~/lib/server/schema";
 import { eq } from "drizzle-orm";
 import { authMiddleware } from "~/lib/middleware/auth-guard";
 import { z } from "zod";
+import { ulid } from "ulid";
+import { UserFormSchema } from "~/lib/server/schema/user.schema";
+import type { UserForm } from "~/lib/server/schema/user.types";
 // import type { SelectUser } from "~/lib/server/db/schema";
 
 
@@ -61,3 +65,26 @@ export const updateOnboardingStep = createServerFn()
   });
 
 
+export const getUsers = createServerFn()
+  // .middleware([authMiddleware])
+  .handler(async ({ context }) => {
+    const users = await db.query.user.findMany();
+    return users;
+  });
+
+
+  export const addUser = createServerFn()
+  .validator((data: UserForm) => UserFormSchema.parse(data))
+  .handler(async ({ data }) => {
+    const userData: InsertUser = {
+      id: ulid(),
+      name: data.name,
+      email: data.email,
+      username: data.username,
+      emailVerified: false,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      onboardingStep: "initial",
+    };
+    return db.insert(userTable).values(userData).returning();
+  });

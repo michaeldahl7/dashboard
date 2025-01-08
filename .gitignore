@@ -10,7 +10,8 @@ yarn.lock
 .output
 .vinxi
 dist
-/build/
+build/
 /api/
 /server/build
 /public/build
+dev-db/

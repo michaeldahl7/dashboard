@@ -5,6 +5,6 @@ import type { auth } from "~/lib/server/auth";
 import { passkeyClient } from "better-auth/client/plugins"
 
 export const authClient = createAuthClient({
-   baseURL: env.VITE_APP_BASE_URL, // the base url of your auth server
+   baseURL: env.VITE_APP_BASE_URL, 
    plugins: [inferAdditionalFields<typeof auth>(), passkeyClient()],
 });
