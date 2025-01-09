@@ -2,17 +2,21 @@ import { createServerFn } from "@tanstack/start";
 import { ulid } from "ulid";
 import { z } from "zod";
 import { db } from "~/lib/server/db";
-import { eq, and, gt } from "drizzle-orm";
+import { eq, and, desc } from "drizzle-orm";
 import { authMiddleware } from "~/lib/middleware/auth-guard";
 import {
   house as houseTable,
-  HouseFormSchema,
   houseMember,
-  houseInvite,
-  user as userTable,
+  HouseFormSchema,
+  HouseMemberFormSchema,
   type HouseForm,
+  type HouseMemberForm,
+  houseInvite,
+  HouseInviteFormSchema,
+  type HouseInviteForm,
 } from "~/lib/server/schema";
-import { createDefaultInventories } from "~/lib/server/utils/defaultInventory";
+import { createDefaultLocations } from "~/lib/server/utils/defaultLocations";
+import { addDays } from "date-fns";
 
 // Create a new house
 export const addHouse = createServerFn()
@@ -35,37 +39,96 @@ export const addHouse = createServerFn()
         role: "admin",
       });
 
-      const [user] = await tx.update(userTable)
-        .set({ currentHouseId: houseId })
-        .where(eq(userTable.id, context.auth.user!.id))
-        .returning();
+      const locations = await createDefaultLocations(houseId);
 
-      const inventories = await createDefaultInventories(houseId);
-
-      return { house, user, inventories };
+      return { house, locations };
     });
   });
 
-// Get houses for current user
-export const getHouses = createServerFn()
-  .middleware([authMiddleware])
-  .handler(async ({ context }) => {
-    return db.query.houseMember.findMany({
-      where: eq(houseMember.user_id, context.auth.user!.id),
-      with: {
-        house: true
-      }
-    });
-  });
-
-// Invite a user to a house
-export const inviteToHouse = createServerFn()
+// Update house
+export const updateHouse = createServerFn()
   .middleware([authMiddleware])
   .validator(z.object({
     houseId: z.string(),
-    email: z.string().email(),
+    name: z.string().min(2).max(50),
   }))
+  .handler(async ({ data: { houseId, name }, context }) => {
+    const member = await db.query.houseMember.findFirst({
+      where: and(
+        eq(houseMember.house_id, houseId),
+        eq(houseMember.user_id, context.auth.user!.id),
+        eq(houseMember.role, "admin")
+      )
+    });
+
+    if (!member) throw new Error("Not authorized to update house");
+
+    const [house] = await db.update(houseTable)
+      .set({ 
+        name,
+        updated_at: new Date()
+      })
+      .where(eq(houseTable.id, houseId))
+      .returning();
+
+    return house;
+  });
+
+// Delete house
+export const deleteHouse = createServerFn()
+  .middleware([authMiddleware])
+  .validator(z.string())
+  .handler(async ({ data: houseId, context }) => {
+    const house = await db.query.house.findFirst({
+      where: eq(houseTable.id, houseId),
+    });
+
+    if (!house || house.owner_id !== context.auth.user!.id) {
+      throw new Error("Not authorized to delete house");
+    }
+
+    await db.delete(houseTable).where(eq(houseTable.id, houseId));
+    return { success: true };
+  });
+
+// Update house member
+export const updateHouseMember = createServerFn()
+  .middleware([authMiddleware])
+  .validator(z.object({
+    houseId: z.string(),
+    memberId: z.string(),
+    role: z.enum(["admin", "member"]),
+  }))
+  .handler(async ({ data: { houseId, memberId, role }, context }) => {
+    const adminMember = await db.query.houseMember.findFirst({
+      where: and(
+        eq(houseMember.house_id, houseId),
+        eq(houseMember.user_id, context.auth.user!.id),
+        eq(houseMember.role, "admin")
+      )
+    });
+
+    if (!adminMember) throw new Error("Not authorized to update members");
+
+    const [member] = await db.update(houseMember)
+      .set({ 
+        role,
+        updated_at: new Date()
+      })
+      .where(and(
+        eq(houseMember.house_id, houseId),
+        eq(houseMember.user_id, memberId)
+      ))
+      .returning();
+
+    return member;
+  });
+
+export const inviteToHouse = createServerFn()
+  .middleware([authMiddleware])
+  .validator((data: HouseInviteForm) => HouseInviteFormSchema.parse(data))
   .handler(async ({ data, context }) => {
+    // Check if inviter is admin
     const member = await db.query.houseMember.findFirst({
       where: and(
         eq(houseMember.house_id, data.houseId),
@@ -74,80 +137,110 @@ export const inviteToHouse = createServerFn()
       )
     });
 
-    if (!member) {
-      throw new Error("Not authorized to invite");
-    }
+    if (!member) throw new Error("Not authorized to invite members");
 
+    // Check for existing pending invite
+    const existingInvite = await db.query.houseInvite.findFirst({
+      where: and(
+        eq(houseInvite.house_id, data.houseId),
+        eq(houseInvite.invitee_email, data.email),
+        eq(houseInvite.status, "pending")
+      )
+    });
+
+    if (existingInvite) throw new Error("Invite already pending");
+
+    // Create new invite
     const [invite] = await db.insert(houseInvite).values({
       id: ulid(),
       house_id: data.houseId,
-      invited_email: data.email,
-      invited_by_id: context.auth.user!.id,
-      status: "pending",
-      expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      inviter_id: context.auth.user!.id,
+      invitee_email: data.email,
+      role: data.role,
+      expires_at: addDays(new Date(), 7), // Expires in 7 days
     }).returning();
 
     return invite;
   });
 
-// Accept a house invitation
-// export const acceptInvite = createServerFn()
-//   .middleware([authMiddleware])
-//   .validator(z.object({
-//     inviteId: z.string(),
-//   }))
-//   .handler(async ({ data, context }) => {
-//     const invite = await db.query.houseInvite.findFirst({
-//       where: and(
-//         eq(houseInvite.id, data.inviteId),
-//         eq(houseInvite.status, "pending"),
-//         gt(houseInvite.expiresAt, new Date())
-//       )
-//     });
+export const acceptHouseInvite = createServerFn()
+  .middleware([authMiddleware])
+  .validator(z.string()) // Invite ID
+  .handler(async ({ data: inviteId, context }) => {
+    return await db.transaction(async (tx) => {
+      // Get and validate invite
+      const invite = await tx.query.houseInvite.findFirst({
+        where: and(
+          eq(houseInvite.id, inviteId),
+          eq(houseInvite.status, "pending")
+        )
+      });
 
-//     if (!invite) {
-//       throw new Error("Invalid or expired invite");
-//     }
+      if (!invite) throw new Error("Invalid or expired invite");
+      if (invite.invitee_email !== context.auth.user!.email) {
+        throw new Error("Invite not for this user");
+      }
+      if (new Date() > invite.expires_at) {
+        throw new Error("Invite expired");
+      }
 
-//     return await db.transaction(async (tx) => {
-//       await tx.update(houseInvite)
-//         .set({ status: "accepted" })
-//         .where(eq(houseInvite.id, data.inviteId));
+      // Add user as house member
+      const [member] = await tx.insert(houseMember).values({
+        id: ulid(),
+        house_id: invite.house_id,
+        user_id: context.auth.user!.id,
+        role: invite.role,
+      }).returning();
 
-//       await tx.insert(houseMember).values({
-//         id: ulid(),
-//         house_id: invite.houseId,
-//         user_id: context.auth.user!.id,
-//         role: "member",
-//       });
+      // Update invite status
+      await tx.update(houseInvite)
+        .set({ status: "accepted" })
+        .where(eq(houseInvite.id, inviteId));
 
-//       const user = await tx.query.user.findFirst({
-//         where: eq(userTable.id, context.auth.user!.id)
-//       });
+      return member;
+    });
+  });
 
-//       if (!user?.currentHouseId) {
-//         await tx.update(userTable)
-//           .set({ currentHouseId: invite.houseId })
-//           .where(eq(userTable.id, context.auth.user!.id));
-//       }
+export const rejectHouseInvite = createServerFn()
+  .middleware([authMiddleware])
+  .validator(z.string()) // Invite ID
+  .handler(async ({ data: inviteId, context }) => {
+    const invite = await db.query.houseInvite.findFirst({
+      where: eq(houseInvite.id, inviteId)
+    });
 
-//       return invite;
-//     });
-//   });
+    if (!invite || invite.invitee_email !== context.auth.user!.email) {
+      throw new Error("Invalid invite");
+    }
 
-// // Get pending invites for current user's email
-// export const getPendingInvites = createServerFn()
-//   .middleware([authMiddleware])
-//   .handler(async ({ context }) => {
-//     return db.query.houseInvite.findMany({
-//       where: and(
-//         eq(houseInvite.invitedEmail, context.auth.user!.email),
-//         eq(houseInvite.status, "pending"),
-//         gt(houseInvite.expiresAt, new Date())
-//       ),
-//       with: {
-//         house: true,
-//         invitedBy: true
-//       }
-//     });
-//   }); 
+    const [updated] = await db.update(houseInvite)
+      .set({ status: "rejected" })
+      .where(eq(houseInvite.id, inviteId))
+      .returning();
+
+    return updated;
+  });
+
+export const getHouseInvites = createServerFn()
+  .middleware([authMiddleware])
+  .validator(z.string()) // House ID
+  .handler(async ({ data: houseId, context }) => {
+    // Check if user is admin
+    const member = await db.query.houseMember.findFirst({
+      where: and(
+        eq(houseMember.house_id, houseId),
+        eq(houseMember.user_id, context.auth.user!.id),
+        eq(houseMember.role, "admin")
+      )
+    });
+
+    if (!member) throw new Error("Not authorized to view invites");
+
+    return db.query.houseInvite.findMany({
+      where: eq(houseInvite.house_id, houseId),
+      with: {
+        inviter: true,
+      },
+      orderBy: (invite) => [desc(invite.created_at)],
+    });
+  });

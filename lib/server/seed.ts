@@ -1,5 +1,5 @@
 import { db } from "./db";
-import { inventory } from "./schema";
+import { location } from "./schema";
 import { ulid } from "ulid";
 
 export async function seedLocations(houseId: string) {
@@ -10,11 +10,11 @@ export async function seedLocations(houseId: string) {
       { name: "Kitchen Counter", type: "counter" },
    ] as const;
 
-   await db.insert(inventory).values(
-      defaultLocations.map(location => ({
+   await db.insert(location).values(
+      defaultLocations.map(loc => ({
          id: ulid(),
-         name: location.name,
-         type: location.type,
+         name: loc.name,
+         type: loc.type,
          house_id: houseId,
       }))
    );

@@ -6,43 +6,43 @@ import { db } from "~/lib/server/db";
 import { eq } from "drizzle-orm";
 import { authMiddleware } from "~/lib/middleware/auth-guard";
 import {
-   inventory,
+   location,
    item,
-   InventoryFormSchema,
+   LocationFormSchema,
    ItemFormSchema,
-   type InsertInventory,
+   type InsertLocation,
    type InsertItem,
-   type InventoryForm,
+   type LocationForm,
    type ItemForm,
-} from "~/lib/server/schema/inventory.schema";
+} from "~/lib/server/schema/location.schema";
 
 export const getInventories = createServerFn()
    .middleware([authMiddleware])
    .validator(z.string())
    .handler(async ({ data: houseId }) => {
       return db.select()
-         .from(inventory)
-         .where(eq(inventory.house_id, houseId));
+         .from(location)
+         .where(eq(location.house_id, houseId));
    });
 
 export const getItems = createServerFn()
    .middleware([authMiddleware])
    .validator(z.string())
-   .handler(async ({ data: inventoryId, context }) => {
-      return db.select().from(item).where(eq(item.inventory_id, inventoryId));
+   .handler(async ({ data: locationId, context }) => {
+      return db.select().from(item).where(eq(item.location_id, locationId));
    });
 
 export const addInventory = createServerFn()
    .middleware([authMiddleware])
-   .validator((data: InventoryForm) => InventoryFormSchema.parse(data))
+   .validator((data: LocationForm) => LocationFormSchema.parse(data))
    .handler(async ({ data }) => {
-      const inventoryData: InsertInventory = {
+      const locationData: InsertLocation = {
          id: ulid(),
          name: data.name,
          type: data.type,
          house_id: data.houseId,
       };
-      return db.insert(inventory).values(inventoryData).returning();
+      return db.insert(location).values(locationData).returning();
    });
 
 export const addItem = createServerFn()
@@ -52,7 +52,7 @@ export const addItem = createServerFn()
       const itemData: InsertItem = {
          id: ulid(),
          name: data.name,
-         inventory_id: data.inventoryId,
+         location_id: data.locationId,
          quantity: data.quantity,
          unit: data.unit,
       };

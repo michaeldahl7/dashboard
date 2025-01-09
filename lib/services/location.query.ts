@@ -5,13 +5,13 @@ import {
    useQueryClient,
    useSuspenseQuery,
 } from "@tanstack/react-query";
-import { getInventories, getItems, addInventory, addItem } from "./inventory.api";
+import { getInventories, getItems, addInventory, addItem } from "./location.api";
 import type {
-   SelectInventory,
+   SelectLocation,
    SelectItem,
-   InventoryForm,
+   LocationForm,
    ItemForm,
-} from "~/lib/server/schema/inventory.schema";
+} from "~/lib/server/schema/location.schema";
 
 // Query keys for cache management
 export const inventoryKeys = {
@@ -22,7 +22,7 @@ export const inventoryKeys = {
 
 // Query options
 export const inventoryQueryOptions = (houseId: string) => {
-   return queryOptions<SelectInventory[]>({
+   return queryOptions<SelectLocation[]>({
       queryKey: inventoryKeys.lists(),
       queryFn: () => getInventories({ data: houseId }),
    });
@@ -53,7 +53,7 @@ export const useInventoryMutations = () => {
    };
 
    const addInventoryMutation = useMutation({
-      mutationFn: (data: InventoryForm) => addInventory({ data }),
+      mutationFn: (data: LocationForm) => addInventory({ data }),
       onSuccess: invalidateInventory,
    });
 

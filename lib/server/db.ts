@@ -27,5 +27,5 @@ export type User = typeof schema.user.$inferSelect;
 export type InsertUser = typeof schema.user.$inferInsert;
 
 export type House = typeof schema.house.$inferSelect;
-export type Inventory = typeof schema.inventory.$inferSelect;
 export type Item = typeof schema.item.$inferSelect;
+export type Location = typeof schema.location.$inferSelect;
