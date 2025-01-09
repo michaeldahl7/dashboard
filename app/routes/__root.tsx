@@ -15,8 +15,6 @@ import appCss from "~/lib/styles/app.css?url";
 import { getWebRequest } from "vinxi/http";
 import { type Auth, auth } from "~/lib/server/auth";
 import { ThemeProvider } from "~/lib/components/theme-provider";
-import { addUser, getUsers } from "~/lib/services/user.api";
-import { UserForm } from "~/lib/server/schema/user.types";
 
 const TanStackRouterDevtools =
    process.env.NODE_ENV === "production"
@@ -59,18 +57,6 @@ interface RouterContext {
 export const Route = createRootRouteWithContext<RouterContext>()({
    beforeLoad: async () => {
       const auth = await getAuth();
-      // const users = await getUsers();
-      // if (users.length === 0) {
-      //   await addUser({
-      //     data: {
-      //       name: "John Doe",
-      //       email: "john.doe@example.com",
-      //       username: "john.doe",
-      //     },
-      //   });
-      // }
-      // const secondUsers = await getUsers();
-      // console.log("secondUsers:", secondUsers);
       return { auth };
    },
    head: () => ({

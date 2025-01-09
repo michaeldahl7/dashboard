@@ -1,94 +1,109 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/lib/components/ui/card";
-import { UsernameForm } from "~/lib/components/onboarding/username-form";
-import { updateOnboardingStep } from "~/lib/services/user.api";
-import type { OnboardingStep } from "~/lib/server/schema/types";
-import { HouseForm } from "~/lib/components/onboarding/house-form";
-import { InventoryForm } from "~/lib/components/onboarding/inventory-form";
-
-const ONBOARDING_PATHS: Record<OnboardingStep, string> = {
-  username: '/',
-  house: '/onboarding/house',
-  inventory: '/onboarding/inventory',
-  completed: '/dashboard'
-} as const;
+import { createFileRoute, redirect, Link } from "@tanstack/react-router";
+import { Button } from "~/lib/components/ui/button";
+import { Menu } from "lucide-react";
+import { Sheet, SheetContent, SheetTrigger } from "~/lib/components/ui/sheet";
+import { useState } from "react";
 
 export const Route = createFileRoute('/')({
-  component: IndexRoute,
   beforeLoad: ({ context }) => {
-    const { user } = context.auth;
-    if (!user) throw redirect({ to: '/signup' });
-    
-    // Redirect if not on username step
-    if (user.onboardingStep !== "username") {
-      const nextPath = ONBOARDING_PATHS[user.onboardingStep as OnboardingStep];
-      throw redirect({ to: nextPath });
+    if (context.auth.isAuthenticated) {
+      throw redirect({ to: '/dashboard' });
     }
-
-    return { user };
   },
+  component: LandingPage
 });
 
-function IndexRoute() {
-  const { user } = Route.useRouteContext();
-
-  const onStepComplete = async (nextStep: OnboardingStep) => {
-    await updateOnboardingStep({
-      data: {
-        userId: user.id,
-        step: nextStep
-      }
-    });
-  };
-
-  const renderStep = () => {
-    switch (user.onboardingStep) {
-      case "username":
-        return {
-          title: "Welcome!",
-          description: "Let's get started by choosing your username",
-          form: <UsernameForm 
-            userId={user.id} 
-            onSuccess={() => onStepComplete("house")} 
-          />
-        };
-      case "house":
-        return {
-          title: "Set Up Your Kitchen",
-          description: "Create your first house to get started",
-          form: <HouseForm 
-            userId={user.id} 
-            onSuccess={() => onStepComplete("inventory")} 
-          />
-        };
-      case "inventory":
-        return {
-          title: "Set Up Your Inventory",
-          description: "Add your storage locations",
-          form: <InventoryForm 
-            userId={user.id}
-            houseId={user.currentHouseId!}
-            onSuccess={() => onStepComplete("completed")} 
-          />
-        };
-      default:
-        throw redirect({ to: '/dashboard' });
-    }
-  };
-
-  const { title, description, form } = renderStep();
+function LandingPage() {
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle>{title}</CardTitle>
-          <CardDescription>{description}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          {form}
-        </CardContent>
-      </Card>
+    <div className="min-h-screen flex flex-col">
+      {/* Navigation */}
+      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container flex h-16 max-w-screen-xl items-center justify-between px-4 md:px-8">
+          <div className="flex items-center gap-2">
+            <Link 
+              to="/" 
+              className="flex items-center text-lg font-semibold"
+            >
+              Kitchen Tracker
+            </Link>
+          </div>
+
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center gap-2">
+            <Button asChild variant="ghost" size="sm">
+              <Link to="/login">Login</Link>
+            </Button>
+            <Button asChild size="sm">
+              <Link to="/signup">Sign up</Link>
+            </Button>
+          </nav>
+
+          {/* Mobile Navigation */}
+          <Sheet open={isOpen} onOpenChange={setIsOpen}>
+            <SheetTrigger asChild className="md:hidden">
+              <Button variant="ghost" size="icon" className="h-9 w-9">
+                <Menu className="h-4 w-4" />
+                <span className="sr-only">Toggle menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent>
+              <nav className="flex flex-col space-y-3 mt-4">
+                <Button asChild variant="ghost" onClick={() => setIsOpen(false)}>
+                  <Link to="/login">Login</Link>
+                </Button>
+                <Button asChild onClick={() => setIsOpen(false)}>
+                  <Link to="/signup">Sign up</Link>
+                </Button>
+              </nav>
+            </SheetContent>
+          </Sheet>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="flex-1">
+        <section className="space-y-12 px-4 pt-12 md:pt-24 text-center">
+          <div className="space-y-6 max-w-[800px] mx-auto">
+            <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
+              Track Your Kitchen Inventory
+            </h1>
+            <p className="mx-auto max-w-[600px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
+              The smart way to manage your kitchen. Never waste food again.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Button asChild size="lg" className="w-full sm:w-auto">
+                <Link to="/signup">Get Started</Link>
+              </Button>
+              <Button asChild variant="outline" size="lg" className="w-full sm:w-auto">
+                <Link to="/login">Sign In</Link>
+              </Button>
+            </div>
+          </div>
+
+          <div className="grid gap-8 px-4 md:grid-cols-3 md:px-6 lg:px-8">
+            <div className="space-y-2">
+              <h3 className="text-xl font-bold">Track Inventory</h3>
+              <p className="text-gray-500 dark:text-gray-400">
+                Keep track of what's in your kitchen and when it expires
+              </p>
+            </div>
+            <div className="space-y-2">
+              <h3 className="text-xl font-bold">Smart Shopping</h3>
+              <p className="text-gray-500 dark:text-gray-400">
+                Generate shopping lists based on what you need
+              </p>
+            </div>
+            <div className="space-y-2">
+              <h3 className="text-xl font-bold">Reduce Waste</h3>
+              <p className="text-gray-500 dark:text-gray-400">
+                Get notified before food expires to reduce waste
+              </p>
+            </div>
+          </div>
+        </section>
+      </main>
     </div>
   );
 }

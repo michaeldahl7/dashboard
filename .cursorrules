@@ -3,10 +3,9 @@
 Every time you choose to apply a rule(s), explicitly state the rule(s) in the output. You can abbreviate the rule description to a single word or phrase.
 
 ## Project Context
-[Brief description ]
-- [more description]
-- [more description]
-- [more description]
+I want to build a web app that allows users to track their kitchen inventory.
+- I will iterate the features of the app, focusing on the core functionality first. The core functionality is to allow users to track their kitchen inventory, how users input the data will evolve as the app evolves. I forsee that users will input manually, via barcode scanner, as well as voice. 
+
 
 ## Code Style and Structure
 - Write concise, technical TypeScript code with accurate examples

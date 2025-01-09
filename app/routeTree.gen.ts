@@ -11,41 +11,21 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as TermsImport } from './routes/terms'
-import { Route as SignupImport } from './routes/signup'
-import { Route as LoginImport } from './routes/login'
-import { Route as DpaImport } from './routes/dpa'
+import { Route as PublicImport } from './routes/_public'
 import { Route as AuthedImport } from './routes/_authed'
 import { Route as IndexImport } from './routes/index'
+import { Route as PublicTermsImport } from './routes/_public/terms'
+import { Route as PublicSignupImport } from './routes/_public/signup'
+import { Route as PublicLoginImport } from './routes/_public/login'
+import { Route as PublicDpaImport } from './routes/_public/dpa'
 import { Route as AuthedDashboardImport } from './routes/_authed/dashboard'
 import { Route as AuthedUsernameImport } from './routes/_authed/$username'
-import { Route as AuthedOnboardingInventoryImport } from './routes/_authed/onboarding/inventory'
-import { Route as AuthedOnboardingHouseImport } from './routes/_authed/onboarding/house'
 import { Route as AuthedUsernameSettingsImport } from './routes/_authed/$username.settings'
 
 // Create/Update Routes
 
-const TermsRoute = TermsImport.update({
-  id: '/terms',
-  path: '/terms',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const SignupRoute = SignupImport.update({
-  id: '/signup',
-  path: '/signup',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const LoginRoute = LoginImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const DpaRoute = DpaImport.update({
-  id: '/dpa',
-  path: '/dpa',
+const PublicRoute = PublicImport.update({
+  id: '/_public',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -60,6 +40,30 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const PublicTermsRoute = PublicTermsImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => PublicRoute,
+} as any)
+
+const PublicSignupRoute = PublicSignupImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => PublicRoute,
+} as any)
+
+const PublicLoginRoute = PublicLoginImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => PublicRoute,
+} as any)
+
+const PublicDpaRoute = PublicDpaImport.update({
+  id: '/dpa',
+  path: '/dpa',
+  getParentRoute: () => PublicRoute,
+} as any)
+
 const AuthedDashboardRoute = AuthedDashboardImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -69,18 +73,6 @@ const AuthedDashboardRoute = AuthedDashboardImport.update({
 const AuthedUsernameRoute = AuthedUsernameImport.update({
   id: '/$username',
   path: '/$username',
-  getParentRoute: () => AuthedRoute,
-} as any)
-
-const AuthedOnboardingInventoryRoute = AuthedOnboardingInventoryImport.update({
-  id: '/onboarding/inventory',
-  path: '/onboarding/inventory',
-  getParentRoute: () => AuthedRoute,
-} as any)
-
-const AuthedOnboardingHouseRoute = AuthedOnboardingHouseImport.update({
-  id: '/onboarding/house',
-  path: '/onboarding/house',
   getParentRoute: () => AuthedRoute,
 } as any)
 
@@ -108,32 +100,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedImport
       parentRoute: typeof rootRoute
     }
-    '/dpa': {
-      id: '/dpa'
-      path: '/dpa'
-      fullPath: '/dpa'
-      preLoaderRoute: typeof DpaImport
-      parentRoute: typeof rootRoute
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginImport
-      parentRoute: typeof rootRoute
-    }
-    '/signup': {
-      id: '/signup'
-      path: '/signup'
-      fullPath: '/signup'
-      preLoaderRoute: typeof SignupImport
-      parentRoute: typeof rootRoute
-    }
-    '/terms': {
-      id: '/terms'
-      path: '/terms'
-      fullPath: '/terms'
-      preLoaderRoute: typeof TermsImport
+    '/_public': {
+      id: '/_public'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof PublicImport
       parentRoute: typeof rootRoute
     }
     '/_authed/$username': {
@@ -150,26 +121,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedDashboardImport
       parentRoute: typeof AuthedImport
     }
+    '/_public/dpa': {
+      id: '/_public/dpa'
+      path: '/dpa'
+      fullPath: '/dpa'
+      preLoaderRoute: typeof PublicDpaImport
+      parentRoute: typeof PublicImport
+    }
+    '/_public/login': {
+      id: '/_public/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof PublicLoginImport
+      parentRoute: typeof PublicImport
+    }
+    '/_public/signup': {
+      id: '/_public/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof PublicSignupImport
+      parentRoute: typeof PublicImport
+    }
+    '/_public/terms': {
+      id: '/_public/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof PublicTermsImport
+      parentRoute: typeof PublicImport
+    }
     '/_authed/$username/settings': {
       id: '/_authed/$username/settings'
       path: '/settings'
       fullPath: '/$username/settings'
       preLoaderRoute: typeof AuthedUsernameSettingsImport
       parentRoute: typeof AuthedUsernameImport
-    }
-    '/_authed/onboarding/house': {
-      id: '/_authed/onboarding/house'
-      path: '/onboarding/house'
-      fullPath: '/onboarding/house'
-      preLoaderRoute: typeof AuthedOnboardingHouseImport
-      parentRoute: typeof AuthedImport
-    }
-    '/_authed/onboarding/inventory': {
-      id: '/_authed/onboarding/inventory'
-      path: '/onboarding/inventory'
-      fullPath: '/onboarding/inventory'
-      preLoaderRoute: typeof AuthedOnboardingInventoryImport
-      parentRoute: typeof AuthedImport
     }
   }
 }
@@ -191,61 +176,69 @@ const AuthedUsernameRouteWithChildren = AuthedUsernameRoute._addFileChildren(
 interface AuthedRouteChildren {
   AuthedUsernameRoute: typeof AuthedUsernameRouteWithChildren
   AuthedDashboardRoute: typeof AuthedDashboardRoute
-  AuthedOnboardingHouseRoute: typeof AuthedOnboardingHouseRoute
-  AuthedOnboardingInventoryRoute: typeof AuthedOnboardingInventoryRoute
 }
 
 const AuthedRouteChildren: AuthedRouteChildren = {
   AuthedUsernameRoute: AuthedUsernameRouteWithChildren,
   AuthedDashboardRoute: AuthedDashboardRoute,
-  AuthedOnboardingHouseRoute: AuthedOnboardingHouseRoute,
-  AuthedOnboardingInventoryRoute: AuthedOnboardingInventoryRoute,
 }
 
 const AuthedRouteWithChildren =
   AuthedRoute._addFileChildren(AuthedRouteChildren)
 
+interface PublicRouteChildren {
+  PublicDpaRoute: typeof PublicDpaRoute
+  PublicLoginRoute: typeof PublicLoginRoute
+  PublicSignupRoute: typeof PublicSignupRoute
+  PublicTermsRoute: typeof PublicTermsRoute
+}
+
+const PublicRouteChildren: PublicRouteChildren = {
+  PublicDpaRoute: PublicDpaRoute,
+  PublicLoginRoute: PublicLoginRoute,
+  PublicSignupRoute: PublicSignupRoute,
+  PublicTermsRoute: PublicTermsRoute,
+}
+
+const PublicRouteWithChildren =
+  PublicRoute._addFileChildren(PublicRouteChildren)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '': typeof AuthedRouteWithChildren
-  '/dpa': typeof DpaRoute
-  '/login': typeof LoginRoute
-  '/signup': typeof SignupRoute
-  '/terms': typeof TermsRoute
+  '': typeof PublicRouteWithChildren
   '/$username': typeof AuthedUsernameRouteWithChildren
   '/dashboard': typeof AuthedDashboardRoute
+  '/dpa': typeof PublicDpaRoute
+  '/login': typeof PublicLoginRoute
+  '/signup': typeof PublicSignupRoute
+  '/terms': typeof PublicTermsRoute
   '/$username/settings': typeof AuthedUsernameSettingsRoute
-  '/onboarding/house': typeof AuthedOnboardingHouseRoute
-  '/onboarding/inventory': typeof AuthedOnboardingInventoryRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '': typeof AuthedRouteWithChildren
-  '/dpa': typeof DpaRoute
-  '/login': typeof LoginRoute
-  '/signup': typeof SignupRoute
-  '/terms': typeof TermsRoute
+  '': typeof PublicRouteWithChildren
   '/$username': typeof AuthedUsernameRouteWithChildren
   '/dashboard': typeof AuthedDashboardRoute
+  '/dpa': typeof PublicDpaRoute
+  '/login': typeof PublicLoginRoute
+  '/signup': typeof PublicSignupRoute
+  '/terms': typeof PublicTermsRoute
   '/$username/settings': typeof AuthedUsernameSettingsRoute
-  '/onboarding/house': typeof AuthedOnboardingHouseRoute
-  '/onboarding/inventory': typeof AuthedOnboardingInventoryRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/_authed': typeof AuthedRouteWithChildren
-  '/dpa': typeof DpaRoute
-  '/login': typeof LoginRoute
-  '/signup': typeof SignupRoute
-  '/terms': typeof TermsRoute
+  '/_public': typeof PublicRouteWithChildren
   '/_authed/$username': typeof AuthedUsernameRouteWithChildren
   '/_authed/dashboard': typeof AuthedDashboardRoute
+  '/_public/dpa': typeof PublicDpaRoute
+  '/_public/login': typeof PublicLoginRoute
+  '/_public/signup': typeof PublicSignupRoute
+  '/_public/terms': typeof PublicTermsRoute
   '/_authed/$username/settings': typeof AuthedUsernameSettingsRoute
-  '/_authed/onboarding/house': typeof AuthedOnboardingHouseRoute
-  '/_authed/onboarding/inventory': typeof AuthedOnboardingInventoryRoute
 }
 
 export interface FileRouteTypes {
@@ -253,60 +246,49 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | ''
+    | '/$username'
+    | '/dashboard'
     | '/dpa'
     | '/login'
     | '/signup'
     | '/terms'
-    | '/$username'
-    | '/dashboard'
     | '/$username/settings'
-    | '/onboarding/house'
-    | '/onboarding/inventory'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | ''
+    | '/$username'
+    | '/dashboard'
     | '/dpa'
     | '/login'
     | '/signup'
     | '/terms'
-    | '/$username'
-    | '/dashboard'
     | '/$username/settings'
-    | '/onboarding/house'
-    | '/onboarding/inventory'
   id:
     | '__root__'
     | '/'
     | '/_authed'
-    | '/dpa'
-    | '/login'
-    | '/signup'
-    | '/terms'
+    | '/_public'
     | '/_authed/$username'
     | '/_authed/dashboard'
+    | '/_public/dpa'
+    | '/_public/login'
+    | '/_public/signup'
+    | '/_public/terms'
     | '/_authed/$username/settings'
-    | '/_authed/onboarding/house'
-    | '/_authed/onboarding/inventory'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthedRoute: typeof AuthedRouteWithChildren
-  DpaRoute: typeof DpaRoute
-  LoginRoute: typeof LoginRoute
-  SignupRoute: typeof SignupRoute
-  TermsRoute: typeof TermsRoute
+  PublicRoute: typeof PublicRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthedRoute: AuthedRouteWithChildren,
-  DpaRoute: DpaRoute,
-  LoginRoute: LoginRoute,
-  SignupRoute: SignupRoute,
-  TermsRoute: TermsRoute,
+  PublicRoute: PublicRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -321,10 +303,7 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/_authed",
-        "/dpa",
-        "/login",
-        "/signup",
-        "/terms"
+        "/_public"
       ]
     },
     "/": {
@@ -334,22 +313,17 @@ export const routeTree = rootRoute
       "filePath": "_authed.tsx",
       "children": [
         "/_authed/$username",
-        "/_authed/dashboard",
-        "/_authed/onboarding/house",
-        "/_authed/onboarding/inventory"
+        "/_authed/dashboard"
       ]
     },
-    "/dpa": {
-      "filePath": "dpa.tsx"
-    },
-    "/login": {
-      "filePath": "login.tsx"
-    },
-    "/signup": {
-      "filePath": "signup.tsx"
-    },
-    "/terms": {
-      "filePath": "terms.tsx"
+    "/_public": {
+      "filePath": "_public.tsx",
+      "children": [
+        "/_public/dpa",
+        "/_public/login",
+        "/_public/signup",
+        "/_public/terms"
+      ]
     },
     "/_authed/$username": {
       "filePath": "_authed/$username.tsx",
@@ -362,17 +336,25 @@ export const routeTree = rootRoute
       "filePath": "_authed/dashboard.tsx",
       "parent": "/_authed"
     },
+    "/_public/dpa": {
+      "filePath": "_public/dpa.tsx",
+      "parent": "/_public"
+    },
+    "/_public/login": {
+      "filePath": "_public/login.tsx",
+      "parent": "/_public"
+    },
+    "/_public/signup": {
+      "filePath": "_public/signup.tsx",
+      "parent": "/_public"
+    },
+    "/_public/terms": {
+      "filePath": "_public/terms.tsx",
+      "parent": "/_public"
+    },
     "/_authed/$username/settings": {
       "filePath": "_authed/$username.settings.tsx",
       "parent": "/_authed/$username"
-    },
-    "/_authed/onboarding/house": {
-      "filePath": "_authed/onboarding/house.tsx",
-      "parent": "/_authed"
-    },
-    "/_authed/onboarding/inventory": {
-      "filePath": "_authed/onboarding/inventory.tsx",
-      "parent": "/_authed"
     }
   }
 }
