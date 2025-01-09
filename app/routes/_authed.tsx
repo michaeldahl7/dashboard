@@ -1,7 +1,7 @@
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
-import { AppHeader } from '~/lib/components/layout/app-header'
-import { AppSidebar } from '~/lib/components/layout/app-sidebar'
-import { SidebarProvider } from '~/lib/components/ui/sidebar'
+import { Button } from '~/lib/components/ui/button'
+import { authClient } from '~/lib/utils/authClient'
+import { ModeToggle } from '~/lib/components/mode-toggle'
 
 export const Route = createFileRoute('/_authed')({
   component: AuthedLayout,
@@ -14,17 +14,23 @@ export const Route = createFileRoute('/_authed')({
 })
 
 function AuthedLayout() {
-  const { user } = Route.useRouteContext();
-
   return (
-    <SidebarProvider>
-      <AppSidebar username={user.username!} />
-      <main className="min-h-screen flex flex-col bg-background">
-        <AppHeader />
-        <div className="flex-1 p-6">
-          <Outlet />
+    <main className="min-h-screen flex flex-col bg-background">
+      <header className="flex h-16 shrink-0 items-center justify-end border-b px-4">
+        <div className="flex items-center gap-4">
+          <ModeToggle />
+          <Button 
+            variant="ghost" 
+            size="sm"
+            onClick={() => authClient.signOut()}
+          >
+            Sign out
+          </Button>
         </div>
-      </main>
-    </SidebarProvider>
+      </header>
+      <div className="flex-1 p-6">
+        <Outlet />
+      </div>
+    </main>
   )
 }

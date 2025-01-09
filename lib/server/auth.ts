@@ -21,10 +21,6 @@ export const auth = betterAuth({
    },
    user: {
       additionalFields: {
-         username: {
-            type: "string",
-            required: false,
-         },
          currentHouseId: {
             type: "string",
             required: false,
@@ -32,7 +28,7 @@ export const auth = betterAuth({
          onboardingStep: {
             type: "string",
             required: true,
-            defaultValue: "username",
+            defaultValue: "house",
          },
       },
    },

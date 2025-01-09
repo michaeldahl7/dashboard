@@ -19,8 +19,6 @@ import { Route as PublicSignupImport } from './routes/_public/signup'
 import { Route as PublicLoginImport } from './routes/_public/login'
 import { Route as PublicDpaImport } from './routes/_public/dpa'
 import { Route as AuthedDashboardImport } from './routes/_authed/dashboard'
-import { Route as AuthedUsernameImport } from './routes/_authed/$username'
-import { Route as AuthedUsernameSettingsImport } from './routes/_authed/$username.settings'
 
 // Create/Update Routes
 
@@ -70,18 +68,6 @@ const AuthedDashboardRoute = AuthedDashboardImport.update({
   getParentRoute: () => AuthedRoute,
 } as any)
 
-const AuthedUsernameRoute = AuthedUsernameImport.update({
-  id: '/$username',
-  path: '/$username',
-  getParentRoute: () => AuthedRoute,
-} as any)
-
-const AuthedUsernameSettingsRoute = AuthedUsernameSettingsImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => AuthedUsernameRoute,
-} as any)
-
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -106,13 +92,6 @@ declare module '@tanstack/react-router' {
       fullPath: ''
       preLoaderRoute: typeof PublicImport
       parentRoute: typeof rootRoute
-    }
-    '/_authed/$username': {
-      id: '/_authed/$username'
-      path: '/$username'
-      fullPath: '/$username'
-      preLoaderRoute: typeof AuthedUsernameImport
-      parentRoute: typeof AuthedImport
     }
     '/_authed/dashboard': {
       id: '/_authed/dashboard'
@@ -149,37 +128,16 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicTermsImport
       parentRoute: typeof PublicImport
     }
-    '/_authed/$username/settings': {
-      id: '/_authed/$username/settings'
-      path: '/settings'
-      fullPath: '/$username/settings'
-      preLoaderRoute: typeof AuthedUsernameSettingsImport
-      parentRoute: typeof AuthedUsernameImport
-    }
   }
 }
 
 // Create and export the route tree
 
-interface AuthedUsernameRouteChildren {
-  AuthedUsernameSettingsRoute: typeof AuthedUsernameSettingsRoute
-}
-
-const AuthedUsernameRouteChildren: AuthedUsernameRouteChildren = {
-  AuthedUsernameSettingsRoute: AuthedUsernameSettingsRoute,
-}
-
-const AuthedUsernameRouteWithChildren = AuthedUsernameRoute._addFileChildren(
-  AuthedUsernameRouteChildren,
-)
-
 interface AuthedRouteChildren {
-  AuthedUsernameRoute: typeof AuthedUsernameRouteWithChildren
   AuthedDashboardRoute: typeof AuthedDashboardRoute
 }
 
 const AuthedRouteChildren: AuthedRouteChildren = {
-  AuthedUsernameRoute: AuthedUsernameRouteWithChildren,
   AuthedDashboardRoute: AuthedDashboardRoute,
 }
 
@@ -206,25 +164,21 @@ const PublicRouteWithChildren =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '': typeof PublicRouteWithChildren
-  '/$username': typeof AuthedUsernameRouteWithChildren
   '/dashboard': typeof AuthedDashboardRoute
   '/dpa': typeof PublicDpaRoute
   '/login': typeof PublicLoginRoute
   '/signup': typeof PublicSignupRoute
   '/terms': typeof PublicTermsRoute
-  '/$username/settings': typeof AuthedUsernameSettingsRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '': typeof PublicRouteWithChildren
-  '/$username': typeof AuthedUsernameRouteWithChildren
   '/dashboard': typeof AuthedDashboardRoute
   '/dpa': typeof PublicDpaRoute
   '/login': typeof PublicLoginRoute
   '/signup': typeof PublicSignupRoute
   '/terms': typeof PublicTermsRoute
-  '/$username/settings': typeof AuthedUsernameSettingsRoute
 }
 
 export interface FileRoutesById {
@@ -232,50 +186,28 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authed': typeof AuthedRouteWithChildren
   '/_public': typeof PublicRouteWithChildren
-  '/_authed/$username': typeof AuthedUsernameRouteWithChildren
   '/_authed/dashboard': typeof AuthedDashboardRoute
   '/_public/dpa': typeof PublicDpaRoute
   '/_public/login': typeof PublicLoginRoute
   '/_public/signup': typeof PublicSignupRoute
   '/_public/terms': typeof PublicTermsRoute
-  '/_authed/$username/settings': typeof AuthedUsernameSettingsRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | ''
-    | '/$username'
-    | '/dashboard'
-    | '/dpa'
-    | '/login'
-    | '/signup'
-    | '/terms'
-    | '/$username/settings'
+  fullPaths: '/' | '' | '/dashboard' | '/dpa' | '/login' | '/signup' | '/terms'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | ''
-    | '/$username'
-    | '/dashboard'
-    | '/dpa'
-    | '/login'
-    | '/signup'
-    | '/terms'
-    | '/$username/settings'
+  to: '/' | '' | '/dashboard' | '/dpa' | '/login' | '/signup' | '/terms'
   id:
     | '__root__'
     | '/'
     | '/_authed'
     | '/_public'
-    | '/_authed/$username'
     | '/_authed/dashboard'
     | '/_public/dpa'
     | '/_public/login'
     | '/_public/signup'
     | '/_public/terms'
-    | '/_authed/$username/settings'
   fileRoutesById: FileRoutesById
 }
 
@@ -312,7 +244,6 @@ export const routeTree = rootRoute
     "/_authed": {
       "filePath": "_authed.tsx",
       "children": [
-        "/_authed/$username",
         "/_authed/dashboard"
       ]
     },
@@ -323,13 +254,6 @@ export const routeTree = rootRoute
         "/_public/login",
         "/_public/signup",
         "/_public/terms"
-      ]
-    },
-    "/_authed/$username": {
-      "filePath": "_authed/$username.tsx",
-      "parent": "/_authed",
-      "children": [
-        "/_authed/$username/settings"
       ]
     },
     "/_authed/dashboard": {
@@ -351,10 +275,6 @@ export const routeTree = rootRoute
     "/_public/terms": {
       "filePath": "_public/terms.tsx",
       "parent": "/_public"
-    },
-    "/_authed/$username/settings": {
-      "filePath": "_authed/$username.settings.tsx",
-      "parent": "/_authed/$username"
     }
   }
 }

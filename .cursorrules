@@ -78,6 +78,7 @@ lib/                      # Shared libraries
 - Sanitize user inputs via tanstack form and zod validator
 
 ## Git Usage
+- When i send "cc", it means i want you to create a commit message for the diff of the working state.
 Commit Message Prefixes:
 - "fix:" for bug fixes
 - "feat:" for new features
@@ -87,6 +88,7 @@ Commit Message Prefixes:
 - "refactor:" for code refactoring
 - "test:" for adding missing tests
 - "chore:" for maintenance tasks
+
 
 Rules:
 - Use lowercase for commit messages

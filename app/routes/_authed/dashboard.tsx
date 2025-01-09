@@ -1,6 +1,6 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/lib/components/ui/card";
-import { UserCircle } from "lucide-react";
+import { Home } from "lucide-react";
 
 export const Route = createFileRoute('/_authed/dashboard')({
   component: DashboardRoute,
@@ -13,18 +13,17 @@ export const Route = createFileRoute('/_authed/dashboard')({
 });
 
 function DashboardRoute() {
-  const { user } = Route.useRouteContext();
-
+  
   return (
     <div className="max-w-2xl mx-auto space-y-6">
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <UserCircle className="h-6 w-6" />
-            Welcome, {user.username}!
+            <Home className="h-6 w-6" />
+            Kitchen Dashboard
           </CardTitle>
           <CardDescription>
-            Your personal kitchen inventory dashboard
+            Your personal kitchen inventory tracker
           </CardDescription>
         </CardHeader>
       </Card>
