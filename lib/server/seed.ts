@@ -1,23 +1,35 @@
-// import { db } from "./db";
-// import { inventory, user } from "./schema";
+import { db } from "./db";
+import { inventory } from "./schema";
+import { ulid } from "ulid";
 
-// export async function seedLocations() {
-//   const [testUser] = await db.select().from(user).limit(1);
-//   await db.insert(inventory).values([
-//     { name: "Main Fridge", type: "fridge", house_id: testUser. },
-//     { name: "Freezer", type: "freezer", house_id: testUser.id },
-//     { name: "Pantry", type: "pantry", house_id: testUser.id },
-//     { name: "Kitchen Counter", type: "counter", house_id: testUser.id },
-//   ]);
-// }
+export async function seedLocations(houseId: string) {
+   const defaultLocations = [
+      { name: "Main Fridge", type: "fridge" },
+      { name: "Freezer", type: "freezer" },
+      { name: "Pantry", type: "pantry" },
+      { name: "Kitchen Counter", type: "counter" },
+   ] as const;
 
-// // Run immediately
-// seedLocations()
-//   .then(() => {
-//     console.log('✅ Locations seeded successfully');
-//     process.exit(0);
-//   })
-//   .catch((error) => {
-//     console.error('❌ Error seeding locations:', error);
-//     process.exit(1);
-//   });
+   await db.insert(inventory).values(
+      defaultLocations.map(location => ({
+         id: ulid(),
+         name: location.name,
+         type: location.type,
+         house_id: houseId,
+      }))
+   );
+}
+
+// For development seeding
+if (process.env.NODE_ENV === 'development') {
+   const TEST_HOUSE_ID = 'test_house_id'; // Replace with actual test house ID
+   seedLocations(TEST_HOUSE_ID)
+      .then(() => {
+         console.log('✅ Default locations seeded successfully');
+         process.exit(0);
+      })
+      .catch((error) => {
+         console.error('❌ Error seeding default locations:', error);
+         process.exit(1);
+      });
+}

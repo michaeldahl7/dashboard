@@ -12,6 +12,7 @@ import {
   user as userTable,
   type HouseForm,
 } from "~/lib/server/schema";
+import { createDefaultInventories } from "~/lib/server/utils/defaultInventory";
 
 // Create a new house
 export const addHouse = createServerFn()
@@ -39,7 +40,9 @@ export const addHouse = createServerFn()
         .where(eq(userTable.id, context.auth.user!.id))
         .returning();
 
-      return { house, user };
+      const inventories = await createDefaultInventories(houseId);
+
+      return { house, user, inventories };
     });
   });
 

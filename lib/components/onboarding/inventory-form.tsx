@@ -7,6 +7,7 @@ import { useInventoryMutations } from '~/lib/services/inventory.query'
 import { inventoryTypes } from "~/lib/server/schema/inventory.schema"
 import { Plus, Trash2 } from 'lucide-react'
 import type { InventoryType } from "~/lib/server/schema/inventory.schema"
+import { DEFAULT_INVENTORIES } from "~/lib/server/utils/defaultInventory";
 
 interface InventoryFormProps {
   userId: string;
@@ -24,11 +25,10 @@ export function InventoryForm({ userId, houseId, onSuccess }: InventoryFormProps
 
   const form = useForm<{ inventories: FormInventory[] }>({
     defaultValues: {
-      inventories: [
-        { name: "Fridge", type: "fridge" },
-        { name: "Freezer", type: "freezer" },
-        { name: "Pantry", type: "pantry" }
-      ]
+      inventories: DEFAULT_INVENTORIES.map(inv => ({
+        name: inv.name,
+        type: inv.type
+      }))
     },
     onSubmit: async ({ value }) => {
       await Promise.all(value.inventories.map(inventory => 
