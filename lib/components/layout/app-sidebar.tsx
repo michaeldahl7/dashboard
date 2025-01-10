@@ -1,9 +1,9 @@
 import { Link } from '@tanstack/react-router'
 import {
-  LayoutDashboard,
-  ShoppingCart,
-  Settings,
-} from "lucide-react"
+  MingcuteDashboardLine,
+  MingcuteShoppingCartLine,
+  MingcuteSettingsLine,
+} from "~/lib/components/icons"
 import {
   Sidebar,
   SidebarContent,
@@ -15,17 +15,17 @@ import {
 const mainNavItems = [
   {
     title: "Dashboard",
-    icon: LayoutDashboard,
+    icon: MingcuteDashboardLine,
     href: "/dashboard",
   },
   {
     title: "Shopping List",
-    icon: ShoppingCart,
+    icon: MingcuteShoppingCartLine,
     href: "/shopping",
   },
   {
     title: "Settings",
-    icon: Settings,
+    icon: MingcuteSettingsLine,
     href: "/settings",
   },
 ];

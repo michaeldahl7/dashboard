@@ -1,6 +1,6 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/lib/components/ui/card";
-import { Home } from "lucide-react";
+import { MingcuteHomeLine } from "~/lib/components/icons";
 
 export const Route = createFileRoute('/_authed/dashboard')({
   component: DashboardRoute,
@@ -19,7 +19,7 @@ function DashboardRoute() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Home className="h-6 w-6" />
+            <MingcuteHomeLine className="h-6 w-6" />
             Kitchen Dashboard
           </CardTitle>
           <CardDescription>

@@ -1,10 +1,10 @@
-import { Mail } from "lucide-react";
 import { Button } from "~/lib/components/ui/button";
 import { Card, CardContent } from "~/lib/components/ui/card";
 import { Separator } from "~/lib/components/ui/separator";
 import { authClient } from "~/lib/utils/authClient";
 import { Link, useRouter } from "@tanstack/react-router";
 import { useEffect } from "react";
+import {  MingcuteMailLine } from "./icons";
 
 export default function Login({ title }: { title: string }) {
   const router = useRouter();
@@ -82,7 +82,7 @@ export default function Login({ title }: { title: string }) {
               className="w-full"
               onClick={() => handleSocialSignIn("google")}
             >
-              
+              <MingcuteMailLine className="mr-2 h-4 w-4" />
               Google
             </Button>
             
@@ -91,6 +91,7 @@ export default function Login({ title }: { title: string }) {
               className="w-full"
               onClick={() => handleSocialSignIn("discord")}
             >
+
               Discord
             </Button>
           </div>

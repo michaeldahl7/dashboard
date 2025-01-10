@@ -28,7 +28,7 @@ export const getInventories = createServerFn()
 export const getItems = createServerFn()
    .middleware([authMiddleware])
    .validator(z.string())
-   .handler(async ({ data: locationId, context }) => {
+   .handler(async ({ data: locationId, }) => {
       return db.select().from(item).where(eq(item.location_id, locationId));
    });
 
