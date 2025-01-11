@@ -1,10 +1,9 @@
 import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
 import { AppHeader } from "~/lib/components/layout/app-header";
-import { authClient } from "~/lib/utils/authClient";
 
 export const Route = createFileRoute("/_authed")({
    component: AuthedLayout,
-   beforeLoad: async ({ context }) => {
+   beforeLoad: ({ context }) => {
       if (!context.auth.user) {
          throw redirect({ to: "/signup" });
       }
@@ -14,11 +13,15 @@ export const Route = createFileRoute("/_authed")({
 
 function AuthedLayout() {
    return (
-      <main className="min-h-screen flex flex-col bg-background">
+      <div className="min-h-screen flex flex-col bg-background">
          <AppHeader />
-         <div className="flex-1 p-6">
+
+         <div className="flex flex-1">
             <Outlet />
+            {/* <main className="flex-1 lg:ml-[300px] p-6"> */}
+
+            {/* </main> */}
          </div>
-      </main>
+      </div>
    );
 }

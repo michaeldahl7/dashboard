@@ -1,9 +1,6 @@
 import { Link, createFileRoute, redirect } from "@tanstack/react-router";
-import { Menu } from "lucide-react";
-import { useState } from "react";
 import { PublicHeader } from "~/lib/components/layout/public-header";
 import { Button } from "~/lib/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "~/lib/components/ui/sheet";
 
 export const Route = createFileRoute("/")({
    beforeLoad: ({ context }) => {

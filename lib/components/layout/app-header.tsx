@@ -1,7 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { ModeToggle } from "~/lib/components/mode-toggle";
 import { Button } from "~/lib/components/ui/button";
-import { SidebarTrigger } from "~/lib/components/ui/sidebar";
 import { authClient } from "~/lib/utils/authClient";
 import { MingcuteHomeLine } from "../icons";
 

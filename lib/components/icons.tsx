@@ -1,6 +1,6 @@
 import type { SVGProps } from "react";
 
-export function MingcuteCheckCircleFill(props: SVGProps<SVGSVGElement>) {
+export function MingcuteCheckCircleLine(props: SVGProps<SVGSVGElement>) {
    return (
       <svg
          xmlns="http://www.w3.org/2000/svg"
@@ -14,7 +14,7 @@ export function MingcuteCheckCircleFill(props: SVGProps<SVGSVGElement>) {
             <path d="m12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.018-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z" />
             <path
                fill="currentColor"
-               d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12S6.477 2 12 2m3.535 6.381l-4.95 4.95l-2.12-2.121a1 1 0 0 0-1.415 1.414l2.758 2.758a1.1 1.1 0 0 0 1.556 0l5.586-5.586a1 1 0 0 0-1.415-1.415"
+               d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12S6.477 2 12 2m0 2a8 8 0 1 0 0 16a8 8 0 0 0 0-16m3.535 4.381a1 1 0 0 1 1.498 1.32l-.083.094l-5.586 5.587a1.1 1.1 0 0 1-1.46.085l-.096-.085l-2.758-2.758a1 1 0 0 1 1.32-1.498l.094.084l2.122 2.121l4.95-4.95Z"
             />
          </g>
       </svg>
@@ -141,7 +141,7 @@ export function MingcutePanelLeftLine(props: SVGProps<SVGSVGElement>) {
    );
 }
 
-export function ChevronRightIcon(props: SVGProps<SVGSVGElement>) {
+export function MingcuteChevronRightIcon(props: SVGProps<SVGSVGElement>) {
    return (
       <svg
          xmlns="http://www.w3.org/2000/svg"
@@ -161,7 +161,7 @@ export function ChevronRightIcon(props: SVGProps<SVGSVGElement>) {
    );
 }
 
-export function MoreHorizontalIcon(props: SVGProps<SVGSVGElement>) {
+export function MingcuteMoreHorizontalIcon(props: SVGProps<SVGSVGElement>) {
    return (
       <svg
          xmlns="http://www.w3.org/2000/svg"
@@ -217,6 +217,89 @@ export function MingcuteMoonLine(props: SVGProps<SVGSVGElement>) {
             <path
                fill="currentColor"
                d="M13.574 3.137a1.01 1.01 0 0 0-1.097 1.409a6 6 0 0 1-7.931 7.931a1.01 1.01 0 0 0-1.409 1.097A9 9 0 0 0 21 12c0-4.434-3.206-8.118-7.426-8.863m1.307 2.481A7.002 7.002 0 0 1 12 19a7 7 0 0 1-6.382-4.12a8 8 0 0 0 9.263-9.263Z"
+            />
+         </g>
+      </svg>
+   );
+}
+
+export function MingcuteDownLine(props: SVGProps<SVGSVGElement>) {
+   return (
+      <svg
+         xmlns="http://www.w3.org/2000/svg"
+         width="1em"
+         height="1em"
+         viewBox="0 0 24 24"
+         {...props}
+      >
+         <title>Chevron Down Icon</title>
+         <g fill="none">
+            <path
+               fill="currentColor"
+               d="M12 15.586L6.707 10.293a1 1 0 0 0-1.414 1.414l6 6a1 1 0 0 0 1.414 0l6-6a1 1 0 0 0-1.414-1.414L12 15.586z"
+            />
+         </g>
+      </svg>
+   );
+}
+
+export function MingcuteRoundLine(props: SVGProps<SVGSVGElement>) {
+   return (
+      <svg
+         xmlns="http://www.w3.org/2000/svg"
+         width="1em"
+         height="1em"
+         viewBox="0 0 24 24"
+         {...props}
+      >
+         <title>Round Icon</title>
+         <g fill="none" fillRule="evenodd">
+            <path d="m12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.018-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z" />
+            <path
+               fill="currentColor"
+               d="M12 4a8 8 0 1 0 0 16a8 8 0 0 0 0-16M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12"
+            />
+         </g>
+      </svg>
+   );
+}
+
+export function MingcuteCloseLine(props: SVGProps<SVGSVGElement>) {
+   return (
+      <svg
+         xmlns="http://www.w3.org/2000/svg"
+         width="1em"
+         height="1em"
+         viewBox="0 0 24 24"
+         {...props}
+      >
+         <title>Close Icon</title>
+         <g fill="none" fillRule="evenodd">
+            <path d="m12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.018-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z" />
+            <path
+               fill="currentColor"
+               d="m12 13.414l5.657 5.657a1 1 0 0 0 1.414-1.414L13.414 12l5.657-5.657a1 1 0 0 0-1.414-1.414L12 10.586L6.343 4.929A1 1 0 0 0 4.93 6.343L10.586 12l-5.657 5.657a1 1 0 1 0 1.414 1.414z"
+            />
+         </g>
+      </svg>
+   );
+}
+
+export function MingcuteUpLine(props: SVGProps<SVGSVGElement>) {
+   return (
+      <svg
+         xmlns="http://www.w3.org/2000/svg"
+         width="1em"
+         height="1em"
+         viewBox="0 0 24 24"
+         {...props}
+      >
+         <title>Up Icon</title>
+         <g fill="none" fillRule="evenodd">
+            <path d="M24 0v24H0V0zM12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.019-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z" />
+            <path
+               fill="currentColor"
+               d="M11.293 8.293a1 1 0 0 1 1.414 0l5.657 5.657a1 1 0 0 1-1.414 1.414L12 10.414l-4.95 4.95a1 1 0 0 1-1.414-1.414z"
             />
          </g>
       </svg>

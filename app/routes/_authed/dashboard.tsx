@@ -1,5 +1,5 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import { MingcuteHomeLine } from "~/lib/components/icons";
+
 import {
    Card,
    CardContent,

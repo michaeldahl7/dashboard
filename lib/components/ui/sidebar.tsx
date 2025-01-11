@@ -1,6 +1,6 @@
 import { Slot } from "@radix-ui/react-slot";
 import { type VariantProps, cva } from "class-variance-authority";
-import { PanelLeft } from "lucide-react";
+import { MingcutePanelLeftLine } from "~/lib/components/icons";
 import * as React from "react";
 
 import { Button } from "~/lib/components/ui/button";
@@ -274,7 +274,7 @@ const SidebarTrigger = React.forwardRef<
          }}
          {...props}
       >
-         <PanelLeft />
+         <MingcutePanelLeftLine />
          <span className="sr-only">Toggle Sidebar</span>
       </Button>
    );
