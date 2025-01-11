@@ -1,7 +1,7 @@
 import * as SheetPrimitive from "@radix-ui/react-dialog";
 import { type VariantProps, cva } from "class-variance-authority";
-import { MingcuteCloseLine } from "~/lib/components/icons";
 import * as React from "react";
+import { MingcuteCloseLine } from "~/lib/components/icons";
 
 import { cn } from "~/lib/utils";
 

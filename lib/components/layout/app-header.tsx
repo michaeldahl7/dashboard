@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { ModeToggle } from "~/lib/components/mode-toggle";
+import { ThemeToggle } from "~/lib/components/theme-toggle";
 import { Button } from "~/lib/components/ui/button";
 import { authClient } from "~/lib/utils/authClient";
 import { MingcuteHomeLine } from "../icons";
@@ -16,7 +16,7 @@ export function AppHeader() {
          </div>
 
          <div className="flex items-center gap-4">
-            <ModeToggle />
+            <ThemeToggle />
             <Button
                variant="ghost"
                size="sm"

@@ -17,6 +17,7 @@ export const Route = createFileRoute("/_authed")({
 function AuthedLayout() {
    return (
       <div className="flex flex-col min-h-screen">
+         <AppHeader />
          <SidebarProvider>
             <AppSidebar />
             <SidebarTrigger />

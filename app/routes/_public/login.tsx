@@ -2,11 +2,11 @@ import { createFileRoute, redirect } from "@tanstack/react-router";
 // import Login from "~/lib/components/login";
 import { useRouter } from "@tanstack/react-router";
 import { useEffect } from "react";
+import { MingcuteMailLine } from "~/lib/components/icons";
 import { Button } from "~/lib/components/ui/button";
 import { Card, CardContent } from "~/lib/components/ui/card";
 import { Separator } from "~/lib/components/ui/separator";
 import { authClient } from "~/lib/utils/authClient";
-import { MingcuteMailLine } from "~/lib/components/icons";
 
 export const Route = createFileRoute("/_public/login")({
    beforeLoad: ({ context }) => {

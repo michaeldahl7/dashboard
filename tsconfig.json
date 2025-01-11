@@ -1,23 +1,35 @@
 {
-   "include": ["**/*.ts", "**/*.tsx"],
    "compilerOptions": {
-      "strict": true,
-      "esModuleInterop": true,
+      "incremental": true,
+      "target": "ESNext",
+
       "jsx": "react-jsx",
-      "module": "ESNext",
-      "moduleResolution": "Bundler",
-      "lib": ["DOM", "DOM.Iterable", "ES2022"],
-      "isolatedModules": true,
-      "resolveJsonModule": true,
-      "skipLibCheck": true,
-      "target": "ES2022",
-      "allowJs": true,
-      "forceConsistentCasingInFileNames": true,
+      /* Bundled projects */
+      "lib": ["esnext", "dom", "dom.iterable"],
+      "moduleDetection": "force",
+
+      /* Path Aliases */
       "baseUrl": ".",
+      "module": "preserve",
       "paths": {
          "~/*": ["./*"]
       },
+      "resolveJsonModule": true,
+      "allowJs": true,
+
+      "checkJs": true,
+      /* Strictness */
+      "strict": true,
+      "noImplicitOverride": true,
+      "noUncheckedIndexedAccess": true,
       "noEmit": true,
-      "strictNullChecks": true
-   }
+      /* Base Options: */
+      "esModuleInterop": true,
+      "isolatedModules": true,
+      "verbatimModuleSyntax": true,
+      "skipLibCheck": true
+   },
+   "include": ["**/*.ts", "**/*.tsx", "**/*.js"],
+
+   "exclude": ["node_modules"]
 }

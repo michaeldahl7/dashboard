@@ -106,14 +106,8 @@ function RootDocument({ children }: { readonly children: React.ReactNode }) {
             <Meta />
          </head>
          <body>
-            <ThemeProvider
-               attribute="class"
-               defaultTheme="system"
-               enableSystem
-               disableTransitionOnChange
-            >
-               {children}
-            </ThemeProvider>
+            <ThemeProvider attribute="class">{children}</ThemeProvider>
+            {children}
             <ScrollRestoration />
             <ReactQueryDevtools buttonPosition="bottom-left" />
             <Suspense>
