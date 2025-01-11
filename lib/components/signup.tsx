@@ -1,4 +1,3 @@
-import { Mail } from "lucide-react";
 import { Button } from "~/lib/components/ui/button";
 import { Card, CardContent } from "~/lib/components/ui/card";
 import { Separator } from "~/lib/components/ui/separator";
@@ -12,27 +11,30 @@ export default function Signup() {
             <h1 className="text-4xl font-bold tracking-tight">Create account</h1>
             <p className="text-muted-foreground">Choose your preferred sign up method</p>
          </div>
-         
+
          <Card className="w-full max-w-sm">
             <CardContent className="pt-6">
                <div className="flex flex-col gap-4">
-                  <Button 
+                  <Button
                      className="w-full"
-                     onClick={() => authClient.signIn.social({
-                        provider: "google",
-                        callbackURL: "/"
-                     })}
+                     onClick={() =>
+                        authClient.signIn.social({
+                           provider: "google",
+                           callbackURL: "/",
+                        })
+                     }
                   >
-                     
                      Continue with Google
                   </Button>
-                  
-                  <Button 
+
+                  <Button
                      className="w-full"
-                     onClick={() => authClient.signIn.social({
-                        provider: "discord",
-                        callbackURL: "/"
-                     })}
+                     onClick={() =>
+                        authClient.signIn.social({
+                           provider: "discord",
+                           callbackURL: "/",
+                        })
+                     }
                   >
                      Continue with Discord
                   </Button>
@@ -44,19 +46,17 @@ export default function Signup() {
                   <Separator />
                </div>
                <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-card px-2 text-muted-foreground">
-                     
-                  </span>
+                  <span className="bg-card px-2 text-muted-foreground" />
                </div>
             </div>
 
             <div className="px-6 pb-4 text-center">
                <p className="text-sm text-muted-foreground">
-                  By signing up, you agree to our{' '}
+                  By signing up, you agree to our{" "}
                   <Link to="/terms" className="hover:underline font-medium text-primary">
                      Terms of Service
-                  </Link>{' '}
-                  and{' '}
+                  </Link>{" "}
+                  and{" "}
                   <Link to="/dpa" className="hover:underline font-medium text-primary">
                      Data Processing Agreement
                   </Link>

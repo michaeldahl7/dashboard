@@ -11,12 +11,15 @@ export const DEFAULT_LOCATIONS = [
 ] as const;
 
 export async function createDefaultLocations(houseId: string) {
-   return db.insert(location).values(
-      DEFAULT_LOCATIONS.map(location => ({
-         id: ulid(),
-         name: location.name,
-         type: location.type,
-         house_id: houseId,
-      }))
-   ).returning();
-} 
+   return db
+      .insert(location)
+      .values(
+         DEFAULT_LOCATIONS.map((location) => ({
+            id: ulid(),
+            name: location.name,
+            type: location.type,
+            house_id: houseId,
+         })),
+      )
+      .returning();
+}

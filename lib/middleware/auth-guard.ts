@@ -11,12 +11,12 @@ export const authMiddleware = createMiddleware().server(async ({ next }) => {
    const session = await auth.api.getSession({ headers });
 
    const authResult: Auth = !session
-   ? { isAuthenticated: false, user: null, session: null }
-   : {
-       isAuthenticated: true,
-       user: session.user,
-       session: session.session,
-     };
+      ? { isAuthenticated: false, user: null, session: null }
+      : {
+           isAuthenticated: true,
+           user: session.user,
+           session: session.session,
+        };
 
    if (!authResult.isAuthenticated) {
       setResponseStatus(401);

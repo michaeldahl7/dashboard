@@ -1,32 +1,29 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.8.3/schema.json",
-  "files": {
-    "ignore": [
-      "app/routeTree.gen.ts",
-      ".vscode/settings.json"
-    ]
-  },
-  "organizeImports": {
-    "enabled": true
-  },
-  "linter": {
-    "enabled": true,
-    "rules": {
-      "recommended": true,
-      "style": {
-        "noNonNullAssertion": "off"
-      },
-      "suspicious": {
-        "noExplicitAny": "off"
+   "$schema": "https://biomejs.dev/schemas/1.8.3/schema.json",
+   "files": {
+      "ignore": ["app/routeTree.gen.ts", ".vscode/settings.json"]
+   },
+   "organizeImports": {
+      "enabled": true
+   },
+   "linter": {
+      "enabled": true,
+      "rules": {
+         "recommended": true,
+         "style": {
+            "noNonNullAssertion": "off"
+         },
+         "suspicious": {
+            "noExplicitAny": "off"
+         }
       }
-    }
-  },
-  "formatter": {
-    "enabled": true,
-    "ignore": [],
-    "indentStyle": "space",
-    "indentWidth": 3,
-    "lineWidth": 90,
-    "lineEnding": "lf"
-  }
+   },
+   "formatter": {
+      "enabled": true,
+      "ignore": [],
+      "indentStyle": "space",
+      "indentWidth": 3,
+      "lineWidth": 90,
+      "lineEnding": "lf"
+   }
 }

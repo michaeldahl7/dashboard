@@ -1,5 +1,5 @@
 export interface UserForm {
-  name: string;
-  email: string;
-  username: string;
-} 
+   name: string;
+   email: string;
+   username: string;
+}

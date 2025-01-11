@@ -11,25 +11,25 @@ export async function seedLocations(houseId: string) {
    ] as const;
 
    await db.insert(location).values(
-      defaultLocations.map(loc => ({
+      defaultLocations.map((loc) => ({
          id: ulid(),
          name: loc.name,
          type: loc.type,
          house_id: houseId,
-      }))
+      })),
    );
 }
 
 // For development seeding
-if (process.env.NODE_ENV === 'development') {
-   const TEST_HOUSE_ID = 'test_house_id'; // Replace with actual test house ID
+if (process.env.NODE_ENV === "development") {
+   const TEST_HOUSE_ID = "test_house_id"; // Replace with actual test house ID
    seedLocations(TEST_HOUSE_ID)
       .then(() => {
-         console.log('✅ Default locations seeded successfully');
+         console.log("✅ Default locations seeded successfully");
          process.exit(0);
       })
       .catch((error) => {
-         console.error('❌ Error seeding default locations:', error);
+         console.error("❌ Error seeding default locations:", error);
          process.exit(1);
       });
 }

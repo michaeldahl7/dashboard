@@ -3,29 +3,29 @@ import { updateOnboardingStatus, updateOnboardingStep, checkUsername } from "./u
 import type { OnboardingStep } from "~/lib/server/schema/types";
 
 export const useUpdateOnboardingStatus = () => {
-  const queryClient = useQueryClient();
+   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: updateOnboardingStatus,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["user"] });
-    },
-  });
+   return useMutation({
+      mutationFn: updateOnboardingStatus,
+      onSuccess: () => {
+         queryClient.invalidateQueries({ queryKey: ["user"] });
+      },
+   });
 };
 
 export const useUpdateOnboardingStep = () => {
-  const queryClient = useQueryClient();
+   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: updateOnboardingStep,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["user"] });
-    },
-  });
+   return useMutation({
+      mutationFn: updateOnboardingStep,
+      onSuccess: () => {
+         queryClient.invalidateQueries({ queryKey: ["user"] });
+      },
+   });
 };
 
 export const useCheckUsername = () => {
-  return useMutation({
-    mutationFn: checkUsername
-  });
+   return useMutation({
+      mutationFn: checkUsername,
+   });
 };
