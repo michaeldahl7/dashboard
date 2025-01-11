@@ -1,9 +1,9 @@
-import { pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
+import { pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 import { user } from "./auth.schema";
-import type { UserRole, InviteStatus } from "./types";
+import type { InviteStatus, UserRole } from "./types";
 
 export const house = pgTable("house", {
    id: text("id").primaryKey(),

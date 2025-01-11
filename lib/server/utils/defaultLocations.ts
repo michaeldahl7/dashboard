@@ -1,6 +1,6 @@
+import { ulid } from "ulid";
 import { db } from "~/lib/server/db";
 import { location } from "~/lib/server/schema/location.schema";
-import { ulid } from "ulid";
 import type { LocationType } from "~/lib/server/schema/location.schema";
 
 export const DEFAULT_LOCATIONS = [

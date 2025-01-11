@@ -5,13 +5,13 @@ import {
    useQueryClient,
    useSuspenseQuery,
 } from "@tanstack/react-query";
-import { getInventories, getItems, addInventory, addItem } from "./location.api";
 import type {
-   SelectLocation,
-   SelectItem,
-   LocationForm,
    ItemForm,
+   LocationForm,
+   SelectItem,
+   SelectLocation,
 } from "~/lib/server/schema/location.schema";
+import { addInventory, addItem, getInventories, getItems } from "./location.api";
 
 // Query keys for cache management
 export const inventoryKeys = {

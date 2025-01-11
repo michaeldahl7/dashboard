@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateOnboardingStatus, updateOnboardingStep, checkUsername } from "./user.api";
 import type { OnboardingStep } from "~/lib/server/schema/types";
+import { checkUsername, updateOnboardingStatus, updateOnboardingStep } from "./user.api";
 
 export const useUpdateOnboardingStatus = () => {
    const queryClient = useQueryClient();

@@ -1,9 +1,9 @@
+import { useRouter } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { Button } from "~/lib/components/ui/button";
 import { Card, CardContent } from "~/lib/components/ui/card";
 import { Separator } from "~/lib/components/ui/separator";
 import { authClient } from "~/lib/utils/authClient";
-import { useRouter } from "@tanstack/react-router";
-import { useEffect } from "react";
 import { MingcuteMailLine } from "./icons";
 
 export default function Login({ title }: { title: string }) {

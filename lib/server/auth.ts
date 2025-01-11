@@ -1,8 +1,8 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { db } from "~/lib/server/db";
-import { env } from "~/lib/env/server";
 import { passkey } from "better-auth/plugins/passkey";
+import { env } from "~/lib/env/server";
+import { db } from "~/lib/server/db";
 
 export const auth = betterAuth({
    database: drizzleAdapter(db, {

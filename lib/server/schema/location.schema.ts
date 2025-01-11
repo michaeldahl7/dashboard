@@ -1,5 +1,5 @@
-import { pgTable, real, text, timestamp, boolean } from "drizzle-orm/pg-core";
-import { createSelectSchema, createInsertSchema } from "drizzle-zod";
+import { boolean, pgTable, real, text, timestamp } from "drizzle-orm/pg-core";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 import { house } from "./house.schema";
 

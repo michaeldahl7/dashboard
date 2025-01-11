@@ -4,18 +4,18 @@ import {
    useQueryClient,
    useSuspenseQuery,
 } from "@tanstack/react-query";
+import type { HouseForm, HouseInviteForm, HouseMemberForm } from "~/lib/server/schema";
 import {
+   acceptHouseInvite,
    // getHouses,
    addHouse,
-   updateHouse,
    deleteHouse,
-   updateHouseMember,
-   inviteToHouse,
-   acceptHouseInvite,
-   rejectHouseInvite,
    getHouseInvites,
+   inviteToHouse,
+   rejectHouseInvite,
+   updateHouse,
+   updateHouseMember,
 } from "./house.api";
-import type { HouseForm, HouseMemberForm, HouseInviteForm } from "~/lib/server/schema";
 
 // Query keys
 export const houseKeys = {

@@ -11,10 +11,10 @@ import { Suspense, lazy } from "react";
 import fontsourceInter from "@fontsource-variable/inter?url";
 import fontsourceJetBrainsMono from "@fontsource-variable/jetbrains-mono?url";
 
-import appCss from "~/lib/styles/app.css?url";
 import { getWebRequest } from "vinxi/http";
-import { type Auth, auth } from "~/lib/server/auth";
 import { ThemeProvider } from "~/lib/components/theme-provider";
+import { type Auth, auth } from "~/lib/server/auth";
+import appCss from "~/lib/styles/app.css?url";
 
 const TanStackRouterDevtools =
    process.env.NODE_ENV === "production"
@@ -74,9 +74,9 @@ export const Route = createRootRouteWithContext<RouterContext>()({
       ],
       links: [
          {
-            rel: 'icon',
-            href: '/favicon.ico',
-          },
+            rel: "icon",
+            href: "/favicon.ico",
+         },
          { rel: "stylesheet", href: appCss },
          {
             rel: "stylesheet",
@@ -89,7 +89,6 @@ export const Route = createRootRouteWithContext<RouterContext>()({
       ],
    }),
    component: RootComponent,
-
 });
 
 function RootComponent() {
@@ -107,19 +106,19 @@ function RootDocument({ children }: { readonly children: React.ReactNode }) {
             <Meta />
          </head>
          <body>
-         <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
+            <ThemeProvider
+               attribute="class"
+               defaultTheme="system"
+               enableSystem
+               disableTransitionOnChange
+            >
+               {children}
             </ThemeProvider>
             <ScrollRestoration />
             <ReactQueryDevtools buttonPosition="bottom-left" />
-        <Suspense>
-          <TanStackRouterDevtools position="bottom-right" />
-        </Suspense>
+            <Suspense>
+               <TanStackRouterDevtools position="bottom-right" />
+            </Suspense>
 
             <Scripts />
          </body>

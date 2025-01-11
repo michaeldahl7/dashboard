@@ -1,16 +1,16 @@
 import { createServerFn } from "@tanstack/start";
+import { and, eq } from "drizzle-orm";
 import { ulid } from "ulid";
 import { z } from "zod";
-import { db } from "~/lib/server/db";
-import { eq, and } from "drizzle-orm";
 import { authMiddleware } from "~/lib/middleware/auth-guard";
+import { db } from "~/lib/server/db";
 import {
-   house as houseTable,
-   houseMember,
-   HouseFormSchema,
-   HouseMemberFormSchema,
    type HouseForm,
+   HouseFormSchema,
    type HouseMemberForm,
+   HouseMemberFormSchema,
+   houseMember,
+   house as houseTable,
 } from "~/lib/server/schema";
 import { createDefaultLocations } from "~/lib/server/utils/defaultLocations";
 

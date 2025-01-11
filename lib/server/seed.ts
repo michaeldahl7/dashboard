@@ -1,6 +1,6 @@
+import { ulid } from "ulid";
 import { db } from "./db";
 import { location } from "./schema";
-import { ulid } from "ulid";
 
 export async function seedLocations(houseId: string) {
    const defaultLocations = [

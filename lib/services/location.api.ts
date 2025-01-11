@@ -1,19 +1,19 @@
 // app/services/inventory.api.ts
 import { createServerFn } from "@tanstack/start";
+import { eq } from "drizzle-orm";
 import { ulid } from "ulid";
 import { z } from "zod";
-import { db } from "~/lib/server/db";
-import { eq } from "drizzle-orm";
 import { authMiddleware } from "~/lib/middleware/auth-guard";
+import { db } from "~/lib/server/db";
 import {
-   location,
-   item,
-   LocationFormSchema,
-   ItemFormSchema,
-   type InsertLocation,
    type InsertItem,
-   type LocationForm,
+   type InsertLocation,
    type ItemForm,
+   ItemFormSchema,
+   type LocationForm,
+   LocationFormSchema,
+   item,
+   location,
 } from "~/lib/server/schema/location.schema";
 
 export const getInventories = createServerFn()

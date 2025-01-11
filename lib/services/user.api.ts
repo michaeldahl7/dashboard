@@ -1,11 +1,11 @@
 import { createServerFn } from "@tanstack/start";
+import { eq } from "drizzle-orm";
+import { ulid } from "ulid";
+import { z } from "zod";
+import { authMiddleware } from "~/lib/middleware/auth-guard";
 import { db } from "~/lib/server/db";
 import type { InsertUser } from "~/lib/server/db";
 import { user as userTable } from "~/lib/server/schema";
-import { eq } from "drizzle-orm";
-import { authMiddleware } from "~/lib/middleware/auth-guard";
-import { z } from "zod";
-import { ulid } from "ulid";
 import { UserFormSchema } from "~/lib/server/schema/user.schema";
 import type { UserForm } from "~/lib/server/schema/user.types";
 // import type { SelectUser } from "~/lib/server/db/schema";
