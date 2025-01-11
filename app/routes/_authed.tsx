@@ -1,6 +1,9 @@
 import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
 import { AppHeader } from "~/lib/components/layout/app-header";
 
+import { AppSidebar } from "~/lib/components/layout/app-sidebar";
+import { SidebarProvider, SidebarTrigger } from "~/lib/components/ui/sidebar";
+
 export const Route = createFileRoute("/_authed")({
    component: AuthedLayout,
    beforeLoad: ({ context }) => {
@@ -13,15 +16,12 @@ export const Route = createFileRoute("/_authed")({
 
 function AuthedLayout() {
    return (
-      <div className="min-h-screen flex flex-col bg-background">
-         <AppHeader />
-
-         <div className="flex flex-1">
+      <div className="flex flex-col min-h-screen">
+         <SidebarProvider>
+            <AppSidebar />
+            <SidebarTrigger />
             <Outlet />
-            {/* <main className="flex-1 lg:ml-[300px] p-6"> */}
-
-            {/* </main> */}
-         </div>
+         </SidebarProvider>
       </div>
    );
 }

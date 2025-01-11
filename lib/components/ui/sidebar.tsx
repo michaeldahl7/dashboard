@@ -1,8 +1,10 @@
+import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { type VariantProps, cva } from "class-variance-authority";
-import { MingcutePanelLeftLine } from "~/lib/components/icons";
-import * as React from "react";
+import { MingcuteDashboardLine } from "~/lib/components/icons";
 
+import { useIsMobile } from "~/lib/hooks/use-mobile";
+import { cn } from "~/lib/utils";
 import { Button } from "~/lib/components/ui/button";
 import { Input } from "~/lib/components/ui/input";
 import { Separator } from "~/lib/components/ui/separator";
@@ -14,8 +16,6 @@ import {
    TooltipProvider,
    TooltipTrigger,
 } from "~/lib/components/ui/tooltip";
-import { useIsMobile } from "~/lib/hooks/use-mobile";
-import { cn } from "~/lib/utils/index";
 
 const SIDEBAR_COOKIE_NAME = "sidebar:state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
@@ -90,7 +90,7 @@ const SidebarProvider = React.forwardRef<
       // Helper to toggle the sidebar.
       const toggleSidebar = React.useCallback(() => {
          return isMobile ? setOpenMobile((open) => !open) : setOpen((open) => !open);
-      }, [isMobile, setOpen]);
+      }, [isMobile, setOpen, setOpenMobile]);
 
       // Adds a keyboard shortcut to toggle the sidebar.
       React.useEffect(() => {
@@ -122,7 +122,7 @@ const SidebarProvider = React.forwardRef<
             setOpenMobile,
             toggleSidebar,
          }),
-         [state, open, setOpen, isMobile, openMobile, toggleSidebar],
+         [state, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar],
       );
 
       return (
@@ -274,7 +274,7 @@ const SidebarTrigger = React.forwardRef<
          }}
          {...props}
       >
-         <MingcutePanelLeftLine />
+         <MingcuteDashboardLine />
          <span className="sr-only">Toggle Sidebar</span>
       </Button>
    );

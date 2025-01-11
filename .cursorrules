@@ -13,6 +13,7 @@ I want to build a web app that allows users to track their kitchen inventory. Th
 - Prefer iteration and modularization over code duplication
 - Use descriptive variable names with auxiliary verbs (e.g., isLoading, hasError)
 - Structure repository files as follows:
+
 ```
 app/                      # Tanstack Router/Start directory
 ├── routes/             # Route directory, filebased routing
@@ -30,6 +31,7 @@ lib/                      # Shared libraries
 ├── services/           # Tanstack Start serverfn's and Tanstack Query
 ├── styles/             # Global styling
 ├── utils/              # Helper functions
+```
 
 ## Tech Stack
 - React
@@ -79,6 +81,7 @@ lib/                      # Shared libraries
 
 ## Git Usage
 - When i send "cc", it means i want you to create a commit message for the diff of the working state.
+
 Commit Message Prefixes:
 - "fix:" for bug fixes
 - "feat:" for new features
@@ -92,4 +95,4 @@ Commit Message Prefixes:
 
 Rules:
 - Use lowercase for commit messages
-- Keep the summary line concise
+- Only respond witha  summary line concise

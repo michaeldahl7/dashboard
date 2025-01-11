@@ -46,7 +46,6 @@
       "drizzle-orm": "^0.38.3",
       "drizzle-seed": "^0.3.0",
       "drizzle-zod": "^0.6.1",
-      "latest": "^0.2.0",
       "next-themes": "^0.4.4",
       "postgres": "^3.4.5",
       "react": "^19.0.0",
