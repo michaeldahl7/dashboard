@@ -1,5 +1,4 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
-// import Login from "~/lib/components/login";
 import { useRouter } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { MingcuteMailLine } from "~/lib/components/icons";
@@ -20,7 +19,6 @@ export const Route = createFileRoute("/_public/login")({
 export function LoginPage() {
    const router = useRouter();
 
-   // Enable conditional UI for passkeys if supported
    useEffect(() => {
       if (
          !("PublicKeyCredential" in window) ||
@@ -42,7 +40,6 @@ export function LoginPage() {
    const handlePasskeySignIn = async () => {
       try {
          await authClient.signIn.passkey();
-         // Invalidate router to trigger re-auth and redirects
          router.invalidate();
       } catch (error) {
          console.error("Failed to sign in with passkey:", error);

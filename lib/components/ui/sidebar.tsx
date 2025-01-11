@@ -1,8 +1,10 @@
+import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { type VariantProps, cva } from "class-variance-authority";
-import * as React from "react";
-import { MingcuteDashboardLine } from "~/lib/components/icons";
+import { PanelLeft } from "lucide-react";
 
+import { useIsMobile } from "~/lib/hooks/use-mobile";
+import { cn } from "~/lib/utils";
 import { Button } from "~/lib/components/ui/button";
 import { Input } from "~/lib/components/ui/input";
 import { Separator } from "~/lib/components/ui/separator";
@@ -14,8 +16,6 @@ import {
    TooltipProvider,
    TooltipTrigger,
 } from "~/lib/components/ui/tooltip";
-import { useIsMobile } from "~/lib/hooks/use-mobile";
-import { cn } from "~/lib/utils";
 
 const SIDEBAR_COOKIE_NAME = "sidebar:state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
@@ -274,7 +274,7 @@ const SidebarTrigger = React.forwardRef<
          }}
          {...props}
       >
-         <MingcuteDashboardLine />
+         <PanelLeft />
          <span className="sr-only">Toggle Sidebar</span>
       </Button>
    );

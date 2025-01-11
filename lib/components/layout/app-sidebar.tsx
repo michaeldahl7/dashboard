@@ -3,16 +3,16 @@ import {
    SidebarContent,
    SidebarFooter,
    SidebarGroup,
+   SidebarHeader,
    SidebarGroupContent,
    SidebarGroupLabel,
-   SidebarHeader,
    SidebarMenu,
    SidebarMenuButton,
    SidebarMenuItem,
 } from "~/lib/components/ui/sidebar";
 
-import { Link, linkOptions } from "@tanstack/react-router";
 import { MingcuteHomeLine, MingcuteSettingsLine } from "~/lib/components/icons";
+import { Link, linkOptions } from "@tanstack/react-router";
 
 // // Menu items.
 // const items = [

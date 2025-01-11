@@ -27,8 +27,6 @@ function TermsPage() {
             <li>Build competitive products using the Service</li>
             <li>Probe, scan, or test the vulnerability of the Service</li>
          </ul>
-
-         {/* Rest of Terms content... */}
       </div>
    );
 }

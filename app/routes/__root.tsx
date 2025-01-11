@@ -1,5 +1,4 @@
 import type { QueryClient } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import {
    Outlet,
    ScrollRestoration,
@@ -107,13 +106,13 @@ function RootDocument({ children }: { readonly children: React.ReactNode }) {
          </head>
          <body>
             <ThemeProvider attribute="class">{children}</ThemeProvider>
-            {children}
             <ScrollRestoration />
-            <ReactQueryDevtools buttonPosition="bottom-left" />
+            <Suspense>
+               <TanStackQueryDevtools buttonPosition="bottom-left" />
+            </Suspense>
             <Suspense>
                <TanStackRouterDevtools position="bottom-right" />
             </Suspense>
-
             <Scripts />
          </body>
       </html>
