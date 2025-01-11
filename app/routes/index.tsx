@@ -3,6 +3,7 @@ import { Button } from "~/lib/components/ui/button";
 import { Menu } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "~/lib/components/ui/sheet";
 import { useState } from "react";
+import { PublicHeader } from '~/lib/components/layout/public-header'
 
 export const Route = createFileRoute('/')({
   beforeLoad: ({ context }) => {
@@ -17,22 +18,7 @@ function LandingPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      <header className="flex h-16 shrink-0 items-center justify-between border-b px-6">
-        <div className="flex items-center gap-6">
-          <Link to="/" className="text-xl font-semibold">
-            Kitchen Tracker
-          </Link>
-        </div>
-
-        <nav className="flex items-center gap-4">
-          <Button asChild variant="ghost">
-            <Link to="/login">Login</Link>
-          </Button>
-          <Button asChild>
-            <Link to="/signup">Sign up</Link>
-          </Button>
-        </nav>
-      </header>
+      <PublicHeader />
 
       {/* Main Content */}
       <main className="flex-1">
@@ -47,9 +33,6 @@ function LandingPage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Button asChild size="lg" className="w-full sm:w-auto">
                 <Link to="/signup">Get Started</Link>
-              </Button>
-              <Button asChild variant="outline" size="lg" className="w-full sm:w-auto">
-                <Link to="/login">Sign In</Link>
               </Button>
             </div>
           </div>

@@ -16,17 +16,6 @@ function DashboardRoute() {
   
   return (
     <div className="max-w-2xl mx-auto space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <MingcuteHomeLine className="h-6 w-6" />
-            Kitchen Dashboard
-          </CardTitle>
-          <CardDescription>
-            Your personal kitchen inventory tracker
-          </CardDescription>
-        </CardHeader>
-      </Card>
 
       <Card>
         <CardHeader>
