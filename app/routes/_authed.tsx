@@ -1,4 +1,4 @@
-import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
+import { createFileRoute, Outlet, redirect, useRouter } from '@tanstack/react-router'
 import { Button } from '~/lib/components/ui/button'
 import { authClient } from '~/lib/utils/authClient'
 import { ModeToggle } from '~/lib/components/mode-toggle'
@@ -14,6 +14,7 @@ export const Route = createFileRoute('/_authed')({
 })
 
 function AuthedLayout() {
+  const router = useRouter()
   return (
     <main className="min-h-screen flex flex-col bg-background">
       <header className="flex h-16 shrink-0 items-center justify-end border-b px-4">
@@ -22,7 +23,10 @@ function AuthedLayout() {
           <Button 
             variant="ghost" 
             size="sm"
-            onClick={() => authClient.signOut()}
+            onClick={async () => {
+              await authClient.signOut();
+              router.invalidate();
+            }}
           >
             Sign out
           </Button>

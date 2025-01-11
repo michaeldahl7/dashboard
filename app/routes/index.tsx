@@ -14,52 +14,24 @@ export const Route = createFileRoute('/')({
 });
 
 function LandingPage() {
-  const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="min-h-screen flex flex-col">
-      {/* Navigation */}
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-16 max-w-screen-xl items-center justify-between px-4 md:px-8">
-          <div className="flex items-center gap-2">
-            <Link 
-              to="/" 
-              className="flex items-center text-lg font-semibold"
-            >
-              Kitchen Tracker
-            </Link>
-          </div>
-
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-2">
-            <Button asChild variant="ghost" size="sm">
-              <Link to="/login">Login</Link>
-            </Button>
-            <Button asChild size="sm">
-              <Link to="/signup">Sign up</Link>
-            </Button>
-          </nav>
-
-          {/* Mobile Navigation */}
-          <Sheet open={isOpen} onOpenChange={setIsOpen}>
-            <SheetTrigger asChild className="md:hidden">
-              <Button variant="ghost" size="icon" className="h-9 w-9">
-                <Menu className="h-4 w-4" />
-                <span className="sr-only">Toggle menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent>
-              <nav className="flex flex-col space-y-3 mt-4">
-                <Button asChild variant="ghost" onClick={() => setIsOpen(false)}>
-                  <Link to="/login">Login</Link>
-                </Button>
-                <Button asChild onClick={() => setIsOpen(false)}>
-                  <Link to="/signup">Sign up</Link>
-                </Button>
-              </nav>
-            </SheetContent>
-          </Sheet>
+    <div className="min-h-screen flex flex-col bg-background">
+      <header className="flex h-16 shrink-0 items-center justify-between border-b px-6">
+        <div className="flex items-center gap-6">
+          <Link to="/" className="text-xl font-semibold">
+            Kitchen Tracker
+          </Link>
         </div>
+
+        <nav className="flex items-center gap-4">
+          <Button asChild variant="ghost">
+            <Link to="/login">Login</Link>
+          </Button>
+          <Button asChild>
+            <Link to="/signup">Sign up</Link>
+          </Button>
+        </nav>
       </header>
 
       {/* Main Content */}
