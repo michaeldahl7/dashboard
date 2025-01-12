@@ -1,10 +1,10 @@
 import { relations } from "drizzle-orm";
 import { bigserial, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema, createUpdateSchema } from "drizzle-zod";
+import { ulid } from "ulid";
 import { z } from "zod";
 import { user } from "./auth.schema";
 import type { InviteStatus, UserRole } from "./types";
-import { ulid } from "ulid";
 
 export const house = pgTable("house", {
    id: bigserial("id", { mode: "number" }).primaryKey(),

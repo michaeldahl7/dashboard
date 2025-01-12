@@ -3,7 +3,7 @@ import { createFileRoute, redirect } from "@tanstack/react-router";
 export const Route = createFileRoute("/_public/signup")({
    beforeLoad: ({ context }) => {
       if (context.auth.isAuthenticated) {
-         throw redirect({ to: "/dashboard" });
+         throw redirect(dashboardLinkOptions);
       }
    },
    component: SignupPage,
@@ -13,6 +13,7 @@ import { Link } from "@tanstack/react-router";
 import { Button } from "~/lib/components/ui/button";
 import { Card, CardContent } from "~/lib/components/ui/card";
 import { Separator } from "~/lib/components/ui/separator";
+import { dashboardLinkOptions } from "~/lib/utils";
 import { authClient } from "~/lib/utils/authClient";
 
 export default function SignupPage() {

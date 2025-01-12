@@ -5,12 +5,13 @@ import { MingcuteMailLine } from "~/lib/components/icons";
 import { Button } from "~/lib/components/ui/button";
 import { Card, CardContent } from "~/lib/components/ui/card";
 import { Separator } from "~/lib/components/ui/separator";
+import { dashboardLinkOptions } from "~/lib/utils";
 import { authClient } from "~/lib/utils/authClient";
 
 export const Route = createFileRoute("/_public/login")({
    beforeLoad: ({ context }) => {
       if (context.auth.isAuthenticated) {
-         throw redirect({ to: "/dashboard" });
+         throw redirect(dashboardLinkOptions);
       }
    },
    component: LoginPage,

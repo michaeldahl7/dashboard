@@ -1,6 +1,6 @@
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
-import { getAuth } from "./auth.api";
 import type { Auth } from "~/lib/server/auth";
+import { getAuth } from "./auth.api";
 
 // Query keys
 export const authKeys = {

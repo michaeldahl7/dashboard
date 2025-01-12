@@ -6,10 +6,10 @@ import {
 } from "@tanstack/react-query";
 import { useRouter } from "@tanstack/react-router";
 import {
+   createDefaultHouse,
    getCurrentHouse,
    getUserHouses,
    updateUser,
-   createDefaultHouse,
 } from "./house.api";
 
 // Query options

@@ -4,8 +4,8 @@ import { SidebarProvider, SidebarTrigger } from "~/lib/components/ui/sidebar";
 import type { User } from "~/lib/server/db";
 import {
    currentHouseQueryOptions,
-   userHousesQueryOptions,
    defaultHouseQueryOptions,
+   userHousesQueryOptions,
 } from "~/lib/services/house.query";
 
 export const Route = createFileRoute("/_authed")({
@@ -14,7 +14,6 @@ export const Route = createFileRoute("/_authed")({
          throw redirect({ to: "/signup" });
       }
 
-      // Create default house if user doesn't have one
       if (!context.auth.user.currentHouseId) {
          await context.queryClient.ensureQueryData(defaultHouseQueryOptions());
       }
@@ -32,14 +31,12 @@ export const Route = createFileRoute("/_authed")({
 
 function AuthedLayout({ user }: { user: User }) {
    return (
-      <SidebarProvider>
-         <AppSidebar />
-         <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
-            <div className="flex items-center gap-2 px-4">
-               <SidebarTrigger className="-ml-1" />
-            </div>
-         </header>
-         <Outlet />
-      </SidebarProvider>
+      <>
+         <SidebarProvider>
+            <AppSidebar />
+            <SidebarTrigger />
+            <Outlet />
+         </SidebarProvider>
+      </>
    );
 }
