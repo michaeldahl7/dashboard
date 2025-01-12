@@ -12,6 +12,8 @@
       "db:migrate": "drizzle-kit migrate",
       "db:push": "drizzle-kit push",
       "db:seed": "bun run lib/server/db/seed.ts",
+      "db:up": "docker compose up -d",
+      "db:down": "docker compose down -v",
       "db:studio": "drizzle-kit studio",
       "ui": "bunx --bun shadcn@latest",
       "auth": "bunx --bun @better-auth/cli@latest",

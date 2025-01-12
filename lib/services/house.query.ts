@@ -16,6 +16,7 @@ import {
    updateHouse,
    updateHouseMember,
 } from "./house.api";
+import { useRouter } from "@tanstack/react-router";
 
 // Query keys
 export const houseKeys = {
@@ -101,3 +102,23 @@ export const useHouseInvitesQuery = (houseId: string) => {
       queryFn: () => getHouseInvites({ data: houseId }),
    });
 };
+
+export const useAddHouse = () => {
+   const router = useRouter();
+   const queryClient = useQueryClient();
+
+   return useMutation({
+      mutationFn: addHouse,
+      onSuccess: async (data) => {
+         await queryClient.invalidateQueries({ queryKey: ["houses"] });
+         await router.invalidate();
+      },
+   });
+};
+
+// Use this in dashboard for new users
+export const createInitialHouseOptions = () =>
+   queryOptions({
+      queryKey: ["initialHouse"],
+      queryFn: () => addHouse({ data: { name: "My House", setAsCurrent: true } }),
+   });

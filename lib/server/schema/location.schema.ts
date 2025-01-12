@@ -1,7 +1,8 @@
 import { boolean, pgTable, real, text, timestamp } from "drizzle-orm/pg-core";
-import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import { createInsertSchema, createSelectSchema, createUpdateSchema } from "drizzle-zod";
 import { z } from "zod";
 import { house } from "./house.schema";
+import { ulid } from "ulid";
 
 // ============= Enums & Types =============
 export const locationType = ["fridge", "freezer", "pantry", "counter"] as const;
@@ -41,7 +42,9 @@ export type ItemCategory = (typeof itemCategories)[number];
 
 // ============= Schemas =============
 export const location = pgTable("location", {
-   id: text("id").primaryKey(),
+   id: text("id")
+      .$defaultFn(() => ulid())
+      .primaryKey(),
    name: text("name").notNull(),
    type: text("type").notNull().$type<LocationType>(),
    houseId: text("house_id")
@@ -53,7 +56,9 @@ export const location = pgTable("location", {
 });
 
 export const item = pgTable("item", {
-   id: text("id").primaryKey(),
+   id: text("id")
+      .$defaultFn(() => ulid())
+      .primaryKey(),
    name: text("name").notNull(),
    locationId: text("location_id")
       .notNull()
@@ -72,7 +77,16 @@ export const item = pgTable("item", {
    updatedAt: timestamp("updated_at").defaultNow(),
 });
 
-// Form Schemas
+// Zod Schemas
+export const LocationSelectSchema = createSelectSchema(location);
+export const LocationInsertSchema = createInsertSchema(location);
+export const LocationUpdateSchema = createUpdateSchema(location);
+
+export const ItemSelectSchema = createSelectSchema(item);
+export const ItemInsertSchema = createInsertSchema(item);
+export const ItemUpdateSchema = createUpdateSchema(item);
+
+// Form Schemas (for API validation)
 export const LocationFormSchema = z.object({
    name: z.string().min(1).max(50),
    type: z.enum(locationType),
@@ -96,9 +110,11 @@ export const ItemFormSchema = z.object({
 });
 
 // Types
-export type LocationForm = z.infer<typeof LocationFormSchema>;
-export type ItemForm = z.infer<typeof ItemFormSchema>;
 export type SelectLocation = typeof location.$inferSelect;
 export type InsertLocation = typeof location.$inferInsert;
 export type SelectItem = typeof item.$inferSelect;
 export type InsertItem = typeof item.$inferInsert;
+
+// Form types can stay as they are
+export type LocationForm = z.infer<typeof LocationFormSchema>;
+export type ItemForm = z.infer<typeof ItemFormSchema>;

@@ -1,12 +1,15 @@
 import { relations } from "drizzle-orm";
 import { pgTable, text, timestamp } from "drizzle-orm/pg-core";
-import { createSelectSchema } from "drizzle-zod";
+import { createInsertSchema, createSelectSchema, createUpdateSchema } from "drizzle-zod";
 import { z } from "zod";
 import { user } from "./auth.schema";
 import type { InviteStatus, UserRole } from "./types";
+import { ulid } from "ulid";
 
 export const house = pgTable("house", {
-   id: text("id").primaryKey(),
+   id: text("id")
+      .$defaultFn(() => ulid())
+      .primaryKey(),
    name: text("name").notNull(),
    ownerId: text("owner_id")
       .notNull()
@@ -16,7 +19,9 @@ export const house = pgTable("house", {
 });
 
 export const houseMember = pgTable("house_member", {
-   id: text("id").primaryKey(),
+   id: text("id")
+      .$defaultFn(() => ulid())
+      .primaryKey(),
    houseId: text("house_id")
       .notNull()
       .references(() => house.id),
@@ -29,7 +34,9 @@ export const houseMember = pgTable("house_member", {
 });
 
 export const houseInvite = pgTable("house_invite", {
-   id: text("id").primaryKey(),
+   id: text("id")
+      .$defaultFn(() => ulid())
+      .primaryKey(),
    houseId: text("house_id")
       .notNull()
       .references(() => house.id, { onDelete: "cascade" }),
@@ -75,7 +82,20 @@ export const houseInviteRelations = relations(houseInvite, ({ one }) => ({
    }),
 }));
 
-// Schemas for validation
+// Zod Schemas
+export const HouseSelectSchema = createSelectSchema(house);
+export const HouseInsertSchema = createInsertSchema(house);
+export const HouseUpdateSchema = createUpdateSchema(house);
+
+export const HouseMemberSelectSchema = createSelectSchema(houseMember);
+export const HouseMemberInsertSchema = createInsertSchema(houseMember);
+export const HouseMemberUpdateSchema = createUpdateSchema(houseMember);
+
+export const HouseInviteSelectSchema = createSelectSchema(houseInvite);
+export const HouseInviteInsertSchema = createInsertSchema(houseInvite);
+export const HouseInviteUpdateSchema = createUpdateSchema(houseInvite);
+
+// Form Schemas (for API validation)
 export const HouseFormSchema = z.object({
    name: z.string().min(2).max(50),
 });
@@ -96,8 +116,10 @@ export type SelectHouse = typeof house.$inferSelect;
 export type InsertHouse = typeof house.$inferInsert;
 export type SelectHouseMember = typeof houseMember.$inferSelect;
 export type InsertHouseMember = typeof houseMember.$inferInsert;
+export type SelectHouseInvite = typeof houseInvite.$inferSelect;
+export type InsertHouseInvite = typeof houseInvite.$inferInsert;
+
+// Form types can stay as they are
 export type HouseForm = z.infer<typeof HouseFormSchema>;
 export type HouseMemberForm = z.infer<typeof HouseMemberFormSchema>;
 export type HouseInviteForm = z.infer<typeof HouseInviteFormSchema>;
-export type SelectHouseInvite = typeof houseInvite.$inferSelect;
-export type InsertHouseInvite = typeof houseInvite.$inferInsert;

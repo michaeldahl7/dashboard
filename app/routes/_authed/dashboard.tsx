@@ -1,5 +1,5 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import { useInitializeUser } from "~/lib/services/user.query";
+import { createInitialHouseOptions } from "~/lib/services/house.query";
 
 import {
    Card,
@@ -16,10 +16,8 @@ export const Route = createFileRoute("/_authed/dashboard")({
          throw redirect({ to: "/signup" });
       }
 
-      // If user doesn't have a current house, initialize them
       if (!context.auth.user.currentHouseId) {
-         const { initializeNewUser } = await import("~/lib/services/user.api");
-         await initializeNewUser();
+         await context.queryClient.ensureQueryData(createInitialHouseOptions());
       }
 
       return { user: context.auth.user };

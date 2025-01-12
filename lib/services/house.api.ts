@@ -15,38 +15,61 @@ import {
    houseInvite,
    houseMember,
    house as houseTable,
+   user as userTable,
 } from "~/lib/server/schema";
 import { createDefaultLocations } from "~/lib/server/utils/defaultLocations";
 import type { UserRole } from "../server/schema/types";
+import { KitchenError } from "../server/utils/errors";
 
 // Create a new house
 export const addHouse = createServerFn()
    .middleware([authMiddleware])
-   .validator((data: HouseForm) => HouseFormSchema.parse(data))
-   .handler(async ({ data, context }) => {
-      const houseId = ulid();
+   .validator(
+      z.object({
+         name: z.string().min(2).max(50),
+         setAsCurrent: z.boolean().default(false),
+      }),
+   )
+   .handler(async ({ context, data }) => {
+      const { name, setAsCurrent } = data;
 
-      return await db.transaction(async (tx) => {
-         const [house] = await tx
-            .insert(houseTable)
-            .values({
-               id: houseId,
-               name: data.name,
-               ownerId: context.auth.user!.id,
+      const [house] = await db
+         .insert(houseTable)
+         .values({
+            id: ulid(),
+            name,
+            ownerId: context.auth.user.id,
+         })
+         .returning();
+
+      if (!house) {
+         throw new KitchenError("Failed to create house", "HOUSE_CREATION_FAILED");
+      }
+
+      await db.insert(houseMember).values({
+         id: ulid(),
+         houseId: house.id,
+         userId: context.auth.user.id,
+         role: "admin",
+      });
+
+      const locations = await createDefaultLocations(house.id);
+
+      if (setAsCurrent) {
+         const [updatedUser] = await db
+            .update(userTable)
+            .set({
+               currentHouseId: house.id,
+               onboardingStep: "completed",
+               updatedAt: new Date(),
             })
+            .where(eq(userTable.id, context.auth.user.id))
             .returning();
 
-         await tx.insert(houseMember).values({
-            id: ulid(),
-            houseId: houseId,
-            userId: context.auth.user!.id,
-            role: "admin",
-         });
+         return { user: updatedUser, house, locations };
+      }
 
-         const locations = await createDefaultLocations(houseId);
-
-         return { house, locations };
-      });
+      return { house, locations };
    });
 
 // Update house
@@ -253,34 +276,5 @@ export const getHouseInvites = createServerFn()
             inviter: true,
          },
          orderBy: (invite) => [desc(invite.createdAt)],
-      });
-   });
-
-// Add this new function to create a default house
-export const createDefaultHouse = createServerFn()
-   .middleware([authMiddleware])
-   .handler(async ({ context }) => {
-      const houseId = ulid();
-
-      return await db.transaction(async (tx) => {
-         const [house] = await tx
-            .insert(houseTable)
-            .values({
-               id: houseId,
-               name: "My House",
-               ownerId: context.auth.user!.id,
-            })
-            .returning();
-
-         await tx.insert(houseMember).values({
-            id: ulid(),
-            houseId: houseId,
-            userId: context.auth.user!.id,
-            role: "admin",
-         });
-
-         const locations = await createDefaultLocations(houseId);
-
-         return { house, locations };
       });
    });
