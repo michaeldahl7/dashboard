@@ -1,69 +1,75 @@
+import { GalleryVerticalEnd, Settings2, SquareTerminal } from "lucide-react";
+
+import { NavMain } from "~/lib/components/layout/nav-main";
+import { NavUser } from "~/lib/components/layout/nav-user";
+import { HouseSwitcher } from "~/lib/components/layout/house-switcher";
 import {
    Sidebar,
    SidebarContent,
    SidebarFooter,
-   SidebarGroup,
    SidebarHeader,
-   SidebarGroupContent,
-   SidebarGroupLabel,
-   SidebarMenu,
-   SidebarMenuButton,
-   SidebarMenuItem,
+   SidebarRail,
 } from "~/lib/components/ui/sidebar";
 
-import { MingcuteHomeLine, MingcuteSettingsLine } from "~/lib/components/icons";
-import { Link, linkOptions } from "@tanstack/react-router";
+// import { linkOptions } from "@tanstack/react-router";
+// import { MingcuteHomeLine, MingcuteSettingsLine } from "../icons";
 
-// // Menu items.
-// const items = [
+// const dashboardLinkOptions = linkOptions([
 //    {
-//       title: "Home",
-//       url: "/dashboard",
+//       to: "/dashboard",
+//       title: "Dashboard",
 //       icon: MingcuteHomeLine,
+//       activeOptions: { exact: true },
 //    },
 //    {
+//       to: "/settings",
 //       title: "Settings",
-//       url: "/settings",
 //       icon: MingcuteSettingsLine,
 //    },
-// ];
+// ]);
 
-const dashboardLinkOptions = linkOptions([
-   {
-      to: "/dashboard",
-      label: "Dashboard",
-      icon: MingcuteHomeLine,
-      activeOptions: { exact: true },
+// This is sample data.
+const data = {
+   user: {
+      name: "shadcn",
+      email: "m@example.com",
+      avatar: "/avatars/shadcn.jpg",
    },
-   {
-      to: "/settings",
-      label: "Settings",
-      icon: MingcuteSettingsLine,
-   },
-]);
+   houses: [
+      {
+         name: "My House",
+         logo: GalleryVerticalEnd,
+      },
+   ],
+   navMain: [
+      {
+         title: "Dashboard",
+         url: "/dashboard",
+         icon: SquareTerminal,
+         isActive: true,
+      },
 
-export function AppSidebar() {
+      {
+         title: "Settings",
+         url: "/settings",
+         icon: Settings2,
+      },
+   ],
+};
+
+export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
    return (
-      <Sidebar>
+      <Sidebar {...props}>
+         <SidebarHeader>
+            <HouseSwitcher houses={data.houses} />
+         </SidebarHeader>
          <SidebarContent>
-            <SidebarGroup>
-               <SidebarGroupLabel>Kitchn</SidebarGroupLabel>
-               <SidebarGroupContent>
-                  <SidebarMenu>
-                     {dashboardLinkOptions.map((item) => (
-                        <SidebarMenuItem key={item.label}>
-                           <SidebarMenuButton asChild>
-                              <Link to={item.to}>
-                                 <item.icon />
-                                 <span>{item.label}</span>
-                              </Link>
-                           </SidebarMenuButton>
-                        </SidebarMenuItem>
-                     ))}
-                  </SidebarMenu>
-               </SidebarGroupContent>
-            </SidebarGroup>
+            <NavMain items={data.navMain} />
          </SidebarContent>
+         <SidebarFooter>
+            <NavUser user={data.user} />
+         </SidebarFooter>
+         <SidebarRail />
       </Sidebar>
    );
 }
