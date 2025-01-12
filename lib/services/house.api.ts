@@ -255,3 +255,32 @@ export const getHouseInvites = createServerFn()
          orderBy: (invite) => [desc(invite.created_at)],
       });
    });
+
+// Add this new function to create a default house
+export const createDefaultHouse = createServerFn()
+   .middleware([authMiddleware])
+   .handler(async ({ context }) => {
+      const houseId = ulid();
+
+      return await db.transaction(async (tx) => {
+         const [house] = await tx
+            .insert(houseTable)
+            .values({
+               id: houseId,
+               name: "My House",
+               owner_id: context.auth.user!.id,
+            })
+            .returning();
+
+         await tx.insert(houseMember).values({
+            id: ulid(),
+            house_id: houseId,
+            user_id: context.auth.user!.id,
+            role: "admin",
+         });
+
+         const locations = await createDefaultLocations(houseId);
+
+         return { house, locations };
+      });
+   });
