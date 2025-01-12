@@ -1,12 +1,8 @@
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 
 import * as React from "react";
-import {
-   MingcuteCheckCircleLine,
-   MingcuteChevronRightIcon,
-   MingcuteRoundLine,
-} from "~/lib/components/icons";
 
+import { LuCheck, LuChevronRight, LuCircle } from "react-icons/lu";
 import { cn } from "~/lib/utils";
 
 const DropdownMenu = DropdownMenuPrimitive.Root;
@@ -37,7 +33,7 @@ const DropdownMenuSubTrigger = React.forwardRef<
       {...props}
    >
       {children}
-      <MingcuteChevronRightIcon className="ml-auto" />
+      <LuChevronRight className="ml-auto" />
    </DropdownMenuPrimitive.SubTrigger>
 ));
 DropdownMenuSubTrigger.displayName = DropdownMenuPrimitive.SubTrigger.displayName;
@@ -108,7 +104,7 @@ const DropdownMenuCheckboxItem = React.forwardRef<
    >
       <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
          <DropdownMenuPrimitive.ItemIndicator>
-            <MingcuteCheckCircleLine className="h-4 w-4" />
+            <LuCheck className="h-4 w-4" />
          </DropdownMenuPrimitive.ItemIndicator>
       </span>
       {children}
@@ -130,7 +126,7 @@ const DropdownMenuRadioItem = React.forwardRef<
    >
       <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
          <DropdownMenuPrimitive.ItemIndicator>
-            <MingcuteRoundLine className="h-2 w-2 fill-current" />
+            <LuCircle className="h-2 w-2 fill-current" />
          </DropdownMenuPrimitive.ItemIndicator>
       </span>
       {children}

@@ -1,6 +1,6 @@
+import type { IconBaseProps, IconType } from "react-icons";
 import { BsDiscord, BsGithub } from "react-icons/bs";
 import { FcGoogle } from "react-icons/fc";
-import type { IconBaseProps, IconType } from "react-icons";
 
 import type { auth } from "~/lib/server/auth";
 

@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { ThemeToggle } from "~/lib/components/theme-toggle";
 import { Button } from "~/lib/components/ui/button";
 import { authClient } from "~/lib/utils/authClient";
-import { MingcuteHomeLine } from "../icons";
+import { LuHouse } from "react-icons/lu";
 
 export function AppHeader() {
    return (
@@ -10,7 +10,7 @@ export function AppHeader() {
          <div className="flex items-center gap-4">
             <Button asChild variant="ghost">
                <Link to="/dashboard" className="font-semibold">
-                  <MingcuteHomeLine />
+                  <LuHouse />
                </Link>
             </Button>
          </div>
