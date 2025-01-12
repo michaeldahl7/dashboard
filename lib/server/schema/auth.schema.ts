@@ -1,6 +1,4 @@
-import { boolean, integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
-import { createInsertSchema, createSelectSchema, createUpdateSchema } from "drizzle-zod";
-import { z } from "zod";
+import { pgTable, text, integer, timestamp, boolean } from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
    id: text("id").primaryKey(),
@@ -8,10 +6,9 @@ export const user = pgTable("user", {
    email: text("email").notNull().unique(),
    emailVerified: boolean("email_verified").notNull(),
    image: text("image"),
-   currentHouseId: text("current_house_id"),
-   onboardingStep: text("onboarding_step").notNull(),
    createdAt: timestamp("created_at").notNull(),
-   updatedAt: timestamp("updated_at").defaultNow(),
+   updatedAt: timestamp("updated_at").notNull(),
+   currentHouseId: integer("current_house_id"),
 });
 
 export const session = pgTable("session", {
@@ -68,24 +65,3 @@ export const passkey = pgTable("passkey", {
    transports: text("transports"),
    createdAt: timestamp("created_at"),
 });
-
-// Zod Schemas
-export const UserSelectSchema = createSelectSchema(user);
-export const UserInsertSchema = createInsertSchema(user);
-export const UserUpdateSchema = createUpdateSchema(user);
-
-export const SessionSelectSchema = createSelectSchema(session);
-export const SessionInsertSchema = createInsertSchema(session);
-export const SessionUpdateSchema = createUpdateSchema(session);
-
-export const AccountSelectSchema = createSelectSchema(account);
-export const AccountInsertSchema = createInsertSchema(account);
-export const AccountUpdateSchema = createUpdateSchema(account);
-
-// Types
-export type SelectUser = typeof user.$inferSelect;
-export type InsertUser = typeof user.$inferInsert;
-export type SelectSession = typeof session.$inferSelect;
-export type InsertSession = typeof session.$inferInsert;
-export type SelectAccount = typeof account.$inferSelect;
-export type InsertAccount = typeof account.$inferInsert;

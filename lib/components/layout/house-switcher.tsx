@@ -1,80 +1,72 @@
 import * as React from "react";
 import { ChevronsUpDown, Plus } from "lucide-react";
-
 import {
    DropdownMenu,
    DropdownMenuContent,
    DropdownMenuItem,
    DropdownMenuLabel,
    DropdownMenuSeparator,
-   DropdownMenuShortcut,
    DropdownMenuTrigger,
 } from "~/lib/components/ui/dropdown-menu";
 import {
    SidebarMenu,
    SidebarMenuButton,
    SidebarMenuItem,
-   useSidebar,
 } from "~/lib/components/ui/sidebar";
+import { useCurrentHouseQuery, useUserHousesQuery } from "~/lib/services/house.query";
+import { Button } from "../ui/button";
+import { Link } from "@tanstack/react-router";
 
-export function HouseSwitcher({
-   houses,
-}: {
-   houses: {
-      name: string;
-      logo: React.ElementType;
-   }[];
-}) {
-   const { isMobile } = useSidebar();
-   const [activehouse, setActivehouse] = React.useState(houses[0]);
+export function HouseSwitcher() {
+   const { data: currentHouse } = useCurrentHouseQuery();
+   const { data: userHouses } = useUserHousesQuery();
 
    return (
       <SidebarMenu>
          <SidebarMenuItem>
             <DropdownMenu>
                <DropdownMenuTrigger asChild>
-                  <SidebarMenuButton
-                     size="lg"
-                     className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-                  >
-                     <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                        <activehouse.logo className="size-4" />
+                  <SidebarMenuButton>
+                     <div className="flex-1 text-left">
+                        <p className="text-sm font-medium leading-none">
+                           {currentHouse.name}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                           {currentHouse.role === "admin" ? "Admin" : "Member"}
+                        </p>
                      </div>
-                     <div className="grid flex-1 text-left text-sm leading-tight">
-                        <span className="truncate font-semibold">{activehouse.name}</span>
-                        {/* <span className="truncate text-xs">{activehouse.plan}</span> */}
-                     </div>
-                     <ChevronsUpDown className="ml-auto" />
+                     <ChevronsUpDown className="ml-auto h-4 w-4" />
                   </SidebarMenuButton>
                </DropdownMenuTrigger>
-               <DropdownMenuContent
-                  className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
-                  align="start"
-                  side={isMobile ? "bottom" : "right"}
-                  sideOffset={4}
-               >
-                  <DropdownMenuLabel className="text-xs text-muted-foreground">
-                     Houses
-                  </DropdownMenuLabel>
-                  {houses.map((house, index) => (
-                     <DropdownMenuItem
-                        key={house.name}
-                        onClick={() => setActivehouse(house)}
-                        className="gap-2 p-2"
-                     >
-                        <div className="flex size-6 items-center justify-center rounded-sm border">
-                           <house.logo className="size-4 shrink-0" />
-                        </div>
-                        {house.name}
-                        <DropdownMenuShortcut>⌘{index + 1}</DropdownMenuShortcut>
+               <DropdownMenuContent align="start" className="w-[200px]">
+                  <DropdownMenuLabel>Switch house</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  {userHouses.map((house) => (
+                     <DropdownMenuItem key={house.id} asChild>
+                        <Link
+                           to="/dashboard"
+                           search={{ houseId: house.id }}
+                           className="w-full cursor-pointer"
+                        >
+                           {house.name}
+                           <span className="ml-auto text-xs text-muted-foreground">
+                              {house.role}
+                           </span>
+                        </Link>
                      </DropdownMenuItem>
                   ))}
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem className="gap-2 p-2">
-                     <div className="flex size-6 items-center justify-center rounded-md border bg-background">
-                        <Plus className="size-4" />
-                     </div>
-                     <div className="font-medium text-muted-foreground">Add house</div>
+                  <DropdownMenuItem asChild>
+                     {/* <Link to="/houses/new" className="gap-2">
+                        <Plus className="h-4 w-4" />
+                        Create House
+                     </Link> */}
+                     <Button asChild variant="ghost" size="sm">
+                        <div className="flex items-center gap-2">
+                           <Plus className="h-4 w-4" />
+                           Create House
+                        </div>
+                     </Button>
                   </DropdownMenuItem>
                </DropdownMenuContent>
             </DropdownMenu>

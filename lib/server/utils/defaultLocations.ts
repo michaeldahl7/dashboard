@@ -1,4 +1,3 @@
-import { ulid } from "ulid";
 import { db } from "~/lib/server/db";
 import { location } from "~/lib/server/schema/location.schema";
 import type { LocationType } from "~/lib/server/schema/location.schema";
@@ -11,18 +10,15 @@ export const DEFAULT_LOCATIONS = [
    { name: "Kitchen Counter", type: "counter" as LocationType },
 ] as const;
 
-export async function createDefaultLocations(houseId: string) {
+export async function createDefaultLocations(houseId: number) {
    try {
       const locations = await db
          .insert(location)
          .values(
             DEFAULT_LOCATIONS.map((location) => ({
-               id: ulid(),
                name: location.name,
                type: location.type,
                houseId: houseId,
-               createdAt: new Date(),
-               updatedAt: new Date(),
             })),
          )
          .returning();

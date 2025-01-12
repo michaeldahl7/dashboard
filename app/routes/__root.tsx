@@ -4,16 +4,16 @@ import {
    ScrollRestoration,
    createRootRouteWithContext,
 } from "@tanstack/react-router";
-import { Meta, Scripts, createServerFn } from "@tanstack/start";
+import { Meta, Scripts } from "@tanstack/start";
 import { Suspense, lazy } from "react";
 
 import fontsourceInter from "@fontsource-variable/inter?url";
 import fontsourceJetBrainsMono from "@fontsource-variable/jetbrains-mono?url";
 
-import { getWebRequest } from "vinxi/http";
-import { ThemeProvider } from "~/lib/components/theme-provider";
-import { type Auth, auth } from "~/lib/server/auth";
 import appCss from "~/lib/styles/app.css?url";
+
+import { getAuth } from "~/lib/services/auth.api";
+import { ThemeProvider } from "~/lib/components/theme-provider";
 
 const TanStackRouterDevtools =
    process.env.NODE_ENV === "production"
@@ -34,20 +34,6 @@ const TanStackQueryDevtools =
               default: res.ReactQueryDevtools,
            })),
         );
-
-const getAuth = createServerFn({ method: "GET" }).handler(async () => {
-   const { headers } = getWebRequest();
-   const session = await auth.api.getSession({ headers });
-   const authResult: Auth = !session
-      ? { isAuthenticated: false, user: null, session: null }
-      : {
-           isAuthenticated: true,
-           user: session.user,
-           session: session.session,
-        };
-
-   return authResult;
-});
 
 interface RouterContext {
    queryClient: QueryClient;

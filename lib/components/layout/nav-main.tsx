@@ -1,25 +1,35 @@
 import { Link } from "@tanstack/react-router";
-import type { LucideIcon } from "lucide-react";
-
+import { GalleryVerticalEnd, Settings2, SquareTerminal } from "lucide-react";
+import { useCurrentHouseQuery } from "~/lib/services/house.query";
 import {
    SidebarMenu,
    SidebarMenuButton,
    SidebarMenuItem,
 } from "~/lib/components/ui/sidebar";
 
-export function NavMain({
-   items,
-}: {
-   items: {
-      title: string;
-      url: string;
-      icon?: LucideIcon;
-      isActive?: boolean;
-   }[];
-}) {
+export function NavMain() {
+   const { data: currentHouse } = useCurrentHouseQuery();
+
+   const routes = [
+      {
+         title: "Dashboard",
+         url: "/dashboard",
+         icon: SquareTerminal,
+      },
+      ...(currentHouse.role === "admin"
+         ? [
+              {
+                 title: "Settings",
+                 url: "/settings",
+                 icon: Settings2,
+              },
+           ]
+         : []),
+   ];
+
    return (
       <SidebarMenu>
-         {items.map((item) => (
+         {routes.map((item) => (
             <SidebarMenuItem key={item.title}>
                <SidebarMenuButton asChild>
                   <Link to={item.url}>

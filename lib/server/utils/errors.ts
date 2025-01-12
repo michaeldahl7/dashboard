@@ -8,7 +8,16 @@ export class KitchenError extends Error {
          | "LOCATION_CREATION_FAILED"
          | "UNAUTHORIZED"
          | "NOT_FOUND"
-         | "VALIDATION_ERROR",
+         | "VALIDATION_ERROR"
+         | "NO_CURRENT_HOUSE"
+         | "HOUSE_NOT_FOUND"
+         | "HOUSE_INVITE_NOT_FOUND"
+         | "HOUSE_INVITE_EXPIRED"
+         | "HOUSE_INVITE_ALREADY_ACCEPTED"
+         | "HOUSE_INVITE_ALREADY_REJECTED"
+         | "HOUSE_INVITE_ALREADY_SENT"
+         | "HOUSE_INVITE_ALREADY_RECEIVED"
+         | "HOUSE_INVITE_ALREADY_ACCEPTED_BY_OTHER_USER",
    ) {
       super(message);
       this.name = "KitchenError";

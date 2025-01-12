@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { bigserial, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema, createUpdateSchema } from "drizzle-zod";
 import { z } from "zod";
 import { user } from "./auth.schema";
@@ -7,9 +7,7 @@ import type { InviteStatus, UserRole } from "./types";
 import { ulid } from "ulid";
 
 export const house = pgTable("house", {
-   id: text("id")
-      .$defaultFn(() => ulid())
-      .primaryKey(),
+   id: bigserial("id", { mode: "number" }).primaryKey(),
    name: text("name").notNull(),
    ownerId: text("owner_id")
       .notNull()
@@ -19,12 +17,8 @@ export const house = pgTable("house", {
 });
 
 export const houseMember = pgTable("house_member", {
-   id: text("id")
-      .$defaultFn(() => ulid())
-      .primaryKey(),
-   houseId: text("house_id")
-      .notNull()
-      .references(() => house.id),
+   id: bigserial("id", { mode: "number" }).primaryKey(),
+   houseId: bigserial("house_id", { mode: "number" }).references(() => house.id),
    userId: text("user_id")
       .notNull()
       .references(() => user.id),
@@ -37,9 +31,9 @@ export const houseInvite = pgTable("house_invite", {
    id: text("id")
       .$defaultFn(() => ulid())
       .primaryKey(),
-   houseId: text("house_id")
+   houseId: bigserial("house_id", { mode: "number" })
       .notNull()
-      .references(() => house.id, { onDelete: "cascade" }),
+      .references(() => house.id),
    inviterId: text("inviter_id")
       .notNull()
       .references(() => user.id),
@@ -106,7 +100,7 @@ export const HouseMemberFormSchema = z.object({
 });
 
 export const HouseInviteFormSchema = z.object({
-   houseId: z.string(),
+   houseId: z.number(),
    email: z.string().email(),
    role: z.enum(["admin", "member"]),
 });

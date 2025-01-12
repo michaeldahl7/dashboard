@@ -21,26 +21,26 @@ export const inventoryKeys = {
 };
 
 // Query options
-export const inventoryQueryOptions = (houseId: string) => {
+export const inventoryQueryOptions = (houseId: number) => {
    return queryOptions<SelectLocation[]>({
       queryKey: inventoryKeys.lists(),
       queryFn: () => getInventories({ data: houseId }),
    });
 };
 
-export const itemsQueryOptions = (inventoryId: string) => {
+export const itemsQueryOptions = (inventoryId: number) => {
    return queryOptions<SelectItem[]>({
-      queryKey: inventoryKeys.items(inventoryId),
+      queryKey: inventoryKeys.items(inventoryId.toString()),
       queryFn: () => getItems({ data: inventoryId }),
    });
 };
 
 // Hooks
-export const useInventoryQuery = (houseId: string) => {
+export const useInventoryQuery = (houseId: number) => {
    return useSuspenseQuery(inventoryQueryOptions(houseId));
 };
 
-export const useItemsQuery = (inventoryId: string) => {
+export const useItemsQuery = (inventoryId: number) => {
    return useSuspenseQuery(itemsQueryOptions(inventoryId));
 };
 

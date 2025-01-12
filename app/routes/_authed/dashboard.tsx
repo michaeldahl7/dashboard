@@ -1,6 +1,4 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
-import { createInitialHouseOptions } from "~/lib/services/house.query";
-
+import { createFileRoute } from "@tanstack/react-router";
 import {
    Card,
    CardContent,
@@ -11,17 +9,6 @@ import {
 
 export const Route = createFileRoute("/_authed/dashboard")({
    component: DashboardRoute,
-   beforeLoad: async ({ context }) => {
-      if (!context.auth.user) {
-         throw redirect({ to: "/signup" });
-      }
-
-      if (!context.auth.user.currentHouseId) {
-         await context.queryClient.ensureQueryData(createInitialHouseOptions());
-      }
-
-      return { user: context.auth.user };
-   },
 });
 
 function DashboardRoute() {

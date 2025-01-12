@@ -4,121 +4,67 @@ import {
    useQueryClient,
    useSuspenseQuery,
 } from "@tanstack/react-query";
-import type { HouseForm, HouseInviteForm, HouseMemberForm } from "~/lib/server/schema";
-import {
-   acceptHouseInvite,
-   // getHouses,
-   addHouse,
-   deleteHouse,
-   getHouseInvites,
-   inviteToHouse,
-   rejectHouseInvite,
-   updateHouse,
-   updateHouseMember,
-} from "./house.api";
 import { useRouter } from "@tanstack/react-router";
+import {
+   getCurrentHouse,
+   getUserHouses,
+   updateUser,
+   createDefaultHouse,
+} from "./house.api";
 
-// Query keys
-export const houseKeys = {
-   all: ["house"] as const,
-   lists: () => [...houseKeys.all, "list"] as const,
-   detail: (id: string) => [...houseKeys.all, "detail", id] as const,
-   members: (id: string) => [...houseKeys.all, "members", id] as const,
-   invites: (id: string) => [...houseKeys.all, "invites", id] as const,
-   invitesList: (houseId: string) =>
-      [...houseKeys.all, "invites", "list", houseId] as const,
-};
-
-// Mutations
-export const useHouseMutations = () => {
-   const queryClient = useQueryClient();
-
-   const invalidateHouses = () => {
-      queryClient.invalidateQueries({ queryKey: houseKeys.all });
-   };
-
-   return {
-      addHouse: useMutation({
-         mutationFn: (data: HouseForm) => addHouse({ data }),
-         onSuccess: invalidateHouses,
-      }),
-
-      updateHouse: useMutation({
-         mutationFn: ({
-            houseId,
-            name,
-         }: {
-            houseId: string;
-            name: string;
-         }) =>
-            updateHouse({
-               data: { houseId, name },
-            }),
-         onSuccess: invalidateHouses,
-      }),
-
-      deleteHouse: useMutation({
-         mutationFn: (houseId: string) => deleteHouse({ data: houseId }),
-         onSuccess: invalidateHouses,
-      }),
-
-      updateMember: useMutation({
-         mutationFn: ({
-            houseId,
-            memberId,
-            role,
-         }: {
-            houseId: string;
-            memberId: string;
-            role: "admin" | "member";
-         }) =>
-            updateHouseMember({
-               data: { houseId, memberId, role },
-            }),
-         onSuccess: invalidateHouses,
-      }),
-
-      inviteToHouse: useMutation({
-         mutationFn: (data: HouseInviteForm) => inviteToHouse({ data }),
-         onSuccess: invalidateHouses,
-      }),
-
-      acceptInvite: useMutation({
-         mutationFn: (inviteId: string) => acceptHouseInvite({ data: inviteId }),
-         onSuccess: invalidateHouses,
-      }),
-
-      rejectInvite: useMutation({
-         mutationFn: (inviteId: string) => rejectHouseInvite({ data: inviteId }),
-         onSuccess: invalidateHouses,
-      }),
-   };
-};
-
-// Add new query hook
-export const useHouseInvitesQuery = (houseId: string) => {
-   return useSuspenseQuery({
-      queryKey: houseKeys.invitesList(houseId),
-      queryFn: () => getHouseInvites({ data: houseId }),
+// Query options
+export const currentHouseQueryOptions = () =>
+   queryOptions({
+      queryKey: ["house", "current"],
+      queryFn: () => getCurrentHouse(),
+      retry: false,
    });
+
+export const userHousesQueryOptions = () =>
+   queryOptions({
+      queryKey: ["house", "list"],
+      queryFn: () => getUserHouses(),
+   });
+
+export const defaultHouseQueryOptions = () =>
+   queryOptions({
+      queryKey: ["house", "default"],
+      queryFn: () => createDefaultHouse(),
+   });
+
+// Query hooks
+export const useCurrentHouseQuery = () => {
+   return useSuspenseQuery(currentHouseQueryOptions());
 };
 
-export const useAddHouse = () => {
+export const useUserHousesQuery = () => {
+   return useSuspenseQuery(userHousesQueryOptions());
+};
+
+// Mutation hooks
+export const useSetCurrentHouseMutation = () => {
    const router = useRouter();
    const queryClient = useQueryClient();
 
    return useMutation({
-      mutationFn: addHouse,
-      onSuccess: async (data) => {
-         await queryClient.invalidateQueries({ queryKey: ["houses"] });
+      mutationFn: (houseId: number) => updateUser({ data: { currentHouseId: houseId } }),
+      onSuccess: async () => {
+         await queryClient.invalidateQueries(currentHouseQueryOptions());
          await router.invalidate();
       },
    });
 };
 
-// Use this in dashboard for new users
-export const createInitialHouseOptions = () =>
-   queryOptions({
-      queryKey: ["initialHouse"],
-      queryFn: () => addHouse({ data: { name: "My House", setAsCurrent: true } }),
+export const useCreateDefaultHouseMutation = () => {
+   const router = useRouter();
+   const queryClient = useQueryClient();
+
+   return useMutation({
+      mutationFn: () => createDefaultHouse(),
+      onSuccess: async () => {
+         await queryClient.invalidateQueries(currentHouseQueryOptions());
+         await queryClient.invalidateQueries(userHousesQueryOptions());
+         await router.invalidate();
+      },
    });
+};

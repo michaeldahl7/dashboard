@@ -1,8 +1,7 @@
-import { boolean, pgTable, real, text, timestamp } from "drizzle-orm/pg-core";
+import { bigserial, pgTable, real, text, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema, createUpdateSchema } from "drizzle-zod";
 import { z } from "zod";
 import { house } from "./house.schema";
-import { ulid } from "ulid";
 
 // ============= Enums & Types =============
 export const locationType = ["fridge", "freezer", "pantry", "counter"] as const;
@@ -23,7 +22,6 @@ export const quantityUnits = [
 ] as const;
 export type QuantityUnit = (typeof quantityUnits)[number];
 
-// Categories for organizing items
 export const itemCategories = [
    "dairy",
    "meat",
@@ -42,12 +40,10 @@ export type ItemCategory = (typeof itemCategories)[number];
 
 // ============= Schemas =============
 export const location = pgTable("location", {
-   id: text("id")
-      .$defaultFn(() => ulid())
-      .primaryKey(),
+   id: bigserial("id", { mode: "number" }).primaryKey(),
    name: text("name").notNull(),
    type: text("type").notNull().$type<LocationType>(),
-   houseId: text("house_id")
+   houseId: bigserial("house_id", { mode: "number" })
       .notNull()
       .references(() => house.id),
    description: text("description"),
@@ -56,11 +52,9 @@ export const location = pgTable("location", {
 });
 
 export const item = pgTable("item", {
-   id: text("id")
-      .$defaultFn(() => ulid())
-      .primaryKey(),
+   id: bigserial("id", { mode: "number" }).primaryKey(),
    name: text("name").notNull(),
-   locationId: text("location_id")
+   locationId: bigserial("location_id", { mode: "number" })
       .notNull()
       .references(() => location.id),
    category: text("category").$type<ItemCategory>(),
@@ -90,13 +84,13 @@ export const ItemUpdateSchema = createUpdateSchema(item);
 export const LocationFormSchema = z.object({
    name: z.string().min(1).max(50),
    type: z.enum(locationType),
-   houseId: z.string(),
+   houseId: z.number(),
    description: z.string().max(200).optional(),
 });
 
 export const ItemFormSchema = z.object({
    name: z.string().min(1).max(50),
-   locationId: z.string(),
+   locationId: z.number(),
    category: z.enum(itemCategories).optional(),
    quantity: z.number().positive().default(1),
    unit: z.enum(quantityUnits).optional(),
