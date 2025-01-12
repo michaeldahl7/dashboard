@@ -18,6 +18,10 @@ export const auth = betterAuth({
          clientId: env.GOOGLE_CLIENT_ID as string,
          clientSecret: env.GOOGLE_CLIENT_SECRET as string,
       },
+      github: {
+         clientId: env.GITHUB_CLIENT_ID as string,
+         clientSecret: env.GITHUB_CLIENT_SECRET as string,
+      },
    },
    user: {
       additionalFields: {
@@ -30,7 +34,7 @@ export const auth = betterAuth({
    account: {
       accountLinking: {
          enabled: true,
-         trustedProviders: ["google", "discord"],
+         trustedProviders: ["google", "discord", "github"],
       },
    },
    plugins: [passkey()],

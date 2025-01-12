@@ -1,5 +1,7 @@
 import type { ComponentProps } from "react";
-import { ChevronsUpDown, LogOut, Plus, Settings2, SquareTerminal } from "lucide-react";
+import { ChevronsUpDown, Plus, Settings2, SquareTerminal } from "lucide-react";
+import { LuLogOut } from "react-icons/lu";
+
 import {
    DropdownMenu,
    DropdownMenuContent,
@@ -25,7 +27,6 @@ import { useCurrentAuthQuery } from "~/lib/services/auth.query";
 import { Avatar } from "@radix-ui/react-avatar";
 import { AvatarFallback, AvatarImage } from "~/lib/components/ui/avatar";
 import { authClient } from "~/lib/utils/authClient";
-import { Button } from "~/lib/components/ui/button";
 import { Link } from "@tanstack/react-router";
 
 export function AppSidebar(props: ComponentProps<typeof Sidebar>) {
@@ -172,20 +173,16 @@ export function NavUser() {
                <DropdownMenuContent align="start" className="w-[200px]">
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                     <Button
-                        variant="ghost"
-                        className="w-full"
-                        onClick={() => {
-                           authClient.signOut().then(() => {
-                              window.location.reload();
-                              window.location.href = "/";
-                           });
-                        }}
-                     >
-                        <LogOut className="h-4 w-4" />
-                        Sign out
-                     </Button>
+                  <DropdownMenuItem
+                     onSelect={() =>
+                        authClient.signOut().then(() => {
+                           window.location.reload();
+                           window.location.href = "/";
+                        })
+                     }
+                  >
+                     <LuLogOut />
+                     Sign Out
                   </DropdownMenuItem>
                </DropdownMenuContent>
             </DropdownMenu>

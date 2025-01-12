@@ -1,4 +1,11 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute, redirect, Link } from "@tanstack/react-router";
+import { Button } from "~/lib/components/ui/button";
+import { Card, CardContent } from "~/lib/components/ui/card";
+import { Separator } from "~/lib/components/ui/separator";
+import { dashboardLinkOptions } from "~/lib/utils";
+import { authClient } from "~/lib/utils/authClient";
+import { socialProviders, type SocialProvider } from "~/lib/config/social-provider";
+import { cx } from "class-variance-authority";
 
 export const Route = createFileRoute("/_public/signup")({
    beforeLoad: ({ context }) => {
@@ -9,14 +16,18 @@ export const Route = createFileRoute("/_public/signup")({
    component: SignupPage,
 });
 
-import { Link } from "@tanstack/react-router";
-import { Button } from "~/lib/components/ui/button";
-import { Card, CardContent } from "~/lib/components/ui/card";
-import { Separator } from "~/lib/components/ui/separator";
-import { dashboardLinkOptions } from "~/lib/utils";
-import { authClient } from "~/lib/utils/authClient";
+function SignupPage() {
+   const handleSocialSignIn = async (provider: SocialProvider["id"]) => {
+      try {
+         await authClient.signIn.social({
+            provider,
+            callbackURL: "/",
+         });
+      } catch (error) {
+         console.error(`Failed to sign in with ${provider}:`, error);
+      }
+   };
 
-export default function SignupPage() {
    return (
       <div className="flex min-h-[calc(100vh-8rem)] flex-col items-center justify-center">
          <div className="mb-4 text-center">
@@ -27,40 +38,32 @@ export default function SignupPage() {
          <Card className="w-full max-w-sm">
             <CardContent className="pt-6">
                <div className="flex flex-col gap-4">
-                  <Button
-                     className="w-full"
-                     onClick={() =>
-                        authClient.signIn.social({
-                           provider: "google",
-                           callbackURL: "/",
-                        })
-                     }
-                  >
-                     Continue with Google
-                  </Button>
-
-                  <Button
-                     className="w-full"
-                     onClick={() =>
-                        authClient.signIn.social({
-                           provider: "discord",
-                           callbackURL: "/",
-                        })
-                     }
-                  >
-                     Continue with Discord
-                  </Button>
+                  {socialProviders.map((socialProvider) => (
+                     <Button
+                        key={socialProvider.id}
+                        variant="outline"
+                        onClick={() => handleSocialSignIn(socialProvider.id)}
+                        style={{
+                           ["--social-bg" as string]: socialProvider.backgroundColor,
+                        }}
+                        className={cx(
+                           "w-full items-center justify-center gap-2 border",
+                           "bg-[var(--social-bg)] hover:bg-[var(--social-bg)] focus-visible:ring-[var(--social-bg)]",
+                           "brightness-100 hover:brightness-90",
+                           socialProvider.id === "google" && "focus-visible:ring-ring",
+                        )}
+                     >
+                        <socialProvider.icon
+                           size={socialProvider.size}
+                           color={socialProvider.logoColor}
+                        />
+                        <span style={{ color: socialProvider.textColor }}>
+                           Continue with {socialProvider.name}
+                        </span>
+                     </Button>
+                  ))}
                </div>
             </CardContent>
-
-            <div className="relative my-4">
-               <div className="absolute inset-0 flex items-center">
-                  <Separator />
-               </div>
-               <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-card px-2 text-muted-foreground" />
-               </div>
-            </div>
 
             <div className="px-6 pb-4 text-center">
                <p className="text-sm text-muted-foreground">

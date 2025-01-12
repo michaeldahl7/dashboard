@@ -7,6 +7,8 @@ import { Card, CardContent } from "~/lib/components/ui/card";
 import { Separator } from "~/lib/components/ui/separator";
 import { dashboardLinkOptions } from "~/lib/utils";
 import { authClient } from "~/lib/utils/authClient";
+import { socialProviders, type SocialProvider } from "~/lib/config/social-provider";
+import { cx } from "class-variance-authority";
 
 export const Route = createFileRoute("/_public/login")({
    beforeLoad: ({ context }) => {
@@ -47,7 +49,7 @@ export function LoginPage() {
       }
    };
 
-   const handleSocialSignIn = async (provider: "google" | "discord") => {
+   const handleSocialSignIn = async (provider: SocialProvider["id"]) => {
       try {
          await authClient.signIn.social({
             provider,
@@ -84,12 +86,32 @@ export function LoginPage() {
                      </div>
                   </div>
 
-                  <Button
-                     variant="outline"
-                     className="w-full"
-                     onClick={() => handleSocialSignIn("google")}
-                  >
-                     <MingcuteMailLine className="mr-2 h-4 w-4" />
+                  {socialProviders.map((socialProvider) => (
+                     <Button
+                        key={socialProvider.id}
+                        variant="outline"
+                        onClick={() => handleSocialSignIn(socialProvider.id)}
+                        style={{
+                           ["--social-bg" as string]: socialProvider.backgroundColor,
+                        }}
+                        className={cx(
+                           "w-full items-center justify-center gap-2 border",
+                           "bg-[var(--social-bg)] hover:bg-[var(--social-bg)] focus-visible:ring-[var(--social-bg)]",
+                           "brightness-100 hover:brightness-90",
+                           socialProvider.id === "google" && "focus-visible:ring-ring",
+                        )}
+                     >
+                        <socialProvider.icon
+                           size={socialProvider.size}
+                           color={socialProvider.logoColor}
+                        />
+                        <span style={{ color: socialProvider.textColor }}>
+                           {socialProvider.name}
+                        </span>
+                     </Button>
+                  ))}
+
+                  {/* <MingcuteMailLine className="mr-2 h-4 w-4" />
                      Google
                   </Button>
 
@@ -99,7 +121,7 @@ export function LoginPage() {
                      onClick={() => handleSocialSignIn("discord")}
                   >
                      Discord
-                  </Button>
+                  </Button> */}
                </div>
             </CardContent>
          </Card>
