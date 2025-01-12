@@ -15,7 +15,7 @@ export async function seedLocations(houseId: string) {
          id: ulid(),
          name: loc.name,
          type: loc.type,
-         house_id: houseId,
+         houseId: houseId,
       })),
    );
 }

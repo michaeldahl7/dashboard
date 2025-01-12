@@ -8,6 +8,10 @@ import type { InsertUser } from "~/lib/server/db";
 import { user as userTable } from "~/lib/server/schema";
 import { UserFormSchema } from "~/lib/server/schema/user.schema";
 import type { UserForm } from "~/lib/server/schema/user.types";
+import { createDefaultHouse } from "./house.api";
+import { house as houseTable } from "~/lib/server/schema";
+import { houseMember } from "~/lib/server/schema";
+import { createDefaultLocations } from "~/lib/server/utils/defaultLocations";
 // import type { SelectUser } from "~/lib/server/db/schema";
 
 // export const getUser = createServerFn()
@@ -92,4 +96,49 @@ export const addUser = createServerFn()
          onboardingStep: "initial",
       };
       return db.insert(userTable).values(userData).returning();
+   });
+
+// Initialize user with default house
+export const initializeNewUser = createServerFn()
+   .middleware([authMiddleware])
+   .handler(async ({ context }) => {
+      const houseId = ulid();
+
+      return await db.transaction(async (tx) => {
+         const [house] = await tx
+            .insert(houseTable)
+            .values({
+               id: houseId,
+               name: "My House",
+               ownerId: context.auth.user!.id,
+            })
+            .returning();
+
+         if (!house) throw new Error("Failed to create house");
+
+         await tx.insert(houseMember).values({
+            id: ulid(),
+            houseId: houseId,
+            userId: context.auth.user!.id,
+            role: "admin",
+         });
+
+         const locations = await createDefaultLocations(houseId);
+
+         const [updatedUser] = await tx
+            .update(userTable)
+            .set({
+               currentHouseId: house.id,
+               onboardingStep: "completed",
+               updatedAt: new Date(),
+            })
+            .where(eq(userTable.id, context.auth.user!.id))
+            .returning();
+
+         return {
+            user: updatedUser,
+            house,
+            locations,
+         };
+      });
    });

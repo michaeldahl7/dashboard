@@ -1,6 +1,11 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { OnboardingStep } from "~/lib/server/schema/types";
-import { checkUsername, updateOnboardingStatus, updateOnboardingStep } from "./user.api";
+import {
+   checkUsername,
+   updateOnboardingStatus,
+   updateOnboardingStep,
+   initializeNewUser,
+} from "./user.api";
 
 export const useUpdateOnboardingStatus = () => {
    const queryClient = useQueryClient();
@@ -27,5 +32,15 @@ export const useUpdateOnboardingStep = () => {
 export const useCheckUsername = () => {
    return useMutation({
       mutationFn: checkUsername,
+   });
+};
+
+export const useInitializeUser = () => {
+   const queryClient = useQueryClient();
+   return useMutation({
+      mutationFn: initializeNewUser,
+      onSuccess: (data) => {
+         queryClient.invalidateQueries({ queryKey: ["user"] });
+      },
    });
 };

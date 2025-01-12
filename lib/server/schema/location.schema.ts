@@ -44,32 +44,32 @@ export const location = pgTable("location", {
    id: text("id").primaryKey(),
    name: text("name").notNull(),
    type: text("type").notNull().$type<LocationType>(),
-   house_id: text("house_id")
+   houseId: text("house_id")
       .notNull()
       .references(() => house.id),
    description: text("description"),
-   created_at: timestamp("created_at").defaultNow().notNull(),
-   updated_at: timestamp("updated_at").defaultNow(),
+   createdAt: timestamp("created_at").defaultNow().notNull(),
+   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
 export const item = pgTable("item", {
    id: text("id").primaryKey(),
    name: text("name").notNull(),
-   location_id: text("location_id")
+   locationId: text("location_id")
       .notNull()
       .references(() => location.id),
    category: text("category").$type<ItemCategory>(),
    quantity: real("quantity").default(1).notNull(),
    unit: text("unit").$type<QuantityUnit>(),
-   expiry_date: timestamp("expiry_date"),
-   opened_date: timestamp("opened_date"),
-   purchase_date: timestamp("purchase_date"),
+   expiryDate: timestamp("expiry_date"),
+   openedDate: timestamp("opened_date"),
+   purchaseDate: timestamp("purchase_date"),
    brand: text("brand"),
    notes: text("notes"),
    barcode: text("barcode"), // For future barcode scanning
-   alert_threshold: real("alert_threshold"), // Minimum quantity before alert
-   created_at: timestamp("created_at").defaultNow().notNull(),
-   updated_at: timestamp("updated_at").defaultNow(),
+   alertThreshold: real("alert_threshold"), // Minimum quantity before alert
+   createdAt: timestamp("created_at").defaultNow().notNull(),
+   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
 // Form Schemas

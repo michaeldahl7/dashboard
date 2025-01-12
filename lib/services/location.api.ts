@@ -20,14 +20,14 @@ export const getInventories = createServerFn()
    .middleware([authMiddleware])
    .validator(z.string())
    .handler(async ({ data: houseId }) => {
-      return db.select().from(location).where(eq(location.house_id, houseId));
+      return db.select().from(location).where(eq(location.houseId, houseId));
    });
 
 export const getItems = createServerFn()
    .middleware([authMiddleware])
    .validator(z.string())
    .handler(async ({ data: locationId }) => {
-      return db.select().from(item).where(eq(item.location_id, locationId));
+      return db.select().from(item).where(eq(item.locationId, locationId));
    });
 
 export const addInventory = createServerFn()
@@ -38,7 +38,7 @@ export const addInventory = createServerFn()
          id: ulid(),
          name: data.name,
          type: data.type,
-         house_id: data.houseId,
+         houseId: data.houseId,
       };
       return db.insert(location).values(locationData).returning();
    });
@@ -50,7 +50,7 @@ export const addItem = createServerFn()
       const itemData: InsertItem = {
          id: ulid(),
          name: data.name,
-         location_id: data.locationId,
+         locationId: data.locationId,
          quantity: data.quantity,
          unit: data.unit,
       };
