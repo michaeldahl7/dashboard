@@ -18,7 +18,9 @@ export async function createDefaultLocations(houseId: string) {
             id: ulid(),
             name: location.name,
             type: location.type,
-            house_id: houseId,
+            houseId: houseId,
+            createdAt: new Date(),
+            updatedAt: new Date(),
          })),
       )
       .returning();
