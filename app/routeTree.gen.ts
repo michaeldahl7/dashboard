@@ -20,6 +20,7 @@ import { Route as PublicLoginImport } from './routes/_public/login'
 import { Route as PublicDpaImport } from './routes/_public/dpa'
 import { Route as AuthedSettingsImport } from './routes/_authed/settings'
 import { Route as AuthedDashboardImport } from './routes/_authed/dashboard'
+import { Route as AuthedLocationsIndexImport } from './routes/_authed/locations/index'
 
 // Create/Update Routes
 
@@ -72,6 +73,12 @@ const AuthedSettingsRoute = AuthedSettingsImport.update({
 const AuthedDashboardRoute = AuthedDashboardImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => AuthedRoute,
+} as any)
+
+const AuthedLocationsIndexRoute = AuthedLocationsIndexImport.update({
+  id: '/locations/',
+  path: '/locations/',
   getParentRoute: () => AuthedRoute,
 } as any)
 
@@ -142,6 +149,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicTermsImport
       parentRoute: typeof PublicImport
     }
+    '/_authed/locations/': {
+      id: '/_authed/locations/'
+      path: '/locations'
+      fullPath: '/locations'
+      preLoaderRoute: typeof AuthedLocationsIndexImport
+      parentRoute: typeof AuthedImport
+    }
   }
 }
 
@@ -150,11 +164,13 @@ declare module '@tanstack/react-router' {
 interface AuthedRouteChildren {
   AuthedDashboardRoute: typeof AuthedDashboardRoute
   AuthedSettingsRoute: typeof AuthedSettingsRoute
+  AuthedLocationsIndexRoute: typeof AuthedLocationsIndexRoute
 }
 
 const AuthedRouteChildren: AuthedRouteChildren = {
   AuthedDashboardRoute: AuthedDashboardRoute,
   AuthedSettingsRoute: AuthedSettingsRoute,
+  AuthedLocationsIndexRoute: AuthedLocationsIndexRoute,
 }
 
 const AuthedRouteWithChildren =
@@ -186,6 +202,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof PublicLoginRoute
   '/signup': typeof PublicSignupRoute
   '/terms': typeof PublicTermsRoute
+  '/locations': typeof AuthedLocationsIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -197,6 +214,7 @@ export interface FileRoutesByTo {
   '/login': typeof PublicLoginRoute
   '/signup': typeof PublicSignupRoute
   '/terms': typeof PublicTermsRoute
+  '/locations': typeof AuthedLocationsIndexRoute
 }
 
 export interface FileRoutesById {
@@ -210,6 +228,7 @@ export interface FileRoutesById {
   '/_public/login': typeof PublicLoginRoute
   '/_public/signup': typeof PublicSignupRoute
   '/_public/terms': typeof PublicTermsRoute
+  '/_authed/locations/': typeof AuthedLocationsIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -223,6 +242,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/signup'
     | '/terms'
+    | '/locations'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -233,6 +253,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/signup'
     | '/terms'
+    | '/locations'
   id:
     | '__root__'
     | '/'
@@ -244,6 +265,7 @@ export interface FileRouteTypes {
     | '/_public/login'
     | '/_public/signup'
     | '/_public/terms'
+    | '/_authed/locations/'
   fileRoutesById: FileRoutesById
 }
 
@@ -281,7 +303,8 @@ export const routeTree = rootRoute
       "filePath": "_authed.tsx",
       "children": [
         "/_authed/dashboard",
-        "/_authed/settings"
+        "/_authed/settings",
+        "/_authed/locations/"
       ]
     },
     "/_public": {
@@ -316,6 +339,10 @@ export const routeTree = rootRoute
     "/_public/terms": {
       "filePath": "_public/terms.tsx",
       "parent": "/_public"
+    },
+    "/_authed/locations/": {
+      "filePath": "_authed/locations/index.tsx",
+      "parent": "/_authed"
     }
   }
 }

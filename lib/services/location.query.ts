@@ -11,13 +11,25 @@ import type {
    SelectItem,
    SelectLocation,
 } from "~/lib/server/schema/location.schema";
-import { addInventory, addItem, getInventories, getItems } from "./location.api";
+import {
+   addInventory,
+   addItem,
+   getInventories,
+   getItems,
+   getLocations,
+} from "./location.api";
 
 // Query keys for cache management
 export const inventoryKeys = {
    all: ["inventory"] as const,
    lists: () => [...inventoryKeys.all, "list"] as const,
    items: (inventoryId: string) => [...inventoryKeys.all, "items", inventoryId] as const,
+};
+
+export const locationKeys = {
+   all: ["location"] as const,
+   lists: () => [...locationKeys.all, "list"] as const,
+   items: (locationId: string) => [...locationKeys.all, "items", locationId] as const,
 };
 
 // Query options
@@ -35,6 +47,13 @@ export const itemsQueryOptions = (inventoryId: number) => {
    });
 };
 
+export const locationQueryOptions = (houseId: number) => {
+   return queryOptions<SelectLocation[]>({
+      queryKey: locationKeys.lists(),
+      queryFn: () => getLocations({ data: houseId }),
+   });
+};
+
 // Hooks
 export const useInventoryQuery = (houseId: number) => {
    return useSuspenseQuery(inventoryQueryOptions(houseId));
@@ -42,6 +61,10 @@ export const useInventoryQuery = (houseId: number) => {
 
 export const useItemsQuery = (inventoryId: number) => {
    return useSuspenseQuery(itemsQueryOptions(inventoryId));
+};
+
+export const useLocationsQuery = (houseId: number) => {
+   return useSuspenseQuery(locationQueryOptions(houseId));
 };
 
 // Mutations

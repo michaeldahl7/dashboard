@@ -1,6 +1,13 @@
 import type { ComponentProps } from "react";
-import { ChevronsUpDown, Plus, Settings2, SquareTerminal } from "lucide-react";
-import { LuLogOut } from "react-icons/lu";
+
+import {
+   LuBox,
+   LuSettings2,
+   LuLogOut,
+   LuSquareTerminal,
+   LuChevronsUpDown,
+   LuPlus,
+} from "react-icons/lu";
 
 import {
    DropdownMenu,
@@ -52,14 +59,19 @@ export function NavMain() {
       {
          title: "Dashboard",
          url: "/dashboard",
-         icon: SquareTerminal,
+         icon: LuSquareTerminal,
+      },
+      {
+         title: "Locations",
+         url: "/locations",
+         icon: LuBox,
       },
       ...(currentHouse.role === "admin"
          ? [
               {
                  title: "Settings",
                  url: "/settings",
-                 icon: Settings2,
+                 icon: LuSettings2,
               },
            ]
          : []),
@@ -104,7 +116,7 @@ export function HouseSwitcher() {
                         </span>
                         {/* <span className="truncate text-xs">{currentHouse.plan}</span> */}
                      </div>
-                     <ChevronsUpDown className="ml-auto" />
+                     <LuChevronsUpDown className="ml-auto" />
                   </SidebarMenuButton>
                </DropdownMenuTrigger>
                <DropdownMenuContent
@@ -132,7 +144,7 @@ export function HouseSwitcher() {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem className="gap-2 p-2">
                      <div className="flex size-6 items-center justify-center rounded-md border bg-background">
-                        <Plus className="size-4" />
+                        <LuPlus className="size-4" />
                      </div>
                      <div className="font-medium text-muted-foreground">Add house</div>
                   </DropdownMenuItem>
@@ -167,7 +179,7 @@ export function NavUser() {
                            {auth.user.email}
                         </span>
                      </div>
-                     <ChevronsUpDown className="ml-auto h-4 w-4" />
+                     <LuChevronsUpDown className="ml-auto h-4 w-4" />
                   </SidebarMenuButton>
                </DropdownMenuTrigger>
                <DropdownMenuContent align="start" className="w-[200px]">

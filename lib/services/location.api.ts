@@ -5,12 +5,8 @@ import { z } from "zod";
 import { authMiddleware } from "~/lib/middleware/auth-guard";
 import { db } from "~/lib/server/db";
 import {
-   type InsertItem,
-   type InsertLocation,
    type ItemForm,
    ItemFormSchema,
-   type LocationForm,
-   LocationFormSchema,
    item,
    location,
 } from "~/lib/server/schema/location.schema";
@@ -27,6 +23,13 @@ export const getItems = createServerFn()
    .validator(z.number())
    .handler(async ({ data: locationId }) => {
       return db.select().from(item).where(eq(item.locationId, locationId));
+   });
+
+export const getLocations = createServerFn()
+   .middleware([authMiddleware])
+   .validator(z.number())
+   .handler(async ({ data: houseId }) => {
+      return db.select().from(location).where(eq(location.houseId, houseId));
    });
 
 export const addInventory = createServerFn()
