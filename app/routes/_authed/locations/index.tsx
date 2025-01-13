@@ -7,7 +7,7 @@ import {
    CardDescription,
    CardContent,
 } from "~/lib/components/ui/card";
-import { LuPlus, LuBox } from "react-icons/lu";
+import { LuPlus, LuBox, LuSettings } from "react-icons/lu";
 import { Skeleton } from "~/lib/components/ui/skeleton";
 import { useLocationsWithItems } from "~/lib/services/location.query";
 import { useCurrentHouseQuery } from "~/lib/services/house.query";
@@ -24,13 +24,12 @@ function RouteComponent() {
 
    return (
       <div className="container mx-auto py-6 px-4">
-         <div className="flex justify-between items-center mb-6">
+         {/* <div className="flex justify-between items-center mb-6">
             <h1 className="text-2xl font-bold">{currentHouse.name}</h1>
-            <Button>
-               <LuPlus className="mr-2 h-4 w-4" />
-               Add Location
+            <Button variant="ghost" size="icon">
+               <LuSettings className="h-4 w-4" />
             </Button>
-         </div>
+         </div> */}
 
          {isLoading ? (
             <LocationsSkeleton />
@@ -49,7 +48,19 @@ function RouteComponent() {
                         <CardDescription>{location.description}</CardDescription>
                      </CardHeader>
                      <CardContent>
-                        <DataTable columns={columns} data={location.items} />
+                        {location.items.length === 0 ? (
+                           <div className="text-center py-6">
+                              <h3 className="text-sm text-muted-foreground mb-4">
+                                 Empty
+                              </h3>
+                              <Button variant="secondary" size="sm">
+                                 <LuPlus className="mr-2 h-4 w-4" />
+                                 Add Item
+                              </Button>
+                           </div>
+                        ) : (
+                           <DataTable columns={columns} data={location.items} />
+                        )}
                      </CardContent>
                   </Card>
                ))}
