@@ -1,6 +1,6 @@
 // app/services/inventory.api.ts
 import { createServerFn } from "@tanstack/start";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { z } from "zod";
 import { authMiddleware } from "~/lib/middleware/auth-guard";
 import { db } from "~/lib/server/db";
@@ -14,6 +14,33 @@ import {
    item,
    location,
 } from "~/lib/server/schema/location.schema";
+import { KitchenError } from "~/lib/server/utils/errors";
+
+// Add new type for location with item count
+interface LocationWithItemCount extends SelectLocation {
+   itemCount: number;
+}
+
+export const getLocationsWithItemCount = createServerFn()
+   .middleware([authMiddleware])
+   .validator(z.number())
+   .handler(async ({ data: houseId }) => {
+      const locations = await db
+         .select({
+            ...location,
+            itemCount: sql<number>`count(${item.id})::int`,
+         })
+         .from(location)
+         .leftJoin(item, eq(item.locationId, location.id))
+         .where(eq(location.houseId, houseId))
+         .groupBy(location.id);
+
+      if (!locations) {
+         throw new KitchenError("No locations found", "NOT_FOUND");
+      }
+
+      return locations as LocationWithItemCount[];
+   });
 
 export const getInventories = createServerFn()
    .middleware([authMiddleware])

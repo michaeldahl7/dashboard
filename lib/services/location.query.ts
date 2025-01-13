@@ -11,7 +11,32 @@ import type {
    SelectItem,
    SelectLocation,
 } from "~/lib/server/schema/location.schema";
-import { addInventory, addItem, getInventories, getItems } from "./location.api";
+import {
+   addInventory,
+   addItem,
+   getInventories,
+   getItems,
+   getLocationsWithItemCount,
+} from "./location.api";
+
+// Query keys for cache management
+export const locationKeys = {
+   all: ["location"] as const,
+   lists: () => [...locationKeys.all, "list"] as const,
+   detail: (id: number) => [...locationKeys.all, "detail", id] as const,
+};
+
+// Query options
+export const locationsQueryOptions = (houseId: number) =>
+   queryOptions({
+      queryKey: locationKeys.lists(),
+      queryFn: () => getLocationsWithItemCount({ data: houseId }),
+   });
+
+// Query hooks
+export const useLocationsQuery = (houseId: number) => {
+   return useSuspenseQuery(locationsQueryOptions(houseId));
+};
 
 // Query keys for cache management
 export const inventoryKeys = {

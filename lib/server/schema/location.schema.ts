@@ -112,3 +112,8 @@ export type InsertItem = typeof item.$inferInsert;
 // Form types can stay as they are
 export type LocationForm = z.infer<typeof LocationFormSchema>;
 export type ItemForm = z.infer<typeof ItemFormSchema>;
+
+// Add to your existing types
+export interface LocationWithItemCount extends SelectLocation {
+   itemCount: number;
+}

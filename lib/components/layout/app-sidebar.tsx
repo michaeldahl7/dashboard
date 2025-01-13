@@ -1,33 +1,33 @@
-import { ChevronsUpDown, Plus, Settings2, SquareTerminal } from "lucide-react";
 import type { ComponentProps } from "react";
+import { ChevronsUpDown, Plus, Settings2, SquareTerminal } from "lucide-react";
 import { LuLogOut } from "react-icons/lu";
 
-import { Avatar } from "@radix-ui/react-avatar";
-import { Link } from "@tanstack/react-router";
-import { AvatarFallback, AvatarImage } from "~/lib/components/ui/avatar";
 import {
    DropdownMenu,
    DropdownMenuContent,
    DropdownMenuItem,
    DropdownMenuLabel,
    DropdownMenuSeparator,
-   DropdownMenuShortcut,
    DropdownMenuTrigger,
+   DropdownMenuShortcut,
 } from "~/lib/components/ui/dropdown-menu";
+import { useCurrentHouseQuery, useUserHousesQuery } from "~/lib/services/house.query";
 import {
    Sidebar,
    SidebarContent,
    SidebarFooter,
    SidebarHeader,
+   SidebarRail,
    SidebarMenu,
    SidebarMenuButton,
    SidebarMenuItem,
-   SidebarRail,
    useSidebar,
 } from "~/lib/components/ui/sidebar";
 import { useCurrentAuthQuery } from "~/lib/services/auth.query";
-import { useCurrentHouseQuery, useUserHousesQuery } from "~/lib/services/house.query";
+import { Avatar } from "@radix-ui/react-avatar";
+import { AvatarFallback, AvatarImage } from "~/lib/components/ui/avatar";
 import { authClient } from "~/lib/utils/authClient";
+import { Link } from "@tanstack/react-router";
 
 export function AppSidebar(props: ComponentProps<typeof Sidebar>) {
    return (
