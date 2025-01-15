@@ -18,7 +18,8 @@ import {
    DropdownMenuTrigger,
    DropdownMenuShortcut,
 } from "~/lib/components/ui/dropdown-menu";
-import { useCurrentHouseQuery, useUserHousesQuery } from "~/lib/services/house.query";
+import { useGetCurrentHouse, useGetHousesOfUser } from "~/lib/services/house/house.query";
+
 import {
    Sidebar,
    SidebarContent,
@@ -53,7 +54,7 @@ export function AppSidebar(props: ComponentProps<typeof Sidebar>) {
    );
 }
 export function NavMain() {
-   const { data: currentHouse } = useCurrentHouseQuery();
+   // const { data: currentHouse } = useGetCurrentHouse();
 
    const routes = [
       {
@@ -66,15 +67,6 @@ export function NavMain() {
          url: "/locations",
          icon: LuBox,
       },
-      ...(currentHouse.role === "admin"
-         ? [
-              {
-                 title: "Settings",
-                 url: "/settings",
-                 icon: LuSettings2,
-              },
-           ]
-         : []),
    ];
 
    return (
@@ -94,9 +86,12 @@ export function NavMain() {
 }
 
 export function HouseSwitcher() {
-   const { data: currentHouse } = useCurrentHouseQuery();
-   const { data: houses } = useUserHousesQuery();
+   const { data: currentHouse } = useGetCurrentHouse();
+   const { data: houses } = useGetHousesOfUser();
+   console.log("Current House:", currentHouse, "Houses:", houses);
    const { isMobile } = useSidebar();
+
+   if (!currentHouse || !houses) return null;
 
    return (
       <SidebarMenu>
@@ -107,14 +102,10 @@ export function HouseSwitcher() {
                      size="lg"
                      className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                   >
-                     {/* <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                        <currentHouse.logo className="size-4" />
-                     </div> */}
                      <div className="grid flex-1 text-left text-sm leading-tight">
                         <span className="truncate font-semibold">
                            {currentHouse.name}
                         </span>
-                        {/* <span className="truncate text-xs">{currentHouse.plan}</span> */}
                      </div>
                      <LuChevronsUpDown className="ml-auto" />
                   </SidebarMenuButton>
@@ -129,14 +120,7 @@ export function HouseSwitcher() {
                      Houses
                   </DropdownMenuLabel>
                   {houses.map((house, index) => (
-                     <DropdownMenuItem
-                        key={house.name}
-                        // onClick={() => setActivehouse(house)}
-                        className="gap-2 p-2"
-                     >
-                        {/* <div className="flex size-6 items-center justify-center rounded-sm border">
-                           <house.logo className="size-4 shrink-0" />
-                        </div> */}
+                     <DropdownMenuItem key={house.name} className="gap-2 p-2">
                         {house.name}
                         <DropdownMenuShortcut>⌘{index + 1}</DropdownMenuShortcut>
                      </DropdownMenuItem>

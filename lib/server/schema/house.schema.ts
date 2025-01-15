@@ -45,7 +45,6 @@ export const houseInvite = pgTable("house_invite", {
    expiresAt: timestamp("expires_at").notNull(),
 });
 
-// Define relations
 export const houseRelations = relations(house, ({ many, one }) => ({
    members: many(houseMember),
    owner: one(user, {

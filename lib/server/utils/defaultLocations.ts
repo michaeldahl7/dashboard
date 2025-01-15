@@ -1,13 +1,12 @@
 import { db } from "~/lib/server/db";
-import { location } from "~/lib/server/schema/location.schema";
-import type { LocationType } from "~/lib/server/schema/location.schema";
+import { location, locationType } from "~/lib/server/schema/location.schema";
 import { KitchenError } from "~/lib/server/utils/errors";
 
 export const DEFAULT_LOCATIONS = [
-   { name: "Main Fridge", type: "fridge" as LocationType },
-   { name: "Freezer", type: "freezer" as LocationType },
-   { name: "Pantry", type: "pantry" as LocationType },
-   { name: "Kitchen Counter", type: "counter" as LocationType },
+   { name: "Main Fridge", type: "fridge" },
+   { name: "Freezer", type: "freezer" },
+   { name: "Pantry", type: "pantry" },
+   { name: "Kitchen Counter", type: "counter" },
 ] as const;
 
 export async function createDefaultLocations(houseId: number) {

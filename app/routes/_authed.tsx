@@ -15,12 +15,12 @@ import {
    SidebarTrigger,
 } from "~/lib/components/ui/sidebar";
 import type { User } from "~/lib/server/db";
-import {
-   currentHouseQueryOptions,
-   defaultHouseQueryOptions,
-   userHousesQueryOptions,
-} from "~/lib/services/house.query";
 
+import {
+   getHousesQueryOptions,
+   useGetHousesOfUser,
+   createDefaultHouseQueryOptions,
+} from "~/lib/services/house/house.query";
 export const Route = createFileRoute("/_authed")({
    beforeLoad: async ({ context }) => {
       if (!context.auth.user) {
@@ -28,14 +28,12 @@ export const Route = createFileRoute("/_authed")({
       }
 
       if (!context.auth.user.currentHouseId) {
-         await context.queryClient.ensureQueryData(defaultHouseQueryOptions());
+         // Create default house and set it as current
+         await context.queryClient.ensureQueryData(createDefaultHouseQueryOptions());
       }
 
-      // Load house data
-      await Promise.all([
-         context.queryClient.ensureQueryData(currentHouseQueryOptions()),
-         context.queryClient.ensureQueryData(userHousesQueryOptions()),
-      ]);
+      // Load houses data
+      await context.queryClient.ensureQueryData(getHousesQueryOptions());
 
       return { user: context.auth.user };
    },

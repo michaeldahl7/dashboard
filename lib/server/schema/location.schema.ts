@@ -1,11 +1,15 @@
-import { bigserial, pgTable, real, text, timestamp, json } from "drizzle-orm/pg-core";
+import {
+   bigserial,
+   pgTable,
+   real,
+   text,
+   timestamp,
+   boolean,
+   integer,
+} from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema, createUpdateSchema } from "drizzle-zod";
-import { z } from "zod";
-import { house } from "./house.schema";
 
-// ============= Enums & Types =============
-export const locationType = ["fridge", "freezer", "pantry", "counter"] as const;
-export type LocationType = (typeof locationType)[number];
+import { house } from "./house.schema";
 
 export const quantityUnits = [
    "pieces",
@@ -39,14 +43,47 @@ export const itemCategories = [
 export type ItemCategory = (typeof itemCategories)[number];
 
 // ============= Schemas =============
+export const locationTemplate = pgTable("location_template", {
+   id: bigserial("id", { mode: "number" }).primaryKey(),
+   name: text("name").notNull(),
+   type: text("type"),
+   isDefault: boolean("is_default").default(false).notNull(),
+   description: text("description"),
+   createdAt: timestamp("created_at").defaultNow().notNull(),
+   updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const locationType = pgTable("location_type", {
+   id: bigserial("id", { mode: "number" }).primaryKey(),
+   name: text("name").notNull(),
+   isDefault: boolean("is_default").default(false).notNull(),
+   houseId: integer("house_id").references(() => house.id),
+   createdAt: timestamp("created_at").defaultNow().notNull(),
+   updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 export const location = pgTable("location", {
    id: bigserial("id", { mode: "number" }).primaryKey(),
    name: text("name").notNull(),
-   type: text("type").$type<LocationType | null>(),
+   typeId: bigserial("type_id", { mode: "number" })
+      .references(() => locationType.id)
+      .notNull(),
    houseId: bigserial("house_id", { mode: "number" })
       .notNull()
       .references(() => house.id),
    description: text("description"),
+   createdAt: timestamp("created_at").defaultNow().notNull(),
+   updatedAt: timestamp("updated_at").defaultNow(),
+   templateId: integer("template_id").references(() => locationTemplate.id),
+   isCustom: boolean("is_custom").default(false).notNull(),
+});
+
+export const itemCategory = pgTable("item_category", {
+   id: bigserial("id", { mode: "number" }).primaryKey(),
+   name: text("name").notNull(),
+   description: text("description"),
+   isDefault: boolean("is_default").default(false).notNull(),
+   houseId: integer("house_id").references(() => house.id),
    createdAt: timestamp("created_at").defaultNow().notNull(),
    updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -54,10 +91,10 @@ export const location = pgTable("location", {
 export const item = pgTable("item", {
    id: bigserial("id", { mode: "number" }).primaryKey(),
    name: text("name").notNull(),
-   locationId: bigserial("location_id", { mode: "number" })
+   locationId: integer("location_id")
       .notNull()
       .references(() => location.id),
-   category: text("category").$type<ItemCategory | null>(),
+   categoryId: integer("category_id").references(() => itemCategory.id),
    quantity: real("quantity").default(1).notNull(),
    unit: text("unit").$type<QuantityUnit | null>(),
    expiryDate: timestamp("expiry_date"),
@@ -65,8 +102,21 @@ export const item = pgTable("item", {
    purchaseDate: timestamp("purchase_date"),
    brand: text("brand"),
    notes: text("notes"),
-   barcode: text("barcode"), // For future barcode scanning
-   alertThreshold: real("alert_threshold"), // Minimum quantity before alert
+   barcode: text("barcode"),
+   alertThreshold: real("alert_threshold"),
+   createdAt: timestamp("created_at").defaultNow().notNull(),
+   updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const locationSettings = pgTable("location_settings", {
+   id: bigserial("id", { mode: "number" }).primaryKey(),
+   locationId: integer("location_id")
+      .references(() => location.id)
+      .notNull(),
+   defaultUnit: text("default_unit").$type<QuantityUnit | null>(),
+   alertEnabled: boolean("alert_enabled").default(true),
+   sortOrder: integer("sort_order"),
+   isVisible: boolean("is_visible").default(true),
    createdAt: timestamp("created_at").defaultNow().notNull(),
    updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -75,13 +125,6 @@ export const item = pgTable("item", {
 export const LocationSelectSchema = createSelectSchema(location);
 export const LocationInsertSchema = createInsertSchema(location);
 export const LocationUpdateSchema = createUpdateSchema(location);
-// export const LocationInsertSchema = createInsertSchema(location, {
-//    type: z.enum(locationType).nullable().default(null),
-//    houseId: z.number().min(1),
-// });
-// export const LocationUpdateSchema = createUpdateSchema(location, {
-//    type: z.enum(locationType).nullable(),
-// });
 
 export type LocationSelect = typeof location.$inferSelect;
 export type LocationInsert = typeof location.$inferInsert;
@@ -89,14 +132,8 @@ export type LocationInsert = typeof location.$inferInsert;
 export const ItemSelectSchema = createSelectSchema(item);
 export const ItemInsertSchema = createInsertSchema(item);
 export const ItemUpdateSchema = createUpdateSchema(item);
-// export const ItemInsertSchema = createInsertSchema(item, {
-//    category: z.enum(itemCategories).nullable(),
-//    unit: z.enum(quantityUnits).nullable(),
-// });
-// export const ItemUpdateSchema = createUpdateSchema(item, {
-//    category: z.enum(itemCategories).nullable(),
-//    unit: z.enum(quantityUnits).nullable(),
-// });
 
 export type ItemSelect = typeof item.$inferSelect;
 export type ItemInsert = typeof item.$inferInsert;
+
+export type LocationTypeSelect = typeof locationType.$inferSelect;
