@@ -280,3 +280,13 @@ export const getHouseMembers = createServerFn()
          },
       });
    });
+
+export const setCurrentHouse = createServerFn()
+   .middleware([authMiddleware])
+   .validator(z.number())
+   .handler(async ({ data: houseId, context }) => {
+      await db
+         .update(user)
+         .set({ currentHouseId: houseId })
+         .where(eq(user.id, context.auth.user.id));
+   });

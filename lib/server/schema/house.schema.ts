@@ -107,8 +107,10 @@ export const HouseInviteFormSchema = z.object({
 // Types
 export type SelectHouse = typeof house.$inferSelect;
 export type InsertHouse = typeof house.$inferInsert;
+
 export type SelectHouseMember = typeof houseMember.$inferSelect;
 export type InsertHouseMember = typeof houseMember.$inferInsert;
+
 export type SelectHouseInvite = typeof houseInvite.$inferSelect;
 export type InsertHouseInvite = typeof houseInvite.$inferInsert;
 

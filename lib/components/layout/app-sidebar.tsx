@@ -18,7 +18,12 @@ import {
    DropdownMenuTrigger,
    DropdownMenuShortcut,
 } from "~/lib/components/ui/dropdown-menu";
-import { useGetCurrentHouse, useGetHousesOfUser } from "~/lib/services/house/house.query";
+import {
+   useGetCurrentHouse,
+   useGetHousesOfUser,
+   addHouseQueryOptions,
+   useSetCurrentHouse,
+} from "~/lib/services/house/house.query";
 
 import {
    Sidebar,
@@ -36,6 +41,34 @@ import { Avatar } from "@radix-ui/react-avatar";
 import { AvatarFallback, AvatarImage } from "~/lib/components/ui/avatar";
 import { authClient } from "~/lib/utils/authClient";
 import { Link } from "@tanstack/react-router";
+import {
+   Dialog,
+   DialogContent,
+   DialogHeader,
+   DialogTitle,
+} from "~/lib/components/ui/dialog";
+import { Button } from "~/lib/components/ui/button";
+import { useState } from "react";
+import { useForm } from "@tanstack/react-form";
+import { Input } from "~/lib/components/ui/input";
+import { z } from "zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { addHouse } from "~/lib/services/house/house.api";
+
+const createHouseSchema = z.object({
+   name: z.string().min(1, "House name is required").max(50, "Name too long"),
+});
+
+function useAddHouse() {
+   const queryClient = useQueryClient();
+   return useMutation({
+      mutationFn: (data: { name: string }) =>
+         addHouse({ data: { ...data, setAsCurrent: true } }),
+      onSuccess: () => {
+         queryClient.invalidateQueries({ queryKey: ["houses"] });
+      },
+   });
+}
 
 export function AppSidebar(props: ComponentProps<typeof Sidebar>) {
    return (
@@ -88,54 +121,131 @@ export function NavMain() {
 export function HouseSwitcher() {
    const { data: currentHouse } = useGetCurrentHouse();
    const { data: houses } = useGetHousesOfUser();
-   console.log("Current House:", currentHouse, "Houses:", houses);
    const { isMobile } = useSidebar();
+   const [isDialogOpen, setIsDialogOpen] = useState(false);
+   const createHouse = useAddHouse();
+   const setCurrentHouse = useSetCurrentHouse();
+
+   const form = useForm({
+      defaultValues: {
+         name: "",
+      },
+      onSubmit: async ({ value }) => {
+         try {
+            await createHouse.mutateAsync({ name: value.name });
+            setIsDialogOpen(false);
+         } catch (error) {
+            console.error("Failed to create house:", error);
+         }
+      },
+   });
 
    if (!currentHouse || !houses) return null;
 
    return (
-      <SidebarMenu>
-         <SidebarMenuItem>
-            <DropdownMenu>
-               <DropdownMenuTrigger asChild>
-                  <SidebarMenuButton
-                     size="lg"
-                     className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+      <>
+         <SidebarMenu>
+            <SidebarMenuItem>
+               <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                     <SidebarMenuButton
+                        size="lg"
+                        className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+                     >
+                        <div className="grid flex-1 text-left text-sm leading-tight">
+                           <span className="truncate font-semibold">
+                              {currentHouse.name}
+                           </span>
+                        </div>
+                        <LuChevronsUpDown className="ml-auto" />
+                     </SidebarMenuButton>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                     className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+                     align="start"
+                     side={isMobile ? "bottom" : "right"}
+                     sideOffset={4}
                   >
-                     <div className="grid flex-1 text-left text-sm leading-tight">
-                        <span className="truncate font-semibold">
-                           {currentHouse.name}
-                        </span>
-                     </div>
-                     <LuChevronsUpDown className="ml-auto" />
-                  </SidebarMenuButton>
-               </DropdownMenuTrigger>
-               <DropdownMenuContent
-                  className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
-                  align="start"
-                  side={isMobile ? "bottom" : "right"}
-                  sideOffset={4}
-               >
-                  <DropdownMenuLabel className="text-xs text-muted-foreground">
-                     Houses
-                  </DropdownMenuLabel>
-                  {houses.map((house, index) => (
-                     <DropdownMenuItem key={house.name} className="gap-2 p-2">
-                        {house.name}
-                        <DropdownMenuShortcut>⌘{index + 1}</DropdownMenuShortcut>
+                     <DropdownMenuLabel className="text-xs text-muted-foreground">
+                        Houses
+                     </DropdownMenuLabel>
+                     {houses.map((house, index) => (
+                        <DropdownMenuItem
+                           key={house.name}
+                           className="gap-2 p-2"
+                           onSelect={() => {
+                              setCurrentHouse.mutate(house.id);
+                           }}
+                        >
+                           {house.name}
+                           <DropdownMenuShortcut>⌘{index + 1}</DropdownMenuShortcut>
+                        </DropdownMenuItem>
+                     ))}
+                     <DropdownMenuSeparator />
+                     <DropdownMenuItem
+                        className="gap-2 p-2"
+                        onSelect={() => setIsDialogOpen(true)}
+                     >
+                        <div className="flex size-6 items-center justify-center rounded-md border bg-background">
+                           <LuPlus className="size-4" />
+                        </div>
+                        <div className="font-medium text-muted-foreground">Add house</div>
                      </DropdownMenuItem>
-                  ))}
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem className="gap-2 p-2">
-                     <div className="flex size-6 items-center justify-center rounded-md border bg-background">
-                        <LuPlus className="size-4" />
-                     </div>
-                     <div className="font-medium text-muted-foreground">Add house</div>
-                  </DropdownMenuItem>
-               </DropdownMenuContent>
-            </DropdownMenu>
-         </SidebarMenuItem>
-      </SidebarMenu>
+                  </DropdownMenuContent>
+               </DropdownMenu>
+            </SidebarMenuItem>
+         </SidebarMenu>
+
+         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogContent>
+               <DialogHeader>
+                  <DialogTitle>Create New House</DialogTitle>
+               </DialogHeader>
+               <form
+                  onSubmit={(e) => {
+                     e.preventDefault();
+                     e.stopPropagation();
+                     form.handleSubmit();
+                  }}
+                  className="space-y-4"
+               >
+                  <form.Field
+                     name="name"
+                     validators={{
+                        onChange: z.string().min(1, "House name is required"),
+                     }}
+                  >
+                     {(field) => (
+                        <div>
+                           <Input
+                              placeholder="Enter house name"
+                              value={field.state.value}
+                              onChange={(e) => field.handleChange(e.target.value)}
+                           />
+                           {field.state.meta.errors && (
+                              <span className="text-sm text-destructive">
+                                 {field.state.meta.errors.join(", ")}
+                              </span>
+                           )}
+                        </div>
+                     )}
+                  </form.Field>
+                  <div className="flex justify-end gap-2">
+                     <Button
+                        variant="outline"
+                        onClick={() => setIsDialogOpen(false)}
+                        type="button"
+                     >
+                        Cancel
+                     </Button>
+                     <Button type="submit" disabled={createHouse.isPending}>
+                        {createHouse.isPending ? "Creating..." : "Create House"}
+                     </Button>
+                  </div>
+               </form>
+            </DialogContent>
+         </Dialog>
+      </>
    );
 }
 

@@ -18,7 +18,7 @@ import type { ItemSelect } from "~/lib/server/schema/location.schema";
 export const columns: ColumnDef<ItemSelect>[] = [
    {
       accessorKey: "name",
-      header: "Item Name",
+      header: "Name",
    },
    {
       accessorKey: "quantity",
@@ -27,17 +27,5 @@ export const columns: ColumnDef<ItemSelect>[] = [
    {
       accessorKey: "unit",
       header: "Unit",
-   },
-   {
-      accessorKey: "category",
-      header: "Category",
-   },
-   {
-      accessorKey: "expirationDate",
-      header: "Expiration Date",
-   },
-   {
-      accessorKey: "lastUpdated",
-      header: "Last Updated",
    },
 ];

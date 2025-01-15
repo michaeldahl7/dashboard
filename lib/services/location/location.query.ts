@@ -1,7 +1,6 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { getLocations, getLocationSettings } from "./location.api";
 import { getLocationTypes } from "./type.api";
-import type { LocationWithItems } from "~/lib/server/schema/types";
 
 export const locationKeys = {
    all: ["locations"] as const,

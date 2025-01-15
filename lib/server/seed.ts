@@ -19,7 +19,7 @@ const seedData = {
       { name: "Pantry", isDefault: true },
       { name: "Refrigerator", isDefault: true },
       { name: "Freezer", isDefault: true },
-      { name: "Spice Rack", isDefault: true },
+      { name: "Counter", isDefault: true },
    ],
    categories: [
       { name: "Dairy", isDefault: true },

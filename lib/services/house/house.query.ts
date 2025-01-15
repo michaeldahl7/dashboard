@@ -4,8 +4,12 @@ import {
    getHouseMembers,
    getCurrentHouse,
    getUserHouses,
+   addHouse,
+   setCurrentHouse,
 } from "./house.api";
 import { getHouseInvites } from "./member.api";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
+import { useRouter } from "@tanstack/react-router";
 
 export const houseKeys = {
    all: ["houses"] as const,
@@ -13,6 +17,7 @@ export const houseKeys = {
    members: (houseId: number) => [...houseKeys.all, houseId, "members"] as const,
    invites: (houseId: number) => [...houseKeys.all, houseId, "invites"] as const,
    default: () => [...houseKeys.all, "default"] as const,
+   create: () => [...houseKeys.all, "create"] as const,
 } as const;
 
 export function useGetHousesOfUser() {
@@ -54,3 +59,21 @@ export const createDefaultHouseQueryOptions = () =>
       queryKey: houseKeys.default(),
       queryFn: () => createDefaultHouse(),
    });
+
+export const addHouseQueryOptions = {
+   queryKey: houseKeys.create(),
+   queryFn: (data: { name: string }) =>
+      addHouse({ data: { ...data, setAsCurrent: true } }),
+};
+
+export function useSetCurrentHouse() {
+   const router = useRouter();
+   const queryClient = useQueryClient();
+   return useMutation({
+      mutationFn: (houseId: number) => setCurrentHouse({ data: houseId }),
+      onSuccess: async () => {
+         await queryClient.invalidateQueries();
+         await router.invalidate();
+      },
+   });
+}
