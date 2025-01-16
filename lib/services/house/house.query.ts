@@ -1,79 +1,73 @@
-import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import {
-   createDefaultHouse,
-   getHouseMembers,
-   getCurrentHouse,
-   getUserHouses,
-   addHouse,
-   setCurrentHouse,
-} from "./house.api";
-import { getHouseInvites } from "./member.api";
-import { useQueryClient, useMutation } from "@tanstack/react-query";
-import { useRouter } from "@tanstack/react-router";
+   useSuspenseQuery,
+   queryOptions,
+   useMutation,
+   useQueryClient,
+} from "@tanstack/react-query";
+import { houseApi } from "./house.api";
 
 export const houseKeys = {
    all: ["houses"] as const,
-   byUser: (userId: string) => [...houseKeys.all, userId] as const,
-   members: (houseId: number) => [...houseKeys.all, houseId, "members"] as const,
-   invites: (houseId: number) => [...houseKeys.all, houseId, "invites"] as const,
+   lists: () => [...houseKeys.all, "list"] as const,
+   current: () => [...houseKeys.all, "current"] as const,
    default: () => [...houseKeys.all, "default"] as const,
-   create: () => [...houseKeys.all, "create"] as const,
-} as const;
-
-export function useGetHousesOfUser() {
-   return useSuspenseQuery({
-      queryKey: houseKeys.byUser("me"),
-      queryFn: () => getUserHouses(),
-   });
-}
-export function useGetCurrentHouse() {
-   return useSuspenseQuery({
-      queryKey: houseKeys.all,
-      queryFn: () => getCurrentHouse(),
-      select: (data) => data,
-   });
-}
-
-export function useHouseMembers(houseId: number) {
-   return useSuspenseQuery({
-      queryKey: houseKeys.members(houseId),
-      queryFn: () => getHouseMembers({ data: houseId }),
-   });
-}
-
-export function useHouseInvites(houseId: number) {
-   return useSuspenseQuery({
-      queryKey: houseKeys.invites(houseId),
-      queryFn: () => getHouseInvites({ data: houseId }),
-   });
-}
+};
 
 export const getHousesQueryOptions = () =>
    queryOptions({
-      queryKey: houseKeys.byUser("me"),
-      queryFn: () => getUserHouses(),
+      queryKey: houseKeys.lists(),
+      queryFn: () => houseApi.getAll(),
+   });
+
+export const getCurrentHouseQueryOptions = () =>
+   queryOptions({
+      queryKey: houseKeys.current(),
+      queryFn: () => houseApi.getCurrent(),
    });
 
 export const createDefaultHouseQueryOptions = () =>
    queryOptions({
       queryKey: houseKeys.default(),
-      queryFn: () => createDefaultHouse(),
+      queryFn: () => houseApi.createDefault(),
    });
 
-export const addHouseQueryOptions = {
-   queryKey: houseKeys.create(),
-   queryFn: (data: { name: string }) =>
-      addHouse({ data: { ...data, setAsCurrent: true } }),
-};
+export function useHouses() {
+   return useSuspenseQuery(getHousesQueryOptions());
+}
 
-export function useSetCurrentHouse() {
-   const router = useRouter();
+export function useCurrentHouse() {
+   return useSuspenseQuery(getCurrentHouseQueryOptions());
+}
+
+export function useCreateHouse() {
    const queryClient = useQueryClient();
    return useMutation({
-      mutationFn: (houseId: number) => setCurrentHouse({ data: houseId }),
-      onSuccess: async () => {
-         await queryClient.invalidateQueries();
-         await router.invalidate();
+      mutationFn: (input: { name: string; setAsCurrent?: boolean }) =>
+         houseApi.create({ data: input }),
+      onSuccess: () => {
+         queryClient.invalidateQueries({ queryKey: houseKeys.all });
+      },
+   });
+}
+
+export function useUpdateHouse() {
+   const queryClient = useQueryClient();
+   return useMutation({
+      mutationFn: (input: { houseId: number; name: string }) =>
+         houseApi.update({ data: input }),
+      onSuccess: () => {
+         queryClient.invalidateQueries({ queryKey: houseKeys.all });
+      },
+   });
+}
+
+export function useSetCurrentHouse() {
+   const queryClient = useQueryClient();
+   return useMutation({
+      mutationFn: (houseId: number) => houseApi.setCurrent({ data: houseId }),
+      onSuccess: () => {
+         queryClient.invalidateQueries({ queryKey: houseKeys.all });
+         queryClient.invalidateQueries({ queryKey: ["items"] });
       },
    });
 }

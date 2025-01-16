@@ -18,9 +18,9 @@ import type { User } from "~/lib/server/db";
 
 import {
    getHousesQueryOptions,
-   useGetHousesOfUser,
    createDefaultHouseQueryOptions,
 } from "~/lib/services/house/house.query";
+
 export const Route = createFileRoute("/_authed")({
    beforeLoad: async ({ context }) => {
       if (!context.auth.user) {

@@ -1,4 +1,4 @@
-export * from "./auth.schema";
+export * from "./item.schema";
 export * from "./location.schema";
 export * from "./house.schema";
-// export your other schemas here
+export * from "./auth.schema";

@@ -3,63 +3,36 @@ import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { authMiddleware } from "~/lib/middleware/auth-guard";
 import { db } from "~/lib/server/db";
-import { location, LocationInsertSchema, item, locationType } from "~/lib/server/schema";
+import {
+   location,
+   type LocationInsert,
+   locationType,
+   LocationInsertSchema,
+} from "~/lib/server/schema/location.schema.js";
 import { locationSettings } from "~/lib/server/schema";
 
-export const getLocations = createServerFn()
+const getAllLocations = createServerFn()
    .middleware([authMiddleware])
    .validator(z.number())
    .handler(async ({ data: houseId }) => {
-      // First get locations with their types
-      const locations = await db
-         .select()
-         .from(location)
-         .where(eq(location.houseId, houseId))
-         .leftJoin(locationType, eq(location.typeId, locationType.id));
-
-      // Then get items for each location
-      const locationsWithItems = await Promise.all(
-         locations.map(async (loc) => {
-            const items = await db
-               .select()
-               .from(item)
-               .where(eq(item.locationId, loc.location.id));
-
-            return {
-               ...loc.location,
-               type: loc.location_type ?? {
-                  id: 0,
-                  name: "Unknown",
-                  createdAt: new Date(),
-                  updatedAt: null,
-                  isDefault: false,
-                  houseId: null,
-               },
-               items,
-            };
-         }),
-      );
-
-      return locationsWithItems;
+      const locations = await db.query.location.findMany({
+         where: eq(location.houseId, houseId),
+         with: {
+            type: true,
+            items: true,
+         },
+      });
+      return locations;
    });
 
-export const addLocation = createServerFn()
+const createLocation = createServerFn()
    .middleware([authMiddleware])
    .validator(LocationInsertSchema)
    .handler(async ({ data }) => {
-      const [newLocation] = await db
-         .insert(location)
-         .values({
-            name: data.name,
-            typeId: data.typeId,
-            houseId: data.houseId,
-         })
-         .returning();
-
-      return newLocation;
+      return db.insert(location).values(data).returning();
    });
 
-export const getLocationSettings = createServerFn()
+const getLocationSettings = createServerFn()
    .middleware([authMiddleware])
    .validator(z.number())
    .handler(async ({ data: locationId }) => {
@@ -67,3 +40,19 @@ export const getLocationSettings = createServerFn()
          where: eq(locationSettings.locationId, locationId),
       });
    });
+
+const getLocationTypes = createServerFn()
+   .middleware([authMiddleware])
+   .validator(z.number())
+   .handler(async ({ data: houseId }) => {
+      return db.query.locationType.findMany({
+         where: eq(locationType.houseId, houseId),
+      });
+   });
+
+export const locationApi = {
+   getAll: getAllLocations,
+   create: createLocation,
+   getSettings: getLocationSettings,
+   getLocationTypes: getLocationTypes,
+};

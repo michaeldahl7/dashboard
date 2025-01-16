@@ -1,4 +1,5 @@
-import type { LocationSelect, ItemSelect, LocationTypeSelect } from "./location.schema";
+import type { ItemSelect } from "./item.schema";
+import type { LocationSelect, LocationTypeSelect } from "./location.schema";
 
 export type UserRole = "admin" | "member";
 export type OnboardingStep = "username" | "house" | "inventory" | "completed";

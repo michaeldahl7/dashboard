@@ -88,6 +88,16 @@ export const HouseInviteSelectSchema = createSelectSchema(houseInvite);
 export const HouseInviteInsertSchema = createInsertSchema(houseInvite);
 export const HouseInviteUpdateSchema = createUpdateSchema(houseInvite);
 
+// Types
+export type SelectHouse = typeof house.$inferSelect;
+export type InsertHouse = typeof house.$inferInsert;
+
+export type SelectHouseMember = typeof houseMember.$inferSelect;
+export type InsertHouseMember = typeof houseMember.$inferInsert;
+
+export type SelectHouseInvite = typeof houseInvite.$inferSelect;
+export type InsertHouseInvite = typeof houseInvite.$inferInsert;
+
 // Form Schemas (for API validation)
 export const HouseFormSchema = z.object({
    name: z.string().min(2).max(50),
@@ -103,18 +113,3 @@ export const HouseInviteFormSchema = z.object({
    email: z.string().email(),
    role: z.enum(["admin", "member"]),
 });
-
-// Types
-export type SelectHouse = typeof house.$inferSelect;
-export type InsertHouse = typeof house.$inferInsert;
-
-export type SelectHouseMember = typeof houseMember.$inferSelect;
-export type InsertHouseMember = typeof houseMember.$inferInsert;
-
-export type SelectHouseInvite = typeof houseInvite.$inferSelect;
-export type InsertHouseInvite = typeof houseInvite.$inferInsert;
-
-// Form types can stay as they are
-export type HouseForm = z.infer<typeof HouseFormSchema>;
-export type HouseMemberForm = z.infer<typeof HouseMemberFormSchema>;
-export type HouseInviteForm = z.infer<typeof HouseInviteFormSchema>;

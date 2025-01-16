@@ -2,11 +2,12 @@ import type { ComponentProps } from "react";
 
 import {
    LuBox,
-   LuSettings2,
+   LuChefHat,
    LuLogOut,
    LuSquareTerminal,
    LuChevronsUpDown,
    LuPlus,
+   LuMapPin,
 } from "react-icons/lu";
 
 import {
@@ -19,10 +20,12 @@ import {
    DropdownMenuShortcut,
 } from "~/lib/components/ui/dropdown-menu";
 import {
-   useGetCurrentHouse,
-   useGetHousesOfUser,
-   addHouseQueryOptions,
+   useCreateHouse,
+   useCurrentHouse,
+   useHouses,
    useSetCurrentHouse,
+   getHousesQueryOptions,
+   getCurrentHouseQueryOptions,
 } from "~/lib/services/house/house.query";
 
 import {
@@ -53,22 +56,10 @@ import { useForm } from "@tanstack/react-form";
 import { Input } from "~/lib/components/ui/input";
 import { z } from "zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { addHouse } from "~/lib/services/house/house.api";
 
 const createHouseSchema = z.object({
    name: z.string().min(1, "House name is required").max(50, "Name too long"),
 });
-
-function useAddHouse() {
-   const queryClient = useQueryClient();
-   return useMutation({
-      mutationFn: (data: { name: string }) =>
-         addHouse({ data: { ...data, setAsCurrent: true } }),
-      onSuccess: () => {
-         queryClient.invalidateQueries({ queryKey: ["houses"] });
-      },
-   });
-}
 
 export function AppSidebar(props: ComponentProps<typeof Sidebar>) {
    return (
@@ -96,9 +87,14 @@ export function NavMain() {
          icon: LuSquareTerminal,
       },
       {
+         title: "Items",
+         url: "/items",
+         icon: LuChefHat,
+      },
+      {
          title: "Locations",
          url: "/locations",
-         icon: LuBox,
+         icon: LuMapPin,
       },
    ];
 
@@ -119,11 +115,11 @@ export function NavMain() {
 }
 
 export function HouseSwitcher() {
-   const { data: currentHouse } = useGetCurrentHouse();
-   const { data: houses } = useGetHousesOfUser();
+   const { data: currentHouse } = useCurrentHouse();
+   const { data: houses } = useHouses();
    const { isMobile } = useSidebar();
    const [isDialogOpen, setIsDialogOpen] = useState(false);
-   const createHouse = useAddHouse();
+   const createHouse = useCreateHouse();
    const setCurrentHouse = useSetCurrentHouse();
 
    const form = useForm({

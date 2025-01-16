@@ -1,12 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Button } from "~/lib/components/ui/button";
-import {
-   Card,
-   CardHeader,
-   CardTitle,
-   CardDescription,
-   CardContent,
-} from "~/lib/components/ui/card";
+import { Card, CardHeader, CardTitle, CardContent } from "~/lib/components/ui/card";
 import { LuPlus, LuBox } from "react-icons/lu";
 import { Skeleton } from "~/lib/components/ui/skeleton";
 import { useLocations } from "~/lib/services/location/location.query";
@@ -27,8 +21,18 @@ function LocationsPage() {
    const { currentHouse } = Route.useLoaderData();
 
    if (!currentHouse) {
-      // Handle no current house selected
-      return <div>No house selected</div>;
+      return (
+         <div className="flex h-[calc(100vh-4rem)] items-center justify-center">
+            <div className="text-center">
+               <h2 className="text-2xl font-semibold tracking-tight">
+                  No House Selected
+               </h2>
+               <p className="text-muted-foreground mt-2">
+                  Please select or create a house to view locations
+               </p>
+            </div>
+         </div>
+      );
    }
 
    const { data: locations, isLoading: locationsLoading } = useLocations(currentHouse);
@@ -47,8 +51,8 @@ function LocationsPage() {
 }
 
 function LocationCard({ location }: { location: LocationWithItems }) {
-   const { data: items } = useItems(location.id);
-   const locationType = location.type;
+   const { data: items } = useItems();
+   const filteredItems = items?.filter((item) => item.location.id === location.id);
 
    return (
       <Card className="relative hover:shadow-lg transition-shadow">
@@ -59,10 +63,10 @@ function LocationCard({ location }: { location: LocationWithItems }) {
             </div>
          </CardHeader>
          <CardContent>
-            {!items?.length ? (
+            {!filteredItems?.length ? (
                <EmptyState />
             ) : (
-               <DataTable columns={columns} data={items} />
+               <DataTable columns={columns} data={filteredItems} />
             )}
          </CardContent>
       </Card>

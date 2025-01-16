@@ -1,5 +1,19 @@
 import { redirect } from "@tanstack/react-router";
 
+export type KitchenErrorCode =
+   | "HOUSE_CREATION_FAILED"
+   | "LOCATION_CREATION_FAILED"
+   | "UNAUTHORIZED"
+   | "NOT_FOUND"
+   | "VALIDATION_ERROR"
+   | "NO_CURRENT_HOUSE"
+   | "HOUSE_NOT_FOUND"
+   | "HOUSE_INVITE_NOT_FOUND"
+   | "HOUSE_INVITE_EXPIRED"
+   | "HOUSE_INVITE_ALREADY_ACCEPTED"
+   | "HOUSE_INVITE_ALREADY_ACCEPTED_BY_OTHER_USER"
+   | "INVALID_LOCATION";
+
 export class KitchenError extends Error {
    constructor(
       message: string,
@@ -7,6 +21,7 @@ export class KitchenError extends Error {
          | "HOUSE_CREATION_FAILED"
          | "LOCATION_CREATION_FAILED"
          | "UNAUTHORIZED"
+         | "INVALID_LOCATION"
          | "NOT_FOUND"
          | "VALIDATION_ERROR"
          | "NO_CURRENT_HOUSE"

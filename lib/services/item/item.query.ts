@@ -1,27 +1,35 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { getItems } from "./item.api";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { addItem, type AddItemInput } from "./item.api";
+import {
+   useSuspenseQuery,
+   queryOptions,
+   useMutation,
+   useQueryClient,
+} from "@tanstack/react-query";
+import { itemApi } from "./item.api";
+import type { z } from "zod";
+import type { addItemSchema } from "./item.api";
 
 export const itemKeys = {
    all: ["items"] as const,
-   byLocation: (locationId: number) => [...itemKeys.all, locationId] as const,
-} as const;
+   lists: () => [...itemKeys.all, "list"] as const,
+};
 
-export function useItems(locationId: number) {
-   return useSuspenseQuery({
-      queryKey: itemKeys.byLocation(locationId),
-      queryFn: () => getItems({ data: locationId }),
+export const getItemsQueryOptions = () =>
+   queryOptions({
+      queryKey: itemKeys.lists(),
+      queryFn: () => itemApi.getAll(),
    });
+
+export function useItems() {
+   return useSuspenseQuery(getItemsQueryOptions());
 }
 
-export function useAddItem() {
+export function useCreateItem() {
    const queryClient = useQueryClient();
-
    return useMutation({
-      mutationFn: (input: AddItemInput) => addItem({ data: input }),
+      mutationFn: (input: z.infer<typeof addItemSchema>) =>
+         itemApi.create({ data: input }),
       onSuccess: () => {
-         queryClient.invalidateQueries({ queryKey: ["items"] });
+         queryClient.invalidateQueries({ queryKey: itemKeys.all });
       },
    });
 }
