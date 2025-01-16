@@ -46,6 +46,7 @@ export function useCreateHouse() {
          houseApi.create({ data: input }),
       onSuccess: () => {
          queryClient.invalidateQueries({ queryKey: houseKeys.all });
+         queryClient.invalidateQueries({ queryKey: ["items"] });
       },
    });
 }

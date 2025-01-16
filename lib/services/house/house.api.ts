@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/start";
-import { and, eq, isNull } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { z } from "zod";
 import { authMiddleware } from "~/lib/middleware/auth-guard";
 import { db } from "~/lib/server/db";

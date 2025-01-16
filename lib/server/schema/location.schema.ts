@@ -94,10 +94,18 @@ export const locationTypeRelations = relations(locationType, ({ one, many }) => 
    locations: many(location),
 }));
 
-// Default locations to be created for each new house
+export const LocationType = {
+   fridge: "fridge",
+   freezer: "freezer",
+   pantry: "pantry",
+   counter: "counter",
+} as const;
+
+export type LocationType = (typeof LocationType)[keyof typeof LocationType];
+
 export const DEFAULT_LOCATIONS = [
-   { name: "Main Fridge", type: "fridge" },
-   { name: "Freezer", type: "freezer" },
-   { name: "Pantry", type: "pantry" },
-   { name: "Kitchen Counter", type: "counter" },
+   { name: "Main Fridge", type: LocationType.fridge },
+   { name: "Freezer", type: LocationType.freezer },
+   { name: "Pantry", type: LocationType.pantry },
+   { name: "Kitchen Counter", type: LocationType.counter },
 ] as const;
