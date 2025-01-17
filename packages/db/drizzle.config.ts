@@ -1,9 +1,9 @@
 import { defineConfig } from "drizzle-kit";
-import { env } from "~/lib/env/server";
+import { env } from "./src/env";
 
 export default defineConfig({
    out: "./drizzle",
-   schema: "./lib/server/schema.ts",
+   schema: "./src/schema.ts",
    breakpoints: true,
    dialect: "postgresql",
    dbCredentials: {

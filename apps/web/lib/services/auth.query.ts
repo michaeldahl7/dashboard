@@ -1,5 +1,5 @@
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
-import type { Auth } from "~/lib/server/auth";
+import type { Auth } from "@munchy/auth";
 import { getAuth } from "./auth.api";
 
 // Query keys

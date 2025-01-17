@@ -1,31 +1,53 @@
 {
    "$schema": "https://turbo.build/schema.json",
    "globalDependencies": ["**/.env"],
+   "globalEnv": ["NODE_ENV", "BETTER_AUTH_SECRET"],
    "tasks": {
       "build": {
          "dependsOn": ["^build"],
-         "outputs": [".output/**", "dist/**", "build/**"]
+         "outputs": [".output/**", "dist/**", "build/**"],
+         "env": [
+            "DATABASE_URL",
+            "APP_BASE_URL",
+            "VITE_*",
+            "DISCORD_*",
+            "GITHUB_*",
+            "GOOGLE_*"
+         ]
       },
       "dev": {
          "cache": false,
-         "persistent": true
+         "persistent": true,
+         "env": [
+            "DATABASE_URL",
+            "APP_BASE_URL",
+            "VITE_*",
+            "DISCORD_*",
+            "GITHUB_*",
+            "GOOGLE_*"
+         ]
       },
       "format-and-lint": {},
       "format-and-lint:fix": {},
       "db:generate": {
-         "cache": false
+         "cache": false,
+         "env": ["DATABASE_URL"]
       },
       "db:migrate": {
-         "cache": false
+         "cache": false,
+         "env": ["DATABASE_URL"]
       },
       "db:push": {
-         "cache": false
+         "cache": false,
+         "env": ["DATABASE_URL"]
       },
       "db:studio": {
-         "cache": false
+         "cache": false,
+         "env": ["DATABASE_URL"]
       },
       "db:seed": {
-         "cache": false
+         "cache": false,
+         "env": ["DATABASE_URL"]
       }
    }
-} 
+}

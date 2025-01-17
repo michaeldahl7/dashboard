@@ -1,0 +1,40 @@
+{
+   "name": "@munchy/db",
+   "version": "0.1.0",
+   "private": true,
+   "type": "module",
+   "exports": {
+      ".": {
+         "types": "./dist/index.d.ts",
+         "default": "./src/index.ts"
+      },
+      "./client": {
+         "types": "./dist/client.d.ts",
+         "default": "./src/client.ts"
+      },
+      "./schema": {
+         "types": "./dist/schema.d.ts",
+         "default": "./src/schema.ts"
+      }
+   },
+   "scripts": {
+      "generate": "bun with-env drizzle-kit generate",
+      "migrate": "bun with-env drizzle-kit migrate",
+      "push": "bun with-env drizzle-kit push",
+      "studio": "bun with-env drizzle-kit studio",
+      "with-env": "dotenv -e .env --"
+   },
+   "dependencies": {
+      "@t3-oss/env-core": "^0.10.1",
+      "drizzle-orm": "^0.33.0",
+      "drizzle-zod": "^0.5.1",
+      "postgres": "^3.4.4",
+      "zod": "^3.24.1"
+   },
+   "devDependencies": {
+      "dotenv-cli": "^7.4.1",
+      "@munchy/tsconfig": "workspace:*",
+      "drizzle-kit": "^0.22.8",
+      "typescript": "^5.5.4"
+   }
+}

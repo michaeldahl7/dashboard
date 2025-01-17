@@ -1,0 +1,21 @@
+{
+   "name": "@munchy/auth",
+   "version": "0.1.0",
+   "private": true,
+   "type": "module",
+   "exports": {
+      ".": {
+         "types": "./dist/index.d.ts",
+         "default": "./src/index.ts"
+      }
+   },
+   "dependencies": {
+      "@t3-oss/env-core": "^0.10.1",
+      "better-auth": "^1.1.13",
+      "zod": "^3.24.1"
+   },
+   "devDependencies": {
+      "@munchy/tsconfig": "workspace:*",
+      "typescript": "^5.5.4"
+   }
+}

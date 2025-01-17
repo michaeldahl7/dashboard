@@ -1,14 +1,14 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { passkey } from "better-auth/plugins/passkey";
-import { env } from "~/lib/env/server";
-import { db } from "~/lib/server/db";
+import { env } from "./env";
+import { db } from "@munchy/db/client";
 
 export const auth = betterAuth({
    database: drizzleAdapter(db, {
       provider: "pg",
    }),
-   baseURL: env.VITE_APP_BASE_URL,
+   baseURL: env.APP_BASE_URL,
    socialProviders: {
       discord: {
          clientId: env.DISCORD_CLIENT_ID as string,
