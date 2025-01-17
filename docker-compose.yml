@@ -3,7 +3,7 @@ services:
   db:
     image: postgres:latest
     environment:
-      POSTGRES_DB: kitchen_tracker
+      POSTGRES_DB: munchy
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     ports:

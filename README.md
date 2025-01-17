@@ -1,4 +1,4 @@
-# Kitchen Tracker
+# Munchy
 
 A web application to help users track their kitchen inventory, manage shopping lists, and reduce food waste.
 
