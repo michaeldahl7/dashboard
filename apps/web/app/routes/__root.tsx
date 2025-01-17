@@ -4,7 +4,7 @@ import {
    ScrollRestoration,
    createRootRouteWithContext,
 } from "@tanstack/react-router";
-import { createServerFn, Meta, Scripts } from "@tanstack/start";
+import { Meta, Scripts } from "@tanstack/start";
 import { Suspense, lazy } from "react";
 
 import { Toaster } from "~/lib/components/ui/sonner";
@@ -17,8 +17,6 @@ import appCss from "~/lib/styles/app.css?url";
 import { ThemeProvider } from "~/lib/components/theme-provider";
 
 import { getAuth } from "~/lib/services/auth.api";
-import { auth } from "@munchy/auth";
-import { getWebRequest } from "vinxi/http";
 
 const TanStackRouterDevtools =
    process.env.NODE_ENV === "production"
@@ -44,13 +42,6 @@ interface RouterContext {
    queryClient: QueryClient;
 }
 
-// const getUser = createServerFn({ method: "GET" }).handler(async () => {
-//     const { headers } = getWebRequest();
-//     const session = await auth.api.getSession({ headers });
-
-//     return session?.user || null;
-//   });
-
 export const Route = createRootRouteWithContext<RouterContext>()({
    beforeLoad: async () => {
       const auth = await getAuth();
@@ -66,7 +57,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
             content: "width=device-width, initial-scale=1",
          },
          {
-            title: "Playground",
+            title: "KITCN",
          },
       ],
       links: [

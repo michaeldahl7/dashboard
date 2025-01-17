@@ -1,53 +1,53 @@
 {
    "$schema": "https://turbo.build/schema.json",
-   "globalDependencies": ["**/.env"],
-   "globalEnv": ["NODE_ENV", "BETTER_AUTH_SECRET"],
+   "globalEnv": [
+      "BETTER_AUTH_SECRET",
+      "DATABASE_URL",
+      "APP_BASE_URL",
+      "DISCORD_CLIENT_ID",
+      "DISCORD_CLIENT_SECRET",
+      "GITHUB_CLIENT_ID",
+      "GITHUB_CLIENT_SECRET",
+      "GOOGLE_CLIENT_ID",
+      "GOOGLE_CLIENT_SECRET"
+   ],
    "tasks": {
       "build": {
          "dependsOn": ["^build"],
-         "outputs": [".output/**", "dist/**", "build/**"],
-         "env": [
-            "DATABASE_URL",
-            "APP_BASE_URL",
-            "VITE_*",
-            "DISCORD_*",
-            "GITHUB_*",
-            "GOOGLE_*"
-         ]
+         "outputs": [".output/**", "dist/**", "build/**"]
       },
       "dev": {
          "cache": false,
          "persistent": true,
          "env": [
+            "VITE_APP_BASE_URL",
+            "BETTER_AUTH_SECRET",
             "DATABASE_URL",
             "APP_BASE_URL",
-            "VITE_*",
-            "DISCORD_*",
-            "GITHUB_*",
-            "GOOGLE_*"
+            "DISCORD_CLIENT_ID",
+            "DISCORD_CLIENT_SECRET",
+            "GITHUB_CLIENT_ID",
+            "GITHUB_CLIENT_SECRET",
+            "GOOGLE_CLIENT_ID",
+            "GOOGLE_CLIENT_SECRET"
          ]
       },
       "format-and-lint": {},
       "format-and-lint:fix": {},
       "db:generate": {
-         "cache": false,
-         "env": ["DATABASE_URL"]
+         "cache": false
       },
       "db:migrate": {
-         "cache": false,
-         "env": ["DATABASE_URL"]
+         "cache": false
       },
       "db:push": {
-         "cache": false,
-         "env": ["DATABASE_URL"]
+         "cache": false
       },
       "db:studio": {
-         "cache": false,
-         "env": ["DATABASE_URL"]
+         "cache": false
       },
       "db:seed": {
-         "cache": false,
-         "env": ["DATABASE_URL"]
+         "cache": false
       }
    }
 }

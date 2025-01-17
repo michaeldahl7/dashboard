@@ -5,7 +5,8 @@
    "packageManager": "bun@1.0.26",
    "workspaces": ["apps/*", "packages/*", "tooling/*"],
    "scripts": {
-      "dev": "turbo dev",
+      "clean": "git clean -xdf node_modules",
+      "dev": "turbo watch dev",
       "build": "turbo build",
       "start": "turbo start",
       "format-and-lint": "turbo format-and-lint",
@@ -22,8 +23,7 @@
    },
    "devDependencies": {
       "@biomejs/biome": "1.9.4",
-      "dotenv-cli": "^7.4.1",
       "turbo": "latest"
    },
-   "trustedDependencies": ["@biomejs/biome", "@parcel/watcher"]
+   "trustedDependencies": ["@biomejs/biome", "@parcel/watcher", "esbuild"]
 }

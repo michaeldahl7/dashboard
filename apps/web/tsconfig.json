@@ -1,37 +1,23 @@
 {
+   "include": ["**/*.ts", "**/*.tsx"],
    "compilerOptions": {
-      /* Base Options: */
-      "esModuleInterop": true,
-      "isolatedModules": true,
-      "verbatimModuleSyntax": true,
-      "skipLibCheck": true,
-      "target": "ESNext",  
-      "incremental": true,
-      "lib": ["esnext", "dom", "dom.iterable"],
-
-      "jsx": "react-jsx",
-      /* Bundled projects */
-      
-      "moduleDetection": "force",
-
-      /* Path Aliases */
-      "baseUrl": ".",
-      "module": "preserve",
-      "paths": {
-         "~/*": ["./*"]
-      },
-      "resolveJsonModule": true,
-      "allowJs": true,
-
-      "checkJs": true,
-      /* Strictness */
-      "strict": true,
-      "noImplicitOverride": true,
-      "noUncheckedIndexedAccess": true,
-      "noEmit": true,
-
-   },
-   "include": ["**/*.ts", "**/*.tsx", "**/*.js"],
-
-   "exclude": ["node_modules"]
-}
+     "strict": true,
+     "esModuleInterop": true,
+     "jsx": "react-jsx",
+     "module": "ESNext",
+     "moduleResolution": "Bundler",
+     "lib": ["DOM", "DOM.Iterable", "ES2022"],
+     "isolatedModules": true,
+     "resolveJsonModule": true,
+     "skipLibCheck": true,
+     "target": "ES2022",
+     "allowJs": true,
+     "forceConsistentCasingInFileNames": true,
+     "baseUrl": ".",
+     "paths": {
+       "~/*": ["./*"]
+     },
+     "noEmit": true,
+     "strictNullChecks": true
+   }
+ }

@@ -16,6 +16,16 @@ function PublicLayout() {
             </div>
          </main>
 
+         <footer className="border-t py-4">
+            <div className="container mx-auto flex justify-center gap-4 text-sm text-muted-foreground">
+               <Link to="/terms" className="hover:text-foreground transition-colors">
+                  Terms of Service
+               </Link>
+               <Link to="/dpa" className="hover:text-foreground transition-colors">
+                  Data Processing Agreement
+               </Link>
+            </div>
+         </footer>
       </div>
    );
 }

@@ -64,7 +64,18 @@ function SignupPage() {
                </div>
             </CardContent>
 
-
+            <div className="px-6 pb-4 text-center">
+               <p className="text-sm text-muted-foreground">
+                  By signing up, you agree to our{" "}
+                  <Link to="/terms" className="hover:underline font-medium text-primary">
+                     Terms of Service
+                  </Link>{" "}
+                  and{" "}
+                  <Link to="/dpa" className="hover:underline font-medium text-primary">
+                     Data Processing Agreement
+                  </Link>
+               </p>
+            </div>
          </Card>
 
          <div className="mt-4 flex items-center gap-2">
