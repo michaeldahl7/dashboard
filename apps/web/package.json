@@ -3,7 +3,7 @@
    "private": true,
    "type": "module",
    "scripts": {
-      "dev": "vinxi dev",
+      "dev": "bun with-env vinxi dev",
       "build": "vinxi build",
       "start": "vinxi start",
       "format-and-lint": "biome check .",
@@ -21,6 +21,7 @@
    },
    "dependencies": {
       "@fontsource-variable/inter": "^5.1.1",
+      "@munchy/auth": "workspace:*",
       "@munchy/db": "workspace:*",
       "@fontsource-variable/jetbrains-mono": "^5.1.2",
       "@mantine/hooks": "^7.16.0",

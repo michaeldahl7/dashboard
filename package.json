@@ -6,7 +6,7 @@
    "workspaces": ["apps/*", "packages/*", "tooling/*"],
    "scripts": {
       "clean": "git clean -xdf node_modules",
-      "dev": "turbo watch dev",
+      "dev": "turbo dev --summarize",
       "build": "turbo build",
       "start": "turbo start",
       "format-and-lint": "turbo format-and-lint",

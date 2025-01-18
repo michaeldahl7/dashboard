@@ -71,10 +71,6 @@ export const item = pgTable("item", {
    alertThreshold: integer("alert_threshold"),
 });
 
-export const ItemSelectSchema = createSelectSchema(item);
-export const ItemInsertSchema = createInsertSchema(item);
-export const ItemUpdateSchema = createUpdateSchema(item);
-
 export type ItemSelect = typeof item.$inferSelect;
 export type ItemInsert = typeof item.$inferInsert;
 

@@ -1,9 +1,9 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { passkey } from "better-auth/plugins/passkey";
-import { serverEnv as env } from "@munchy/env";
-import { db } from "@munchy/db/client";
 
+import { db } from "@munchy/db/client";
+import { env } from "../env";
 export const auth = betterAuth({
    database: drizzleAdapter(db, {
       provider: "pg",

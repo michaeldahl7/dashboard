@@ -9,6 +9,10 @@
          "default": "./src/index.ts"
       }
    },
+   "scripts": {
+      "build": "tsc",
+      "dev": "tsc"
+   },
    "dependencies": {
       "@t3-oss/env-core": "^0.10.1",
       "better-auth": "^1.1.13",

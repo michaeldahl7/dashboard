@@ -4,7 +4,8 @@ import { createInsertSchema, createSelectSchema, createUpdateSchema } from "driz
 import { ulid } from "ulid";
 import { z } from "zod";
 import { user } from "./auth.schema";
-import type { InviteStatus, UserRole } from "./types";
+type InviteStatus = "pending" | "accepted" | "rejected";
+type UserRole = "admin" | "member";
 
 export const house = pgTable("house", {
    id: bigserial("id", { mode: "number" }).primaryKey(),
@@ -74,19 +75,6 @@ export const houseInviteRelations = relations(houseInvite, ({ one }) => ({
       references: [user.id],
    }),
 }));
-
-// Zod Schemas
-export const HouseSelectSchema = createSelectSchema(house);
-export const HouseInsertSchema = createInsertSchema(house);
-export const HouseUpdateSchema = createUpdateSchema(house);
-
-export const HouseMemberSelectSchema = createSelectSchema(houseMember);
-export const HouseMemberInsertSchema = createInsertSchema(houseMember);
-export const HouseMemberUpdateSchema = createUpdateSchema(houseMember);
-
-export const HouseInviteSelectSchema = createSelectSchema(houseInvite);
-export const HouseInviteInsertSchema = createInsertSchema(houseInvite);
-export const HouseInviteUpdateSchema = createUpdateSchema(houseInvite);
 
 // Types
 export type SelectHouse = typeof house.$inferSelect;

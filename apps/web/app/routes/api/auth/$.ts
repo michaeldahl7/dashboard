@@ -1,5 +1,5 @@
 import { createAPIFileRoute } from "@tanstack/start/api";
-import { auth } from "~/lib/utils/auth";
+import { auth } from "@munchy/auth";
 
 export const APIRoute = createAPIFileRoute("/api/auth/$")({
    GET: ({ request }) => {

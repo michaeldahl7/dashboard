@@ -18,13 +18,17 @@
       }
    },
    "scripts": {
-      "db:generate": "bun rdizzle-kit generate",
-      "db:migrate": "bun drizzle-kit migrate",
-      "db:push": "bun drizzle-kit push",
-      "db:studio": "bun drizzle-kit studio"
+      "db:generate": "bun with-env drizzle-kit generate",
+      "db:migrate": "bun with-env drizzle-kit migrate",
+      "db:push": "bun with-env drizzle-kit push",
+      "db:studio": "bun with-env drizzle-kit studio",
+      "with-env": "dotenv -e ../../.env --",
+      "build": "tsc",
+      "dev": "tsc"
    },
    "dependencies": {
       "@t3-oss/env-core": "^0.10.1",
+      "drizzle-kit": "^0.30.2",
       "drizzle-orm": "^0.38.3",
       "drizzle-zod": "^0.6.1",
       "postgres": "^3.4.5",
@@ -33,7 +37,6 @@
    "devDependencies": {
       "dotenv-cli": "^7.4.1",
       "@munchy/tsconfig": "workspace:*",
-
       "typescript": "^5.5.4"
    }
 }

@@ -1,7 +1,7 @@
 import { drizzle } from "drizzle-orm/postgres-js";
 
 import postgres from "postgres";
-import { serverEnv as env } from "@munchy/env";
+import { env } from "../env";
 import * as schema from "./schema";
 
 const driver = postgres(env.DATABASE_URL);

@@ -2,7 +2,7 @@ import type { IconBaseProps, IconType } from "react-icons";
 import { BsDiscord, BsGithub } from "react-icons/bs";
 import { FcGoogle } from "react-icons/fc";
 
-import type { auth } from "~/lib/utils/auth";
+import type { auth } from "@munchy/auth";
 
 export interface SocialProvider {
    id: keyof typeof auth.options.socialProviders;

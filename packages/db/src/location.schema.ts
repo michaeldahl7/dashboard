@@ -72,8 +72,6 @@ export type LocationTemplateInsert = typeof locationTemplate.$inferInsert;
 export type LocationSettingsSelect = typeof locationSettings.$inferSelect;
 export type LocationSettingsInsert = typeof locationSettings.$inferInsert;
 
-export const LocationInsertSchema = createInsertSchema(location);
-
 export const locationRelations = relations(location, ({ one, many }) => ({
    house: one(house, {
       fields: [location.houseId],
