@@ -7,16 +7,16 @@ import {
 import { Meta, Scripts } from "@tanstack/start";
 import { Suspense, lazy } from "react";
 
-import { Toaster } from "~/lib/components/ui/sonner";
+import { Toaster } from "~/app/components/ui/sonner";
 
 import fontsourceInter from "@fontsource-variable/inter?url";
 import fontsourceJetBrainsMono from "@fontsource-variable/jetbrains-mono?url";
 
-import appCss from "~/lib/styles/app.css?url";
+import appCss from "~/app/styles/app.css?url";
 
-import { ThemeProvider } from "~/lib/components/theme-provider";
+import { ThemeProvider } from "~/app/components/theme-provider";
 
-import { getAuth } from "~/lib/services/auth.api";
+import { getAuth } from "~/app/services/auth.api";
 
 const TanStackRouterDevtools =
    process.env.NODE_ENV === "production"

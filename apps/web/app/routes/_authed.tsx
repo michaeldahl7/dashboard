@@ -1,5 +1,5 @@
 import { Link, Outlet, createFileRoute, redirect } from "@tanstack/react-router";
-import { AppSidebar } from "~/lib/components/layout/app-sidebar";
+import { AppSidebar } from "~/app/components/layout/app-sidebar";
 import {
    Breadcrumb,
    BreadcrumbList,
@@ -7,18 +7,18 @@ import {
    BreadcrumbLink,
    BreadcrumbSeparator,
    BreadcrumbPage,
-} from "~/lib/components/ui/breadcrumb";
-import { Separator } from "~/lib/components/ui/separator";
+} from "~/app/components/ui/breadcrumb";
+import { Separator } from "~/app/components/ui/separator";
 import {
    SidebarInset,
    SidebarProvider,
    SidebarTrigger,
-} from "~/lib/components/ui/sidebar";
+} from "~/app/components/ui/sidebar";
 
 import {
    getHousesQueryOptions,
    createDefaultHouseQueryOptions,
-} from "~/lib/services/house/house.query";
+} from "~/app/services/house/house.query";
 
 export const Route = createFileRoute("/_authed")({
    beforeLoad: async ({ context }) => {

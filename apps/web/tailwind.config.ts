@@ -5,7 +5,7 @@ import defaultTheme from "tailwindcss/defaultTheme";
 
 export default {
    darkMode: ["class"],
-   content: ["./lib/**/*.tsx", "./app/**/*.tsx"],
+   content: ["./app/**/*.tsx"],
    theme: {
       extend: {
          borderRadius: {

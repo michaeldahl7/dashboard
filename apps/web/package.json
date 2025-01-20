@@ -6,8 +6,6 @@
       "dev": "bun with-env vinxi dev",
       "build": "vinxi build",
       "start": "vinxi start",
-      "format-and-lint": "biome check .",
-      "format-and-lint:fix": "biome check . --write",
       "db:generate": "drizzle-kit generate",
       "db:migrate": "drizzle-kit migrate",
       "db:push": "bun with-env drizzle-kit push",

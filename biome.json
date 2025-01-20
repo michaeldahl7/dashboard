@@ -1,7 +1,12 @@
 {
    "$schema": "https://biomejs.dev/schemas/1.8.3/schema.json",
    "files": {
-      "ignore": ["app/routeTree.gen.ts", ".vscode/settings.json"]
+      "ignore": [
+         "app/routeTree.gen.ts",
+         "node_modules/**/*",
+         ".turbo/**/*",
+         "**/dist/**/*"
+      ]
    },
    "organizeImports": {
       "enabled": true
@@ -25,5 +30,10 @@
       "indentWidth": 3,
       "lineWidth": 90,
       "lineEnding": "lf"
+   },
+   "json": {
+      "parser": {
+         "allowComments": false
+      }
    }
 }

@@ -1,5 +1,5 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import { dashboardLinkOptions } from "~/lib/utils";
+import { dashboardLinkOptions } from "~/app/utils";
 
 export const Route = createFileRoute("/_public/dpa")({
    beforeLoad: ({ context }) => {

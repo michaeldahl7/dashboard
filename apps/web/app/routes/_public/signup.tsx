@@ -1,10 +1,10 @@
 import { Link, createFileRoute, redirect } from "@tanstack/react-router";
 import { cx } from "class-variance-authority";
-import { Button } from "~/lib/components/ui/button";
-import { Card, CardContent } from "~/lib/components/ui/card";
-import { type SocialProvider, socialProviders } from "~/lib/config/social-provider";
-import { dashboardLinkOptions } from "~/lib/utils";
-import { authClient } from "~/lib/utils/authClient";
+import { Button } from "~/app/components/ui/button";
+import { Card, CardContent } from "~/app/components/ui/card";
+import { type SocialProvider, socialProviders } from "~/app/utils/social-provider";
+import { dashboardLinkOptions } from "~/app/utils";
+import { authClient } from "~/app/utils/authClient";
 
 export const Route = createFileRoute("/_public/signup")({
    beforeLoad: ({ context }) => {

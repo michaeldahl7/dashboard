@@ -5,8 +5,8 @@ import {
    CardDescription,
    CardHeader,
    CardTitle,
-} from "~/lib/components/ui/card";
-import { AddItemForm } from "~/lib/components/forms/add-item-form";
+} from "~/app/components/ui/card";
+import { AddItemForm } from "~/app/components/forms/add-item-form";
 
 export const Route = createFileRoute("/_authed/dashboard")({
    component: DashboardRoute,
