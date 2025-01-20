@@ -22,7 +22,7 @@ const getAllLocations = createServerFn()
 
 const createLocation = createServerFn()
    .middleware([authMiddleware])
-   .validator(LocationInsertSchema)
+   // .validator(locationInsertSchema)
    .handler(async ({ data }) => {
       return db.insert(location).values(data).returning();
    });

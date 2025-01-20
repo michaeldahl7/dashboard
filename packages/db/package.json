@@ -18,6 +18,7 @@
       }
    },
    "scripts": {
+      "clean": "git clean -xdf .cache .turbo dist node_modules",
       "db:generate": "bun with-env drizzle-kit generate",
       "db:migrate": "bun with-env drizzle-kit migrate",
       "db:push": "bun with-env drizzle-kit push",

@@ -2,7 +2,7 @@ import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { LuSun, LuMoon } from "react-icons/lu";
 
-import { Button } from "~/app/components/ui/button";
+import { Button } from "@munchy/ui/components/ui/button";
 
 export function ThemeToggle() {
    const [mounted, setMounted] = useState(false);

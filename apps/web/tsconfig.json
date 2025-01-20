@@ -15,8 +15,12 @@
      "forceConsistentCasingInFileNames": true,
      "baseUrl": ".",
      "paths": {
-       "~/*": ["./*"]
+       "~/*": ["./*"],
+       "@ui/*": [
+        "../../packages/ui/src/*"
+      ]
      },
+
      "noEmit": true,
      "strictNullChecks": true
    }
