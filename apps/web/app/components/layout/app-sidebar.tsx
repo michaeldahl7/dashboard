@@ -18,7 +18,7 @@ import {
    DropdownMenuSeparator,
    DropdownMenuTrigger,
    DropdownMenuShortcut,
-} from "~/app/components/ui/dropdown-menu";
+} from "@munchy/ui/components/ui/dropdown-menu";
 import {
    useCreateHouse,
    useCurrentHouse,
@@ -38,10 +38,10 @@ import {
    SidebarMenuButton,
    SidebarMenuItem,
    useSidebar,
-} from "~/app/components/ui/sidebar";
+} from "@munchy/ui/components/ui/sidebar";
 import { useCurrentAuthQuery } from "~/app/services/auth.query";
 import { Avatar } from "@radix-ui/react-avatar";
-import { AvatarFallback, AvatarImage } from "~/app/components/ui/avatar";
+import { AvatarFallback, AvatarImage } from "@munchy/ui/components/ui/avatar";
 import { authClient } from "~/app/utils/authClient";
 import { Link } from "@tanstack/react-router";
 import {
@@ -49,11 +49,11 @@ import {
    DialogContent,
    DialogHeader,
    DialogTitle,
-} from "~/app/components/ui/dialog";
-import { Button } from "~/app/components/ui/button";
+} from "@munchy/ui/components/ui/dialog";
+import { Button } from "@munchy/ui/components/ui/button";
 import { useState } from "react";
 import { useForm } from "@tanstack/react-form";
-import { Input } from "~/app/components/ui/input";
+import { Input } from "@munchy/ui/components/ui/input";
 import { z } from "zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 

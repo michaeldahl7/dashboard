@@ -3,7 +3,7 @@ import { cx } from "class-variance-authority";
 import { Button } from "@munchy/ui/components/ui/button";
 import { Card, CardContent } from "@munchy/ui/components/ui/card";
 import { type SocialProvider, socialProviders } from "~/app/utils/social-provider";
-import { dashboardLinkOptions } from "~/app/utils";
+import { dashboardLinkOptions } from "~/app/utils/link-options";
 import { authClient } from "~/app/utils/authClient";
 
 export const Route = createFileRoute("/_public/signup")({

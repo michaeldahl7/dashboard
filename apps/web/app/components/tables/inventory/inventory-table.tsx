@@ -1,4 +1,4 @@
-import { DataTable } from "~/app/components/ui/data-table";
+import { DataTable } from "~/app/components/tables/data-table";
 import { columns } from "~/app/components/tables/inventory/columns";
 import type { ItemSelect } from "@munchy/db/schema";
 

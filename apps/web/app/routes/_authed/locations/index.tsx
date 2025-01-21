@@ -1,13 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Button } from "~/app/components/ui/button";
-import { Card, CardHeader, CardTitle, CardContent } from "~/app/components/ui/card";
+import { Button } from "@munchy/ui/components/ui/button";
+import { Card, CardHeader, CardTitle, CardContent } from "@munchy/ui/components/ui/card";
 import { LuPlus, LuBox } from "react-icons/lu";
-import { Skeleton } from "~/app/components/ui/skeleton";
+import { Skeleton } from "@munchy/ui/components/ui/skeleton";
 import { useLocations } from "~/app/services/location/location.query";
 import { useItems } from "~/app/services/item/item.query";
-import { DataTable } from "~/app/components/ui/data-table";
-import { columns } from "~/app/components/tables/inventory/columns";
-// import type { LocationWithItems } from "@munchy/db/schema";
+
 
 export const Route = createFileRoute("/_authed/locations/")({
    component: LocationsPage,

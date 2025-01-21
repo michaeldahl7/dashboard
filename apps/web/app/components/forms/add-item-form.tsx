@@ -1,8 +1,8 @@
 import { useForm } from "@tanstack/react-form";
 import { z } from "zod";
-import { Button } from "~/app/components/ui/button";
-import { Input } from "~/app/components/ui/input";
-import { Label } from "~/app/components/ui/label";
+import { Button } from "@munchy/ui/components/ui/button";
+import { Input } from "@munchy/ui/components/ui/input";
+import { Label } from "@munchy/ui/components/ui/label";
 import { useCreateItem } from "~/app/services/item/item.query";
 import { addItemSchema, type AddItemInput } from "~/app/services/item/item.api";
 import { toast } from "sonner";
@@ -12,7 +12,7 @@ import {
    SelectItem,
    SelectTrigger,
    SelectValue,
-} from "~/app/components/ui/select";
+} from "@munchy/ui/components/ui/select";
 import { quantityUnits } from "@munchy/db/schema";
 import { useCurrentHouse } from "~/app/services/house/house.query";
 import { useLocations } from "~/app/services/location/location.query";
