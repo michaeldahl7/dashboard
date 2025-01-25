@@ -62,7 +62,14 @@ const InputOTPSeparator = React.forwardRef<
   React.ElementRef<'div'>,
   React.ComponentPropsWithoutRef<'div'>
 >(({ ...props }, ref) => (
-  <div ref={ref} role="separator" {...props}>
+  <div
+    tabIndex={0}
+    ref={ref}
+    // biome-ignore lint/a11y/useSemanticElements: <explanation>
+    role="separator"
+    className="flex items-center justify-center"
+    {...props}
+  >
     <Minus />
   </div>
 ));

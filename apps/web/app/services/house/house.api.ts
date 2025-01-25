@@ -53,7 +53,9 @@ const getCurrentHouse = createServerFn()
       },
     });
 
-    if (!result) return null;
+    if (!result) {
+      return null;
+    }
 
     return {
       ...result.house,
@@ -98,7 +100,9 @@ const createHouse = createServerFn()
             ),
           });
 
-          if (existing) return existing;
+          if (existing) {
+            return existing;
+          }
 
           const [newType] = await tx
             .insert(locationType)
@@ -157,7 +161,9 @@ const updateHouse = createServerFn()
       ),
     });
 
-    if (!member) throw new Error('Not authorized to update house');
+    if (!member) {
+      throw new Error('Not authorized to update house');
+    }
 
     const [updatedHouse] = await db
       .update(house)
@@ -180,7 +186,9 @@ const deleteHouse = createServerFn()
       ),
     });
 
-    if (!member) throw new Error('Not authorized to delete house');
+    if (!member) {
+      throw new Error('Not authorized to delete house');
+    }
 
     await db.delete(house).where(eq(house.id, houseId));
   });
@@ -197,8 +205,8 @@ const setCurrentHouse = createServerFn()
 
 const createDefaultHouse = createServerFn()
   .middleware([authMiddleware])
-  .handler(async ({ context }) => {
-    return createHouse({
+  .handler(async () => {
+    return await createHouse({
       data: {
         name: 'My House',
         setAsCurrent: true,

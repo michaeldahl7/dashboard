@@ -9,7 +9,7 @@ const getAllMembers = createServerFn()
   .middleware([authMiddleware])
   .validator(z.number())
   .handler(async ({ data: houseId }) => {
-    return db.query.houseMember.findMany({
+    return await db.query.houseMember.findMany({
       where: eq(houseMember.houseId, houseId),
       with: {
         user: true,
@@ -35,7 +35,9 @@ const updateMember = createServerFn()
       ),
     });
 
-    if (!adminMember) throw new Error('Not authorized to update members');
+    if (!adminMember) {
+      throw new Error('Not authorized to update members');
+    }
 
     const [member] = await db
       .update(houseMember)

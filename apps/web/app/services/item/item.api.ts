@@ -33,7 +33,9 @@ const getAllItems = createServerFn()
   .middleware([authMiddleware])
   .handler(async ({ context }) => {
     const { user } = context.auth;
-    if (!user.currentHouseId) throw new Error('No house selected');
+    if (!user.currentHouseId) {
+      throw new Error('No house selected');
+    }
 
     const results = await db
       .select()

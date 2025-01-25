@@ -6,6 +6,7 @@ import {
 } from '@tanstack/react-router';
 import { Meta, Scripts } from '@tanstack/start';
 import { Suspense, lazy } from 'react';
+import type React from 'react';
 
 import { Toaster } from '~/components/ui/sonner';
 

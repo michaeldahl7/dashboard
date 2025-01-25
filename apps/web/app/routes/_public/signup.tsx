@@ -2,6 +2,7 @@ import { Button } from '@munchy/ui/components/ui/button';
 import { Card, CardContent } from '@munchy/ui/components/ui/card';
 import { Link, createFileRoute, redirect } from '@tanstack/react-router';
 import { cx } from 'class-variance-authority';
+import { toast } from 'sonner';
 import { authClient } from '~/utils/auth-client';
 import { dashboardLinkOptions } from '~/utils/link-options';
 import { type SocialProvider, socialProviders } from '~/utils/social-provider';
@@ -22,8 +23,8 @@ function SignupPage() {
         provider,
         callbackURL: '/',
       });
-    } catch (error) {
-      console.error(`Failed to sign in with ${provider}:`, error);
+    } catch (_error) {
+      toast.error('Failed to sign in');
     }
   };
 

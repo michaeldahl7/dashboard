@@ -14,7 +14,9 @@ export const currentAuthQueryOptions = () =>
     queryKey: authKeys.current(),
     queryFn: async () => {
       const auth = await getAuth();
-      if (!auth.user) throw new Error('Not authenticated');
+      if (!auth.user) {
+        throw new Error('Not authenticated');
+      }
       return auth;
     },
   });

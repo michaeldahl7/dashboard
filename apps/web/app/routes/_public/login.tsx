@@ -4,7 +4,7 @@ import { Separator } from '@munchy/ui/components/ui/separator';
 import { createFileRoute, redirect } from '@tanstack/react-router';
 import { useRouter } from '@tanstack/react-router';
 import { cx } from 'class-variance-authority';
-import { useEffect } from 'react';
+import { toast } from 'sonner';
 import { authClient } from '~/utils/auth-client';
 import { dashboardLinkOptions } from '~/utils/link-options';
 import { type SocialProvider, socialProviders } from '~/utils/social-provider';
@@ -21,33 +21,6 @@ export const Route = createFileRoute('/_public/login')({
 export function LoginPage() {
   const router = useRouter();
 
-  useEffect(() => {
-    if (
-      !('PublicKeyCredential' in window) ||
-      !PublicKeyCredential.isConditionalMediationAvailable ||
-      !PublicKeyCredential.isConditionalMediationAvailable()
-    ) {
-      return;
-    }
-
-    void authClient.signIn
-      .passkey({
-        autoFill: true,
-      })
-      .then(() => {
-        router.invalidate();
-      });
-  }, [router]);
-
-  const handlePasskeySignIn = async () => {
-    try {
-      await authClient.signIn.passkey();
-      router.invalidate();
-    } catch (error) {
-      console.error('Failed to sign in with passkey:', error);
-    }
-  };
-
   const handleSocialSignIn = async (provider: SocialProvider['id']) => {
     try {
       await authClient.signIn.social({
@@ -55,8 +28,8 @@ export function LoginPage() {
         callbackURL: '/',
       });
       router.invalidate();
-    } catch (error) {
-      console.error(`Failed to sign in with ${provider}:`, error);
+    } catch (_error) {
+      toast.error('Failed to sign in');
     }
   };
 
@@ -72,10 +45,6 @@ export function LoginPage() {
       <Card className="w-full max-w-sm">
         <CardContent className="pt-6">
           <div className="flex flex-col gap-4">
-            <Button className="w-full" onClick={handlePasskeySignIn}>
-              Continue with Passkey
-            </Button>
-
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
                 <Separator />

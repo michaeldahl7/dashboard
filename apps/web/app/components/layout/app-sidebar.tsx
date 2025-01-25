@@ -49,11 +49,12 @@ import { Avatar } from '@radix-ui/react-avatar';
 import { useForm } from '@tanstack/react-form';
 import { Link } from '@tanstack/react-router';
 import { useState } from 'react';
+import { toast } from 'sonner';
 import { z } from 'zod';
 import { useCurrentAuthQuery } from '~/services/auth.query';
 import { authClient } from '~/utils/auth-client';
 
-const createHouseSchema = z.object({
+const _createHouseSchema = z.object({
   name: z.string().min(1, 'House name is required').max(50, 'Name too long'),
 });
 
@@ -126,13 +127,15 @@ export function HouseSwitcher() {
       try {
         await createHouse.mutateAsync({ name: value.name });
         setIsDialogOpen(false);
-      } catch (error) {
-        console.error('Failed to create house:', error);
+      } catch (_error) {
+        toast.error('Failed to create house');
       }
     },
   });
 
-  if (!currentHouse || !houses) return null;
+  if (!currentHouse || !houses) {
+    return null;
+  }
 
   return (
     <>

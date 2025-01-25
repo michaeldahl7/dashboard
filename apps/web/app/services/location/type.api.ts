@@ -9,7 +9,7 @@ export const getLocationTypes = createServerFn()
   .middleware([authMiddleware])
   .validator(z.number())
   .handler(async ({ data: houseId }) => {
-    return db
+    await db
       .select()
       .from(locationType)
       .where(

@@ -24,14 +24,14 @@ const createLocation = createServerFn()
   .middleware([authMiddleware])
   // .validator(locationInsertSchema)
   .handler(async ({ data }) => {
-    return db.insert(location).values(data).returning();
+    return await db.insert(location).values(data).returning();
   });
 
 const getLocationSettings = createServerFn()
   .middleware([authMiddleware])
   .validator(z.number())
   .handler(async ({ data: locationId }) => {
-    return db.query.locationSettings.findFirst({
+    return await db.query.locationSettings.findFirst({
       where: eq(locationSettings.locationId, locationId),
     });
   });
@@ -40,7 +40,7 @@ const getLocationTypes = createServerFn()
   .middleware([authMiddleware])
   .validator(z.number())
   .handler(async ({ data: houseId }) => {
-    return db.query.locationType.findMany({
+    return await db.query.locationType.findMany({
       where: eq(locationType.houseId, houseId),
     });
   });

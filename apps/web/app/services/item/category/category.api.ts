@@ -10,7 +10,7 @@ const getAllCategories = createServerFn()
   .middleware([authMiddleware])
   .validator(z.number())
   .handler(async ({ data: houseId }) => {
-    return db.query.itemCategory.findMany({
+    return await db.query.itemCategory.findMany({
       where: or(
         eq(itemCategory.houseId, houseId),
         isNull(itemCategory.houseId)
@@ -28,7 +28,7 @@ const createCategory = createServerFn()
     })
   )
   .handler(async ({ data }) => {
-    return db.insert(itemCategory).values(data).returning();
+    return await db.insert(itemCategory).values(data).returning();
   });
 
 export const categoryApi = {
