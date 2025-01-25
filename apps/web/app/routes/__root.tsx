@@ -7,17 +7,17 @@ import {
 import { Meta, Scripts } from "@tanstack/start";
 import { Suspense, lazy } from "react";
 
-// import { Toaster } from "~/app/components/ui/sonner";
+import { Toaster } from "~/components/ui/sonner";
 
 import fontsourceInter from "@fontsource-variable/inter?url";
 import fontsourceJetBrainsMono from "@fontsource-variable/jetbrains-mono?url";
 
-// import appCss from "~/app/styles/app.css?url";
-import appCss from "@munchy/ui/globals.css?url";
+import appCss from "~/styles/app.css?url";
+// import appCss from "@munchy/ui/globals.css?url";
 
-import { ThemeProvider } from "~/app/components/theme-provider";
+import { ThemeProvider } from "~/components/theme-provider";
 
-import { getAuth } from "~/app/services/auth.api";
+import { getAuth } from "~/services/auth.api";
 
 const TanStackRouterDevtools =
    process.env.NODE_ENV === "production"
@@ -97,7 +97,7 @@ function RootDocument({ children }: { readonly children: React.ReactNode }) {
          <body>
             <ThemeProvider attribute="class">
                {children}
-               {/* <Toaster /> */}
+               <Toaster />
             </ThemeProvider>
             <ScrollRestoration />
             <Suspense>

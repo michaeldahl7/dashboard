@@ -5,9 +5,9 @@ import { useEffect } from "react";
 import { Button } from "@munchy/ui/components/ui/button";
 import { Card, CardContent } from "@munchy/ui/components/ui/card";
 import { Separator } from "@munchy/ui/components/ui/separator";
-import { type SocialProvider, socialProviders } from "~/app/utils/social-provider";
-import { dashboardLinkOptions } from "~/app/utils/link-options";
-import { authClient } from "~/app/utils/authClient";
+import { type SocialProvider, socialProviders } from "~/utils/social-provider";
+import { dashboardLinkOptions } from "~/utils/link-options";
+import { authClient } from "~/utils/auth-client";
 
 export const Route = createFileRoute("/_public/login")({
    beforeLoad: ({ context }) => {

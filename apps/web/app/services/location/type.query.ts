@@ -1,5 +1,5 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { locationApi } from "~/app/services/location/location.api";
+import { locationApi } from "~/services/location/location.api";
 
 export const locationTypeKeys = {
    all: ["locationTypes"] as const,

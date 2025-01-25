@@ -4,7 +4,7 @@ import {
    useMutation,
    useQueryClient,
 } from "@tanstack/react-query";
-import { memberApi } from "~/app/services/house/member.api";
+import { memberApi } from "~/services/house/member.api";
 import type { houseMember } from "@munchy/db/schema";
 type UserRole = typeof houseMember.$inferSelect.role;
 

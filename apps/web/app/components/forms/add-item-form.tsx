@@ -3,8 +3,8 @@ import { z } from "zod";
 import { Button } from "@munchy/ui/components/ui/button";
 import { Input } from "@munchy/ui/components/ui/input";
 import { Label } from "@munchy/ui/components/ui/label";
-import { useCreateItem } from "~/app/services/item/item.query";
-import { addItemSchema, type AddItemInput } from "~/app/services/item/item.api";
+import { useCreateItem } from "~/services/item/item.query";
+import { addItemSchema, type AddItemInput } from "~/services/item/item.api";
 import { toast } from "sonner";
 import {
    Select,
@@ -14,8 +14,8 @@ import {
    SelectValue,
 } from "@munchy/ui/components/ui/select";
 import { quantityUnits } from "@munchy/db/schema";
-import { useCurrentHouse } from "~/app/services/house/house.query";
-import { useLocations } from "~/app/services/location/location.query";
+import { useCurrentHouse } from "~/services/house/house.query";
+import { useLocations } from "~/services/location/location.query";
 
 export function AddItemForm() {
    const { mutate: createItem, isPending } = useCreateItem();
@@ -164,7 +164,7 @@ export function AddItemForm() {
             />
          </div>
 
-         <Button type="submit" disabled={isPending}>
+         <Button variant="secondary" disabled={isPending}>
             {isPending ? "Adding..." : "Add Item"}
          </Button>
       </form>

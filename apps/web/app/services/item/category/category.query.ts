@@ -4,7 +4,7 @@ import {
    useMutation,
    useQueryClient,
 } from "@tanstack/react-query";
-import { categoryApi } from "~/app/services/item/category/category.api";
+import { categoryApi } from "~/services/item/category/category.api";
 
 export const categoryKeys = {
    all: ["categories"] as const,

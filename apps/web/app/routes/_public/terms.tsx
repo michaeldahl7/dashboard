@@ -1,5 +1,5 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import { dashboardLinkOptions } from "~/app/utils/link-options";
+import { dashboardLinkOptions } from "~/utils/link-options";
 
 export const Route = createFileRoute("/_public/terms")({
    beforeLoad: ({ context }) => {

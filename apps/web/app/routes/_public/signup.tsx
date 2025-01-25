@@ -2,9 +2,9 @@ import { Link, createFileRoute, redirect } from "@tanstack/react-router";
 import { cx } from "class-variance-authority";
 import { Button } from "@munchy/ui/components/ui/button";
 import { Card, CardContent } from "@munchy/ui/components/ui/card";
-import { type SocialProvider, socialProviders } from "~/app/utils/social-provider";
-import { dashboardLinkOptions } from "~/app/utils/link-options";
-import { authClient } from "~/app/utils/authClient";
+import { type SocialProvider, socialProviders } from "~/utils/social-provider";
+import { dashboardLinkOptions } from "~/utils/link-options";
+import { authClient } from "~/utils/auth-client";
 
 export const Route = createFileRoute("/_public/signup")({
    beforeLoad: ({ context }) => {

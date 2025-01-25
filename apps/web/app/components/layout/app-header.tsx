@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
-import { ThemeToggle } from "~/app/components/theme-toggle";
+import { ThemeToggle } from "~/components/theme-toggle";
 import { Button } from "@munchy/ui/components/ui/button";
-import { authClient } from "~/app/utils/authClient";
+import { authClient } from "~/utils/auth-client";
 import { LuHouse } from "react-icons/lu";
 
 export function AppHeader() {

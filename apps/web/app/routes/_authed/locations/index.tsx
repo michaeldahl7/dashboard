@@ -3,9 +3,8 @@ import { Button } from "@munchy/ui/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@munchy/ui/components/ui/card";
 import { LuPlus, LuBox } from "react-icons/lu";
 import { Skeleton } from "@munchy/ui/components/ui/skeleton";
-import { useLocations } from "~/app/services/location/location.query";
-import { useItems } from "~/app/services/item/item.query";
-
+import { useLocations } from "~/services/location/location.query";
+import { useItems } from "~/services/item/item.query";
 
 export const Route = createFileRoute("/_authed/locations/")({
    component: LocationsPage,

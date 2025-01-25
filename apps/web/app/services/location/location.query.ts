@@ -4,7 +4,7 @@ import {
    useQueryClient,
    queryOptions,
 } from "@tanstack/react-query";
-import { locationApi } from "~/app/services/location/location.api";
+import { locationApi } from "~/services/location/location.api";
 import type { LocationInsert } from "@munchy/db/schema";
 
 export const locationKeys = {

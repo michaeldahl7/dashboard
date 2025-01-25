@@ -4,7 +4,7 @@ import {
    useMutation,
    useQueryClient,
 } from "@tanstack/react-query";
-import { houseApi } from "~/app/services/house/house.api";
+import { houseApi } from "~/services/house/house.api";
 
 export const houseKeys = {
    all: ["houses"] as const,

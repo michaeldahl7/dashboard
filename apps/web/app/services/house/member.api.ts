@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/start";
 import { and, eq } from "drizzle-orm";
 import { z } from "zod";
-import { authMiddleware } from "~/app/middleware/auth-guard";
+import { authMiddleware } from "~/middleware/auth-guard";
 import { db } from "@munchy/db/client";
 import { houseMember } from "@munchy/db/schema";
 

@@ -1,6 +1,6 @@
 import type { ComponentProps } from "react";
 
-import { cn } from "./lib/utils";
+import { cn } from "@ui/lib/utils";
 
 function Heading1({ className, ...props }: ComponentProps<"h1">) {
    return (
@@ -45,9 +45,7 @@ function Heading4({ className, ...props }: ComponentProps<"h4">) {
 }
 
 function Paragraph({ className, ...props }: ComponentProps<"p">) {
-   return (
-      <p className={cn("leading-7 not-first:mt-6", className)} {...props} />
-   );
+   return <p className={cn("leading-7 not-first:mt-6", className)} {...props} />;
 }
 
 function Blockquote({ className, ...props }: ComponentProps<"blockquote">) {

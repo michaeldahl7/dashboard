@@ -15,9 +15,9 @@ export default defineConfig({
       ],
       resolve: {
          alias: {
-           "@ui": path.resolve(__dirname, "../../packages/ui/src"),
+            "@ui": path.resolve(__dirname, "../../packages/ui/src"),
          },
-       },
+      },
    },
    react: {
       babel: {

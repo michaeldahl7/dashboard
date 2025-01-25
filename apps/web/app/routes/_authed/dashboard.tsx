@@ -6,7 +6,7 @@ import {
    CardHeader,
    CardTitle,
 } from "@munchy/ui/components/ui/card";
-import { AddItemForm } from "~/app/components/forms/add-item-form";
+import { AddItemForm } from "~/components/forms/add-item-form";
 
 export const Route = createFileRoute("/_authed/dashboard")({
    component: DashboardRoute,

@@ -1,1 +1,0 @@
-export * from "@munchy/ui/tailwind.config";

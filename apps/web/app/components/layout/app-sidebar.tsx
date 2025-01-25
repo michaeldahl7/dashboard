@@ -26,7 +26,7 @@ import {
    useSetCurrentHouse,
    getHousesQueryOptions,
    getCurrentHouseQueryOptions,
-} from "~/app/services/house/house.query";
+} from "~/services/house/house.query";
 
 import {
    Sidebar,
@@ -39,10 +39,10 @@ import {
    SidebarMenuItem,
    useSidebar,
 } from "@munchy/ui/components/ui/sidebar";
-import { useCurrentAuthQuery } from "~/app/services/auth.query";
+import { useCurrentAuthQuery } from "~/services/auth.query";
 import { Avatar } from "@radix-ui/react-avatar";
 import { AvatarFallback, AvatarImage } from "@munchy/ui/components/ui/avatar";
-import { authClient } from "~/app/utils/authClient";
+import { authClient } from "~/utils/auth-client";
 import { Link } from "@tanstack/react-router";
 import {
    Dialog,
@@ -157,7 +157,7 @@ export function HouseSwitcher() {
                      </SidebarMenuButton>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent
-                     className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+                     className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
                      align="start"
                      side={isMobile ? "bottom" : "right"}
                      sideOffset={4}

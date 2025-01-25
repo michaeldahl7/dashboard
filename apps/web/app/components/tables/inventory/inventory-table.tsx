@@ -1,5 +1,5 @@
-import { DataTable } from "~/app/components/tables/data-table";
-import { columns } from "~/app/components/tables/inventory/columns";
+import { DataTable } from "~/components/tables/data-table";
+import { columns } from "~/components/tables/inventory/columns";
 import type { ItemSelect } from "@munchy/db/schema";
 
 interface InventoryTableProps {

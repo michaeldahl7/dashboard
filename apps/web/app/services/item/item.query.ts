@@ -4,7 +4,7 @@ import {
    useMutation,
    useQueryClient,
 } from "@tanstack/react-query";
-import { itemApi, type addItemSchema } from "~/app/services/item/item.api";
+import { itemApi, type addItemSchema } from "~/services/item/item.api";
 import type { z } from "zod";
 
 export const itemKeys = {
