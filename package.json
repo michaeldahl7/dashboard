@@ -1,29 +1,30 @@
 {
-   "name": "munchy",
-   "private": true,
-   "type": "module",
-   "packageManager": "bun@1.0.26",
-   "workspaces": ["apps/*", "packages/*", "tooling/*"],
-   "scripts": {
-      "clean": "git clean -xdf node_modules",
-      "dev": "turbo dev",
-      "build": "turbo build",
-      "start": "turbo start",
-      "format-and-lint": "turbo format-and-lint",
-      "format-and-lint:fix": "turbo format-and-lint:fix",
-      "db:generate": "turbo -F @munchy/db generate",
-      "db:migrate": "turbo -F @munchy/db migrate",
-      "db:push": "turbo -F @munchy/db push",
-      "db:up": "docker compose up -d",
-      "db:down": "docker compose down -v",
-      "db:studio": "turbo -F @munchy/db studio",
-      "ui": "cd packages/ui && bunx --bun shadcn@latest add",
-      "auth": "bunx --bun @better-auth/cli@latest",
-      "auth:generate": "bunx @better-auth/cli@latest generate --y --output ./lib/server/schema/auth.schema.ts && bunx biome format --write ./lib/server/schema/auth.schema.ts"
-   },
-   "devDependencies": {
-      "@biomejs/biome": "1.9.4",
-      "turbo": "latest"
-   },
-   "trustedDependencies": ["@biomejs/biome", "@parcel/watcher", "esbuild"]
+  "name": "munchy",
+  "private": true,
+  "type": "module",
+  "packageManager": "bun@1.0.26",
+  "workspaces": ["apps/*", "packages/*", "tooling/*"],
+  "scripts": {
+    "clean": "git clean -xdf node_modules",
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "start": "turbo start",
+    "format-and-lint": "biome check .",
+    "format-and-lint:fix": "biome check . --write",
+    "db:generate": "turbo -F @munchy/db generate",
+    "db:migrate": "turbo -F @munchy/db migrate",
+    "db:push": "turbo -F @munchy/db push",
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down -v",
+    "db:studio": "turbo -F @munchy/db studio",
+    "ui": "cd packages/ui && bunx --bun shadcn@latest add",
+    "auth": "bunx --bun @better-auth/cli@latest",
+    "auth:generate": "bunx @better-auth/cli@latest generate --y --output ./lib/server/schema/auth.schema.ts && bunx biome format --write ./lib/server/schema/auth.schema.ts"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4",
+    "turbo": "latest",
+    "ultracite": "latest"
+  },
+  "trustedDependencies": ["@biomejs/biome", "@parcel/watcher", "esbuild"]
 }

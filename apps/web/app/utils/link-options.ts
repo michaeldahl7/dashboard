@@ -1,5 +1,5 @@
-import { linkOptions } from "@tanstack/react-router";
+import { linkOptions } from '@tanstack/react-router';
 
 export const dashboardLinkOptions = linkOptions({
-   to: "/dashboard",
+  to: '/dashboard',
 });

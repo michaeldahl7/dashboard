@@ -1,8 +1,8 @@
 {
-   "extends": "@munchy/tsconfig/internal-package.json",
-   "compilerOptions": {
-      "noUncheckedIndexedAccess": false
-   },
-   "include": ["src"],
-   "exclude": ["node_modules"]
+  "extends": "@munchy/tsconfig/internal-package.json",
+  "compilerOptions": {
+    "noUncheckedIndexedAccess": false
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
 }

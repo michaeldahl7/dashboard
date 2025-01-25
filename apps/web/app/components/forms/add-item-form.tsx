@@ -1,11 +1,7 @@
-import { useForm } from "@tanstack/react-form";
-import { z } from "zod";
+import { quantityUnits } from "@munchy/db/schema";
 import { Button } from "@munchy/ui/components/ui/button";
 import { Input } from "@munchy/ui/components/ui/input";
 import { Label } from "@munchy/ui/components/ui/label";
-import { useCreateItem } from "~/services/item/item.query";
-import { addItemSchema, type AddItemInput } from "~/services/item/item.api";
-import { toast } from "sonner";
 import {
    Select,
    SelectContent,
@@ -13,8 +9,11 @@ import {
    SelectTrigger,
    SelectValue,
 } from "@munchy/ui/components/ui/select";
-import { quantityUnits } from "@munchy/db/schema";
+import { useForm } from "@tanstack/react-form";
+import { toast } from "sonner";
 import { useCurrentHouse } from "~/services/house/house.query";
+import { type AddItemInput, addItemSchema } from "~/services/item/item.api";
+import { useCreateItem } from "~/services/item/item.query";
 import { useLocations } from "~/services/location/location.query";
 
 export function AddItemForm() {
@@ -64,7 +63,7 @@ export function AddItemForm() {
                         onChange={(e) => field.handleChange(e.target.value)}
                      />
                      {field.state.meta.errors ? (
-                        <div className="text-sm text-red-500">
+                        <div className="text-red-500 text-sm">
                            {field.state.meta.errors}
                         </div>
                      ) : null}
@@ -88,7 +87,7 @@ export function AddItemForm() {
                         onChange={(e) => field.handleChange(Number(e.target.value))}
                      />
                      {field.state.meta.errors ? (
-                        <div className="text-sm text-red-500">
+                        <div className="text-red-500 text-sm">
                            {field.state.meta.errors}
                         </div>
                      ) : null}
@@ -121,7 +120,7 @@ export function AddItemForm() {
                         </SelectContent>
                      </Select>
                      {field.state.meta.errors && (
-                        <div className="text-sm text-red-500">
+                        <div className="text-red-500 text-sm">
                            {field.state.meta.errors}
                         </div>
                      )}
