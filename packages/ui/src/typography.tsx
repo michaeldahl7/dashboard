@@ -46,7 +46,7 @@ function Heading4({ className, ...props }: ComponentProps<"h4">) {
 
 function Paragraph({ className, ...props }: ComponentProps<"p">) {
    return (
-      <p className={cn("leading-7 [&:not(:first-child)]:mt-6", className)} {...props} />
+      <p className={cn("leading-7 not-first:mt-6", className)} {...props} />
    );
 }
 
